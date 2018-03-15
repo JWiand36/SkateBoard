@@ -1,11 +1,9 @@
-package sample;
+package sample.client;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,7 +14,9 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Calendar;
+
+import sample.Event;
+import sample.board.Main;
 
 /**
  * Created by John Wiand on 10/29/2016.
@@ -25,19 +25,20 @@ public class Client extends Application {
 
     private String ip = "localhost";
 
-    ArrayList<Event> savedData = new ArrayList<>();
+    private ArrayList<Event> savedData = new ArrayList<>();
 
     private Stage secondaryStage;
     private Stage thirdStage;
     private Stage fourthStage;
     private ArrayList<Event>[] combinedEvents;
     private ListView<String> savedInfo = new ListView<>();
-    private BorderPane mainPane;
-    private MainPane pane;
     private ListView<String>[] lists;
 
     @Override
     public void start(Stage primaryStage){
+
+        BorderPane mainPane;
+        MainPane pane;
 
         combinedEvents = new ArrayList[7];
         for(int i = 0; i < combinedEvents.length; i++)
@@ -61,14 +62,15 @@ public class Client extends Application {
         primaryStage.setScene(new Scene(mainPane, 600,650));
 
         try{
-            ip = (String)readFromFile("IP");
+            ip = (String)Main.readFromFile("IP");
             inputData(ip);
             primaryStage.show();
         }catch(IOException io){io.printStackTrace(); secondaryStage.show();}
         catch (ClassNotFoundException not){System.out.println("Error");}
     }
 
-    class IPPane extends VBox{
+    //Displays the window asking for the Servers IP Address
+    private class IPPane extends VBox{
 
         private IPPane(Stage primaryStage){
 
@@ -84,6 +86,8 @@ public class Client extends Application {
 
             incorrect.setStyle("-fx-fill: Red;");
 
+            //Once the connect button is pressed, the Program will collect data from the Server and save the IP address
+            //giving to a file. If an IP error occurs the IP Address will continue to display and provide an error message
             connect.setOnAction(e->{
                 ip = ipTF.getText();
 
@@ -95,7 +99,7 @@ public class Client extends Application {
                             primaryStage.show();
                             incorrect.setText("");
                             try {
-                                writeToFile(ip, "IP");
+                                Main.writeToFile(ip, "IP");
                             }catch (IOException io){io.printStackTrace();System.out.println("Error Writing");}
                         });
                     } catch (IOException io) {Platform.runLater(()->incorrect.setText("Can't find Server, Please check your IP Address"));}
@@ -104,11 +108,12 @@ public class Client extends Application {
             });
 
             secondaryStage.setScene(new Scene(this,255,125));
-            secondaryStage.setTitle("Skate Board");
+            secondaryStage.setTitle("Skate board");
             secondaryStage.setResizable(false);
         }
     }
 
+    //This pane displays the menu bar at the top
     class MenuPane extends MenuBar{
 
         Menu file = new Menu("File");
@@ -123,72 +128,68 @@ public class Client extends Application {
         MenuItem alert = new MenuItem("Alert");
         MenuItem remove = new MenuItem("Remove Alert");
 
+        //Sets up the MenuPane
         private MenuPane(){
             this.getMenus().addAll(file, server, message);
             file.getItems().addAll(newfile,exit);
             server.getItems().addAll(input, output, change);
             message.getItems().addAll(promotion, alert, remove);
 
+            //Clears all events from the arraylist to start new
             newfile.setOnAction(e->{
                 combinedEvents = new ArrayList[7];
 
                 for(int i = 0; i < combinedEvents.length; i++)
-                    combinedEvents[i] = new ArrayList<Event>();
+                    combinedEvents[i] = new ArrayList<>();
 
                 updateLists(combinedEvents);
             });
 
+            //Exits the project and saves the data in the saved array
             exit.setOnAction(e->{
                 try {
-                    writeToFile(savedData, "Data");
+                    Main.writeToFile(savedData, "Data");
                 }catch (IOException io){io.printStackTrace();}
                 System.exit(0);
             });
 
+            //Retrieves data from the server
             input.setOnAction(e -> {
-                new Thread(()->{
-                    try {
-                        inputData(ip);
-                    } catch (IOException io) {secondaryStage.show();
-                    } catch (ClassNotFoundException not) {not.printStackTrace();}
-                }).start();
+                try {
+                    inputData(ip);
+                } catch (IOException io) {secondaryStage.show();
+                } catch (ClassNotFoundException not) {not.printStackTrace();}
             });
 
+            //Sends data to the server
             output.setOnAction(e -> {
-                new Thread(()-> {
-                    try {
-                        outputData(ip);
-                    } catch (IOException io) {secondaryStage.show();}
-                }).start();
+                try {
+                    outputData(ip);
+                } catch (IOException io) {secondaryStage.show();}
             });
 
-            change.setOnAction(e->{
-                secondaryStage.show();
-            });
+            //Allows the user to change the server
+            change.setOnAction(e-> secondaryStage.show());
 
-            promotion.setOnAction(e->{
-                new Thread(()->{
-                    new MessagePane(1);
-                }).start();
-            });
+            //Sends a message that displays promotional message
+            promotion.setOnAction(e-> new MessagePane(1));
 
-            alert.setOnAction(e->{
-                new Thread(()->{
-                    new MessagePane(0);
-                }).start();
-            });
+            //Sends a message that displays any emergency messages
+            alert.setOnAction(e-> new MessagePane(0));
 
-            remove.setOnAction(e->{
-                new Thread(()->{
-                    try {
-                        removeAlertMessage(ip);
-                    }catch (IOException io){secondaryStage.show();}
-                }).start();
+            //Removes the alert message being displayed
+            remove.setOnAction(e-> {
+                try {
+                    removeAlertMessage(ip);
+                } catch (IOException io) {secondaryStage.show();}
             });
         }
 
+        //Sends the data to the Server
         private void outputData(String ip) throws IOException {
             Socket socket = new Socket(ip, 36);
+
+            //The streams are in order with the server. Even if it isn't used
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
             ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
@@ -201,9 +202,12 @@ public class Client extends Application {
             socket.close();
         }
 
+        //Removes the alert message on the Server
         private void removeAlertMessage(String ip) throws IOException {
             try {
                 Socket socket = new Socket(ip, 36);
+
+                //The streams are in order with the server. Even if it isn't used
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
                 ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
@@ -216,8 +220,12 @@ public class Client extends Application {
 
         }
 
+        //The Event list coming from the server is 14 different ArrayLists but the client uses only 7, this method
+        //separates the ArrayLists based on which rink they are used. Makes it easier to handle the data for the Server
         private ArrayList<Event>[] separateEvents(ArrayList<Event>[] combinedEvents){
 
+            //Just checks if the first locker room is higher then 4. If the first locker is higher then 4 then the Event
+            //takes place on Rink 2, otherwise the Event is on Rink 1.
             ArrayList<Event>[] result = new ArrayList[14];
 
             for(int i = 0; i < result.length; i++)
@@ -238,6 +246,7 @@ public class Client extends Application {
         }
     }
 
+    //Sets up the MessagePane for both the Promotional message and the Alert message
     class MessagePane extends VBox{
 
         Text t;
@@ -254,23 +263,19 @@ public class Client extends Application {
                 t.setText("The Promotional Message");
 
                 submit.setOnAction(e -> {
-                    new Thread(() -> {
-                        try {
-                            sendMessage(ip, tf.getText());
-                            Platform.runLater(()->thirdStage.close());
-                        } catch (IOException io) {secondaryStage.show();}
-                    }).start();
+                    try {
+                        sendMessage(ip, tf.getText());
+                        Platform.runLater(()->thirdStage.close());
+                    } catch (IOException io) {secondaryStage.show();}
                 });
             }else {
                 t.setText("The Alert Message");
 
                 submit.setOnAction(e -> {
-                    new Thread(() -> {
-                        try {
-                            sendAlertMessage(ip, tf.getText());
-                            Platform.runLater(()->thirdStage.close());
-                        } catch (IOException io) {secondaryStage.show();}
-                    }).start();
+                    try {
+                        sendAlertMessage(ip, tf.getText());
+                        Platform.runLater(()->thirdStage.close());
+                    } catch (IOException io) {secondaryStage.show();}
                 });
             }
 
@@ -288,9 +293,12 @@ public class Client extends Application {
 
         }
 
+        //Sends the Alert message to the server
         private void sendAlertMessage(String ip, String message) throws IOException {
             try {
                 Socket socket = new Socket(ip, 36);
+
+                //The streams are in order with the server. Even if it isn't used
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
                 ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
@@ -304,9 +312,12 @@ public class Client extends Application {
             }catch (IOException io){io.printStackTrace();}
         }
 
+        //Sends a Promotional message to the server
         private void sendMessage(String ip, String message)throws IOException {
             try {
                 Socket socket = new Socket(ip, 36);
+
+                //The streams are in order with the server. Even if it isn't used
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
                 ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
@@ -321,10 +332,12 @@ public class Client extends Application {
         }
     }
 
+    //The MainPane of the client, it displays the days and allows you to pick your desired day.
     class MainPane extends GridPane{
 
         ArrayList<String> nameOfData = new ArrayList<>();
 
+        //Sets up the view of the MainPane
         private MainPane() {
             lists = new ListView[7];
             for (int i = 0; i < lists.length; i++)
@@ -341,6 +354,8 @@ public class Client extends Application {
             for (int i = 0; i < buttons.length; i++)
                 buttons[i] = new Button("Modify");
 
+
+            //Each button opens a ModifyPane to modify the desired day.
             buttons[0].setOnAction(e -> {
                 fourthStage.close();
                 new ModifyPane(0);
@@ -383,6 +398,8 @@ public class Client extends Application {
                     this.add(panes[i], i - 4, 1);
             }
 
+
+            //This section is for the last ListView for data that will be saved to the computer after you close the program
             VBox savedPane = new VBox();
             HBox buttonsPane = new HBox();
             ComboBox<String> dates = new ComboBox<>();
@@ -390,23 +407,22 @@ public class Client extends Application {
             Button remove = new Button("Remove");
 
             try {
-                savedData = (ArrayList<Event>) readFromFile("Data");
-            } catch (IOException io) {
-                io.printStackTrace();
-            } catch (ClassNotFoundException not) {
-                not.printStackTrace();
+                savedData = (ArrayList<Event>) Main.readFromFile("Data");
+            } catch (IOException |ClassNotFoundException e) {
+                e.printStackTrace();
             }
 
-            for (int i = 0; i < savedData.size(); i++) {
-                if (savedData.get(i).getTeam2() != null)
-                    nameOfData.add(savedData.get(i).getTeam1() + " vs " + savedData.get(i).getTeam2() +
-                            " " + savedData.get(i).getStartHour() + ":" + savedData.get(i).getStartMin() +
-                            savedData.get(i).getDayNightCycle() + " L:" + savedData.get(i).getLocker1() + "/" +
-                            savedData.get(i).getLocker2());
+            //Sets up how the ListView will be displayed
+            for (Event event : savedData) {
+                if (event.getTeam2() != null)
+                    nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
+                            " " + event.getStartHour() + ":" + event.getStartMin() +
+                            event.getDayNightCycle() + " L:" + event.getLocker1() + "/" +
+                            event.getLocker2());
                 else
-                    nameOfData.add(savedData.get(i).getTeam1() +
-                            " " + savedData.get(i).getStartHour() + ":" + savedData.get(i).getStartMin() +
-                            savedData.get(i).getDayNightCycle() + " L:" + savedData.get(i).getLocker1());
+                    nameOfData.add(event.getTeam1() +
+                            " " + event.getStartHour() + ":" + event.getStartMin() +
+                            event.getDayNightCycle() + " L:" + event.getLocker1());
             }
 
             dates.getItems().addAll(FXCollections.observableArrayList(days));
@@ -420,6 +436,7 @@ public class Client extends Application {
             savedPane.setAlignment(Pos.TOP_CENTER);
             savedPane.setSpacing(5);
 
+            //Adds the selected data to the desired day
             add.setOnAction(e->{
                 try {
                     Event event = savedData.get(savedInfo.getSelectionModel().getSelectedIndex());
@@ -428,21 +445,22 @@ public class Client extends Application {
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list or choose a day.");}
             });
 
+            //Allows the user to remove the data from the saved list
             remove.setOnAction(e->{
                 try {
                     savedData.remove(savedInfo.getSelectionModel().getSelectedIndex());
-                    nameOfData = new ArrayList<String>();
+                    nameOfData = new ArrayList<>();
 
-                    for (int i = 0; i < savedData.size(); i++) {
-                        if (savedData.get(i).getTeam2() != null)
-                            nameOfData.add(savedData.get(i).getTeam1() + " vs " + savedData.get(i).getTeam2() +
-                                    " " + savedData.get(i).getStartHour() + ":" + savedData.get(i).getStartMin() +
-                                    savedData.get(i).getDayNightCycle() + " L:" + savedData.get(i).getLocker1() + "/" +
-                                    savedData.get(i).getLocker2());
+                    for (Event event : savedData) {
+                        if (event.getTeam2() != null)
+                            nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
+                                    " " + event.getStartHour() + ":" + event.getStartMin() +
+                                    event.getDayNightCycle() + " L:" + event.getLocker1() + "/" +
+                                    event.getLocker2());
                         else
-                            nameOfData.add(savedData.get(i).getTeam1() +
-                                    " " + savedData.get(i).getStartHour() + ":" + savedData.get(i).getStartMin() +
-                                    savedData.get(i).getDayNightCycle() + " L:" + savedData.get(i).getLocker1());
+                            nameOfData.add(event.getTeam1() +
+                                    " " + event.getStartHour() + ":" + event.getStartMin() +
+                                    event.getDayNightCycle() + " L:" + event.getLocker1());
                     }
 
                     savedInfo.setItems(FXCollections.observableArrayList(nameOfData));
@@ -455,11 +473,14 @@ public class Client extends Application {
         }
     }
 
+    //This Pane allows the user to manipulate the data when the user selects the desired day
     class ModifyPane extends GridPane{
 
         ArrayList<String> n;
         ListView<String> list;
 
+        //Sets up the view of the Modify Pane. It creates 20 rows of TextFields to allow the user to enter in multiple
+        //events at once
         private ModifyPane(int modifyingDay){
 
             list = new ListView<>();
@@ -486,7 +507,7 @@ public class Client extends Application {
             TextField[][] tf = new TextField[20][6];
             CheckBox[] ampm = new CheckBox[20];
 
-
+            //Checks the info and adds the data if it meets the requirements
             add.setOnAction(e->{
                 for(int i = 0; i < tf.length; i++) {
                     if (checkInfoAdd(tf[i], n, ampm[i].isSelected())) {
@@ -496,6 +517,7 @@ public class Client extends Application {
                 }
             });
 
+            //The user can select data from the list and modify it. It only uses the top row of TextFields
             modify.setOnAction(e->{
                 try {
                     if (checkInfo(tf[0])) {
@@ -507,6 +529,7 @@ public class Client extends Application {
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list.");}
             });
 
+            //The user can select data from the list and remove it.
             remove.setOnAction(e->{
                 try {
                     int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
@@ -515,6 +538,7 @@ public class Client extends Application {
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list.");}
             });
 
+            //Sets the look of the text in the ListView
             list.getSelectionModel().selectedItemProperty().addListener(e-> {
                 try {
                     int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
@@ -528,29 +552,32 @@ public class Client extends Application {
                         ampm[0].selectedProperty().setValue(true);
                     else
                         ampm[0].selectedProperty().setValue(false);
-                }catch (ArrayIndexOutOfBoundsException IOB){}
+                }catch (ArrayIndexOutOfBoundsException IOB){IOB.getStackTrace();}
             });
 
+            //Allows the user to store data in the SavedList to be used for another day
             save.setOnAction(e->{
                 try {
                     if (checkInfoAdd(tf[0], savedData, ampm[0].isSelected())) {
                         savedData.add(modifyInfo(tf[0], ampm[0]));
-                        ArrayList<String> nameOfData = new ArrayList<String>();
+                        ArrayList<String> nameOfData = new ArrayList<>();
 
-                        for (int i = 0; i < savedData.size(); i++)
-                            if(savedData.get(i).getTeam2() != null)
-                                nameOfData.add(savedData.get(i).getTeam1() + " vs " + savedData.get(i).getTeam2() +
-                                    " " + savedData.get(i).getStartHour() + ":" + savedData.get(i).getStartMin() +
-                                    savedData.get(i).getDayNightCycle() + " L:" + savedData.get(i).getLocker1() + "/" +
-                                    savedData.get(i).getLocker2());
+                        for (Event event : savedData) {
+                            if (event.getTeam2() != null)
+                                nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
+                                        " " + event.getStartHour() + ":" + event.getStartMin() +
+                                        event.getDayNightCycle() + " L:" + event.getLocker1() + "/" +
+                                        event.getLocker2());
                             else
-                                nameOfData.add(savedData.get(i).getTeam1() +
-                                        " " + savedData.get(i).getStartHour() + ":" + savedData.get(i).getStartMin() +
-                                        savedData.get(i).getDayNightCycle() + " L:" + savedData.get(i).getLocker1());
+                                nameOfData.add(event.getTeam1() +
+                                        " " + event.getStartHour() + ":" + event.getStartMin() +
+                                        event.getDayNightCycle() + " L:" + event.getLocker1());
+                        }
 
                         savedInfo.setItems(FXCollections.observableArrayList(nameOfData));
                     }
-                }catch (ArrayIndexOutOfBoundsException out){}
+
+                }catch (ArrayIndexOutOfBoundsException out){out.getStackTrace();}
             });
 
             flow.getChildren().addAll(add,modify,remove, save);
@@ -559,8 +586,8 @@ public class Client extends Application {
             this.setPadding(new Insets(5));
             this.setHgap(5);
             this.setVgap(5);
-            this.setRowSpan(list, REMAINING);
-            this.setColumnSpan(flow, REMAINING);
+            setRowSpan(list, REMAINING);
+            setColumnSpan(flow, REMAINING);
             this.getColumnConstraints().addAll(col1, col2, col3, col4, col5, col6, col7, col8);
 
             this.add(list,0,0);
@@ -591,12 +618,16 @@ public class Client extends Application {
             fourthStage.show();
         }
 
+        //Checks the data when the user hits the add button. Data can't match other data and the list and it has to meet
+        //certain requirements. Team 1 needs to be filled, as Locker Room 1, Hour, Min are all required
+        //The data is matched with the ListView's String values to see if the event matches
         private boolean checkInfoAdd(TextField[] tf, ArrayList n, Boolean ampm){
 
             //Team1, Locker1, Team2, Locker2, Hour, Min,
 
             String am;
 
+            //Checks if if their are vales to meet requirements
             if(tf[1].getText() != null && tf[4].getText() != null && tf[5].getText() != null &&
                     tf[1].getText().length() > 0 && tf[4].getText().length() > 0 && tf[5].getText().length() > 0&&
                     isNumber(tf[1].getText()) && isNumber(tf[4].getText()) && isNumber(tf[5].getText())){
@@ -610,6 +641,7 @@ public class Client extends Application {
                 else
                     am = "pm";
 
+                //Checks to see if Team 2 and Locker Room 2 are filled, if not the program passes
                 if(tf[3].getText() != null && tf[3].getText().length() > 0 &&
                         tf[2].getText() != null && tf[2].getText().length() > 0){
                     if(isNumber(tf[3].getText())) {
@@ -622,17 +654,18 @@ public class Client extends Application {
                         return false;
                 }
 
-                if(l1 < 1 || l1 > 8 || h < 0 || h > 24 || m < 0 || m > 60 || n.contains(h+":"+m+am+" "+tf[0].getText()+" L"+tf[1].getText()))
-                        return false;
-                return true;
+                //Checks if the locker Rooms are in range and if the time is correct
+                return l1 >= 1 && l1 <= 8 && h >= 0 && h <= 24 && m >= 0 && m <= 60 && !n.contains(h + ":" + m + am + " " + tf[0].getText() + " L" + tf[1].getText());
             }else
                 return false;
         }
 
+        //Same as CheckInfoAdd with minor differences, it doesn't check for Am/Pm. Used for the Modify Button
         private boolean checkInfo(TextField[] tf){
 
             //Team1, Locker1, Team2, Locker2, Hour, Min,
 
+            //Checks to see if Team1, Locker1, Hour and Min, all have values
             if(tf[1].getText() != null && tf[4].getText() != null && tf[5].getText() != null &&
                     tf[1].getText().length() > 0 && tf[4].getText().length() > 0 && tf[5].getText().length() > 0&&
                     isNumber(tf[1].getText()) && isNumber(tf[4].getText()) && isNumber(tf[5].getText())){
@@ -641,6 +674,7 @@ public class Client extends Application {
                 int h = Integer.parseInt(tf[4].getText());
                 int m = Integer.parseInt(tf[5].getText());
 
+                //Checks to see if there is a Team2 or Locker2
                 if(tf[3].getText() != null && tf[3].getText().length() > 0 &&
                         tf[2].getText() != null && tf[2].getText().length() > 0){
                     if(isNumber(tf[3].getText())) {
@@ -652,13 +686,13 @@ public class Client extends Application {
                         return false;
                 }
 
-                if(l1 < 1 || l1 > 8 || h < 0 || h > 24 || m < 0 || m > 60)
-                    return false;
-                return true;
+                //Checks Locker1 and time
+                return l1 >= 1 && l1 <= 8 && h >= 0 && h <= 24 && m >= 0 && m <= 60;
             }else
                 return false;
         }
 
+        //Manipulates the data's values and displays it in the ListView
         private Event modifyInfo(TextField[] tf, CheckBox ampm) {
 
             String team1 = tf[0].getText();
@@ -672,40 +706,43 @@ public class Client extends Application {
             else
                 am = "pm";
 
-            if (tf[2].getText() != null && tf[3].getText() != null)
+            //Checks if there is a second Team
+            if (tf[2].getText() != null && tf[3].getText() != null){
                 if (tf[2].getText().length() > 0 && tf[3].getText().length() > 0) {
                     String team2 = tf[2].getText();
                     int locker2 = Integer.parseInt(tf[3].getText());
 
-                    for (int i = 0; i < tf.length; i++)
-                        tf[i].setText(null);
+                    for (TextField field: tf)
+                        field.setText(null);
 
                     ampm.selectedProperty().setValue(false);
 
                     hour %= 12;
 
-                    if(hour == 0)
+                    if (hour == 0)
                         hour = 12;
 
                     return new Event(team1, team2, locker1, locker2, hour, min, am);
                 } else {
 
-                    for (int i = 0; i < tf.length; i++)
-                        tf[i].setText(null);
+                    for (TextField field: tf)
+                        field.setText(null);
 
                     ampm.selectedProperty().setValue(false);
 
                     hour %= 12;
 
-                    if(hour == 0)
+                    if (hour == 0)
                         hour = 12;
 
                     return new Event(team1, locker1, hour, min, am);
                 }
-            else {
 
-                for (int i = 0; i < tf.length; i++)
-                    tf[i].setText(null);
+                //If there isn't a second event
+            }else {
+
+                for (TextField field: tf)
+                    field.setText(null);
 
                 ampm.selectedProperty().setValue(false);
 
@@ -718,6 +755,7 @@ public class Client extends Application {
             }
         }
 
+        //Used to update the list, sets up the String for the ListView
         private void update(int d){
 
             n = new ArrayList<>();
@@ -740,6 +778,7 @@ public class Client extends Application {
             updateLists(combinedEvents);
         }
 
+        //Checks Locker Room1, Locker Room2, Hour and Min TextFields are numbers
         private boolean isNumber(String s){
 
             char a;
@@ -753,16 +792,16 @@ public class Client extends Application {
                     c++;
             }
 
-            if(c > 0)
-                return false;
-            else
-                return true;
+            return c <= 0;
         }
     }
 
+    //Retrieves the data from the server
     private void inputData(String ip) throws IOException, ClassNotFoundException {
 
         Socket socket = new Socket(ip, 36);
+
+        //The streams are in order with the server. Even if it isn't used
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
         ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
@@ -774,6 +813,8 @@ public class Client extends Application {
 
     }
 
+    //The client manipulates the data with 7 ArrayLists but the Server uses 14 ArrayLists, makes it easier to manipulate
+    //the data. This combines the data into 7 ArrayLists
     private ArrayList<Event>[] combineEvents(ArrayList<Event>[] events){
 
         ArrayList<Event>[] result = new ArrayList[7];
@@ -789,12 +830,13 @@ public class Client extends Application {
         return result;
     }
 
+    //Updates the lists on the MainPane
     private void updateLists(ArrayList<Event>[] combinedEvents){
 
         ArrayList<String>[] names = new ArrayList[7];
 
         for (int i = 0; i < combinedEvents.length; i++) {
-            names[i] = new ArrayList();
+            names[i] = new ArrayList<>();
 
             for (int k = 0; k < combinedEvents[i].size(); k++)
                 if(combinedEvents[i].get(k).getTeam2() != null)
@@ -806,35 +848,21 @@ public class Client extends Application {
         }
     }
 
-    private void writeToFile(Object o, String n) throws IOException{
-        File f = new File(n+".dat");
-        FileOutputStream fs = new FileOutputStream(f);
-        ObjectOutputStream os = new ObjectOutputStream(fs);
-
-        os.writeObject(o);
-        os.flush();
-        os.close();
-        fs.flush();
-        fs.close();
-    }
-
-    private Object readFromFile(String n) throws IOException, ClassNotFoundException{
-        File f = new File(n+".dat");
-        FileInputStream fi = new FileInputStream(f);
-        ObjectInputStream oi = new ObjectInputStream(fi);
-
-        return oi.readObject();
-    }
-
+    //Displays if the user makes a mistake
     private void displayError(String message){
         Stage s = new Stage();
-        Text t = new Text(message);
-        Button b = new Button("Ok");
-        FlowPane p = new FlowPane(t, b);
 
+        Text t = new Text(message);
+        t.setWrappingWidth(225);
+
+        Button b = new Button("Ok");
         b.setOnAction(e->s.close());
 
-        s.setScene(new Scene(p, 200, 100));
+        VBox p = new VBox(t, b);
+        p.setAlignment(Pos.CENTER);
+        p.setSpacing(10);
+
+        s.setScene(new Scene(p, 250, 100));
         s.setTitle("Error Message!!");
         s.setResizable(false);
         s.show();
@@ -843,11 +871,9 @@ public class Client extends Application {
     @Override
     public void stop(){
         try {
-            writeToFile(savedData, "Data");
+            Main.writeToFile(savedData, "Data");
         }catch (IOException io){io.printStackTrace();}
         System.exit(0);
     }
 
 }
-
-

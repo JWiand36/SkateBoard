@@ -33,31 +33,31 @@ public class Event implements Serializable{
         this.dayNightCycle = dayNightCycle;
     }
 
-    protected String getTeam1() {
+    public String getTeam1() {
         return team1;
     }
 
-    protected String getTeam2() {
+    public String getTeam2() {
         return team2;
     }
 
-    protected int getLocker1() {
+    public int getLocker1() {
         return locker1;
     }
 
-    protected int getLocker2() {
+    public int getLocker2() {
         return locker2;
     }
 
-    protected int getStartHour() {
+    public int getStartHour() {
         return startHour;
     }
 
-    protected int getStartMin() {
+    public int getStartMin() {
         return startMin;
     }
 
-    protected String getDayNightCycle() {
+    public String getDayNightCycle() {
         return dayNightCycle;
     }
 

@@ -1,19 +1,31 @@
-package sample;
+package sample.board;
 
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import sample.Event;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -21,50 +33,54 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Main extends Application {
 
-    private int today;
-    private int currentEventNbr1;
-    private int currentEventNbr2;
+    /*The nextEventNbr 1 & 2 helps the program discover the next event. It holds the value of next event until the time
+      pass the time of the event.
+      savedEventNbr 1 & 2 is used to work with the styling of FlowPanes
+    */
+    private int nextEventNbr1;
+    private int nextEventNbr2;
+    private int savedEventNbr1;
+    private int savedEventNbr2;
+    private int stop;
 
-    private ArrayList<Event>[] events = new ArrayList[14];
-    private Text clock;
+    private ArrayList<sample.Event>[] events = new ArrayList[14];
+    private Text clockText;
     private Text messageTxt;
     private Text specialMessage;
-    private BorderPane mainBorder;
+    private Text[] text = {new Text("Time"), new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Rink 1"), new Text("Time"), new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Rink 2")};
     private BorderPane innerBorder;
-    private BorderPane upperBorder;
     private FlowPane specialMessagePane;
-    private FlowPane rink1CheckPane;
-    private FlowPane rink2CheckPane;
+    private GridPane rink1 = new GridPane();
+    private GridPane rink2 = new GridPane();
     private File[] files;
     private Pane imagePane;
-    private Pane messagePane;
-    private PathTransition messagePath;
     private ImageView logo;
+    private Clock clock;
 
     @Override
     public void start(Stage primaryStage) {
 
         innerBorder = new BorderPane();
-        upperBorder = new BorderPane();
+        BorderPane upperBorder = new BorderPane();
         FlowPane clockPane = new FlowPane();
         specialMessagePane = new FlowPane();
-        messagePane = new Pane();
-        mainBorder = new BorderPane();
+        Pane messagePane = new Pane();
+        BorderPane mainBorder = new BorderPane();
         imagePane = new Pane();
+
+        stop = 1;
 
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
 
         try{
-            events = (ArrayList<Event>[]) readFromFile("Events");
-        }catch (IOException io){}
-        catch (ClassNotFoundException not){}
+            events = (ArrayList<sample.Event>[]) readFromFile("Events");
+        }catch (IOException | ClassNotFoundException e){e.getStackTrace();}
 
-        clock = new Text();
+        clockText = new Text();
         specialMessage = new Text("");
         messageTxt = new Text("");
 
@@ -79,7 +95,7 @@ public class Main extends Application {
         logo.setFitHeight(75);
         logo.setFitWidth(75);
 
-        clock.setFont(new Font(20));
+        clockText.setFont(new Font(20));
 
         specialMessage.setStyle("-fx-font-weight: bold; " +
                 "-fx-fill: white;");
@@ -91,13 +107,13 @@ public class Main extends Application {
         messagePane.getChildren().add(messageTxt);
         messagePane.setMinHeight(40);
 
-        clockPane.getChildren().addAll(logo,clock);
+        clockPane.getChildren().addAll(logo,clockText);
         clockPane.setAlignment(Pos.CENTER);
 
-        specialMessagePane.setStyle("-fx-background-color: #cc0000");
+        specialMessagePane.setStyle("-fx-background-color: #cc0000;" +
+                "-fx-alignment: top-center;" +
+                "-fx-pref-height: 40");
         specialMessagePane.getChildren().add(specialMessage);
-        specialMessagePane.setAlignment(Pos.TOP_CENTER);
-        specialMessagePane.setPrefHeight(40);
 
         innerBorder.setBottom(messagePane);
         innerBorder.setCenter(imagePane);
@@ -105,28 +121,30 @@ public class Main extends Application {
         upperBorder.setCenter(clockPane);
 
         mainBorder.setBottom(innerBorder);
+        mainBorder.setLeft(rink1);
+        mainBorder.setRight(rink2);
         mainBorder.setTop(upperBorder);
         mainBorder.setPadding(new Insets(5,5,0,5));
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Scene scene = new Scene(mainBorder, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
 
-        //The Clock of the program
-        new Thread(new RunClock()).start();
-
-        //Networking
+        new Thread(clock = new Clock(this)).start();
         new Thread(new RunServer()).start();
 
         runMessage("");
 
-        displayNewDay(today);
+        rink1 = setUpDisplay(rink1, 0);
+        rink2 = setUpDisplay(rink2, 6);
+
+        displayNewDay(clock.getDay());
 
         try {
             File dir = new File("Pictures");
             files = dir.listFiles();
 
             runImage();
-        }catch (IOException nul){nul.printStackTrace();}
+        }catch (IOException |ArrayIndexOutOfBoundsException nul){nul.printStackTrace();}
 
         primaryStage.setTitle("");
         primaryStage.setScene(scene);
@@ -136,12 +154,10 @@ public class Main extends Application {
     /*An If Nightmare, tread carefully, checks the time for the next event and continues if the event has already passed
       Still needs to be thoroughly tested.
     */
-    private Text checkTimes(int currentHour, int currentMin, String dayNightCycle, ArrayList<Event> dayList, int counter){
-
-        Text nxtEvntRink = new Text();
+    private int checkTimes(int currentHour, int currentMin, String dayNightCycle, ArrayList<sample.Event> dayList, int counter){
 
         try {
-            Event currentEvent1 = dayList.get(counter);
+            sample.Event currentEvent1 = dayList.get(counter);
 
             //If the current hour doesn't equal the start time of the event
             if(currentHour != currentEvent1.getStartHour()) {
@@ -151,9 +167,9 @@ public class Main extends Application {
                         counter = (counter + 1) % dayList.size();
 
                 }else
-                    if(dayNightCycle.equals("pm"))
-                        if (currentHour % 12 < currentEvent1.getStartHour() % 12 || currentEvent1.getDayNightCycle().equals("am"))
-                            counter = (counter + 1) % dayList.size();
+                if(dayNightCycle.equals("pm"))
+                    if (currentHour % 12 < currentEvent1.getStartHour() % 12 || currentEvent1.getDayNightCycle().equals("am"))
+                        counter = (counter + 1) % dayList.size();
             }
 
             //Current hour and the event start time equals but the day night cycle are off then it goes to the next event
@@ -166,39 +182,53 @@ public class Main extends Application {
               event, else it moves on.
              */
             if(currentHour == currentEvent1.getStartHour() && dayNightCycle.equals(currentEvent1.getDayNightCycle())) {
-                    if (currentMin > currentEvent1.getStartMin())
-                        counter = (counter + 1) % dayList.size();
+                if (currentMin > currentEvent1.getStartMin())
+                    counter = (counter + 1) % dayList.size();
             }
 
-            nxtEvntRink = new Text(dayList.get(counter).toString());
-            nxtEvntRink.setStyle("-fx-font-size: 16;");
-
-            if(dayList.get(0).equals(events[today].get(0))) {
-                if (counter != currentEventNbr1)
-                    currentEventNbr1 = (currentEventNbr1 + 1) % dayList.size();
-            }else
-                if(counter != currentEventNbr2)
-                    currentEventNbr2 = (currentEventNbr2 + 1) % dayList.size();
-
-            return nxtEvntRink;
+            return counter;
 
         }catch (NullPointerException np){System.out.println("No Event Found - NP");}catch (IndexOutOfBoundsException iob){
             System.out.println("No Event Found - IOB");
         }
 
-        return nxtEvntRink;
+        return counter;
+    }
+
+    private GridPane changeCurrentEvent(int currentEvent, GridPane pane){
+
+        /*This styles the FlowPanes of the desired cells in the GridPane. It will change to the next event to blue and
+          the last event to clear.
+         */
+        for(Node node : pane.getChildren()){
+            if (GridPane.getRowIndex(node) == currentEvent + 2)
+                node.setStyle("-fx-background-color: #99C0E6;");
+            else
+                node.setStyle("-fx-background-color: null;");
+
+        }
+
+        return pane;
     }
 
     private void displayNewDay(int today){
 
+        System.out.println("Displaying new Day" + today);
+        //This method is used to manipulate the GridPane if the data is changed.
         Platform.runLater(()->{
             try {
 
-                GridPane rink1 = new GridPane();
-                GridPane rink2 = new GridPane();
+                //Builds and fills the GridPane with data
+                rink1 = setRinkInfo(rink1, events[today]);
+                rink2 = setRinkInfo(rink2, events[today + 7]);
 
-                mainBorder.setLeft(setUpDisplay(rink1, events[today], "Rink 1"));
-                mainBorder.setRight(setUpDisplay(rink2, events[today+7], "Rink 2"));
+                //Styles the FlowPanes
+                rink1 = changeCurrentEvent(nextEventNbr1, rink1);
+                rink2 = changeCurrentEvent(nextEventNbr2, rink2);
+
+                savedEventNbr1 = nextEventNbr1;
+                savedEventNbr2 = nextEventNbr2;
+
 
             }catch (IndexOutOfBoundsException id){id.printStackTrace();}
             catch (NullPointerException nul){System.out.println("Null Value in displayNewDay");}
@@ -206,12 +236,12 @@ public class Main extends Application {
 
     }
 
-    //Sorts the arrays of Events to be in ascending order of time
-    private ArrayList<Event>[] sortEvents(ArrayList<Event>[] events){
-        ArrayList<Event>[] result = new ArrayList[events.length];
-        ArrayList<Event>[] sortArrays = new ArrayList[12];
-        ArrayList<Event> am = new ArrayList<>();
-        ArrayList<Event> pm = new ArrayList<>();
+    //Sorts the arrays of Events to be in ascending order of time, it uses the merge sorting technique.
+    private ArrayList<sample.Event>[] sortEvents(ArrayList<sample.Event>[] events){
+        ArrayList<sample.Event>[] result = new ArrayList[events.length];
+        ArrayList<sample.Event>[] sortArrays = new ArrayList[12];
+        ArrayList<sample.Event> am = new ArrayList<>();
+        ArrayList<sample.Event> pm = new ArrayList<>();
 
         //sets up the result and the array used to sort the data
         for(int i = 0; i < result.length; i++)
@@ -292,7 +322,8 @@ public class Main extends Application {
     public void stop(){
         try {
             writeToFile(events, "Events");
-        }catch (IOException io){}
+        }catch (IOException io){io.getStackTrace();}
+        stop = 0;
         System.exit(0);
     }
 
@@ -303,7 +334,7 @@ public class Main extends Application {
             try {
                 ServerSocket serverSocket = new ServerSocket(36);
 
-                while(true) {
+                while(stop == 1) {
 
                     //Looks for the communication of the client, the Input/Output Stream must be in order
                     Socket socket = serverSocket.accept();
@@ -323,13 +354,14 @@ public class Main extends Application {
 
                     //Receive the data
                     if(selection == 2) {
-                        events = (ArrayList<Event>[]) objInput.readObject();
+                        events = (ArrayList<sample.Event>[]) objInput.readObject();
                         events = sortEvents(events);
-                        displayNewDay(today);
-                        currentEventNbr1 = 0;
-                        currentEventNbr2 = 0;
+                        displayNewDay(clock.getDay());
+                        nextEventNbr1 = 0;
+                        nextEventNbr2 = 0;
                     }
 
+                    //Sets the alert message if there is an emergency. The FlowPane is red to attract attention
                     if(selection == 3){
                         specialMessage.setText((String)objInput.readObject());
                         specialMessage.setFont(new Font(20));
@@ -337,116 +369,34 @@ public class Main extends Application {
                         Platform.runLater(()->innerBorder.setTop(specialMessagePane));
                     }
 
+                    //Hides the alert message if the emergency is over.
                     if(selection == 4){
                         Platform.runLater(()->innerBorder.setTop(null));
                     }
 
+                    //Displays a promotional message that scrolls on the bottom
                     if(selection == 5){
                         runMessage((String)objInput.readObject());
                     }
 
                     socket.close();
                 }
-            }catch (IOException io){io.printStackTrace(); new Thread(new RunServer()).start();}
-            catch (ClassNotFoundException cnf){cnf.printStackTrace(); new Thread(new RunServer()).start();}
+            }catch (IOException | ClassNotFoundException e){e.printStackTrace(); new Thread(new RunServer()).start();}
 
-
-        }
-    }
-
-    //The Clock of the program
-    private class RunClock implements Runnable{
-
-        @Override
-        public void run(){
-            try {
-                Calendar calendar = Calendar.getInstance();
-                int second;
-                int min;
-                int hour;
-                int day;
-                int dayNight;
-                int savedDay = calendar.get(Calendar.DAY_OF_MONTH);
-                int weekDayNumber;
-                String dayNightCycle;
-                String[] weekDay = {"Sunday","Monday","Tuesday", "Wednesday", "Thursday", "Friday","Saturday"};
-
-                while (true) {
-                    //Checks the system clock for the time
-                    calendar = Calendar.getInstance();
-                    second = calendar.get(Calendar.SECOND);
-                    min = calendar.get(Calendar.MINUTE);
-                    hour = calendar.get(Calendar.HOUR);
-                    day = calendar.get(Calendar.DAY_OF_MONTH);
-                    dayNight = calendar.get(Calendar.AM_PM);
-                    weekDayNumber = (calendar.get(Calendar.DAY_OF_WEEK)-1)%7;
-
-                    today = weekDayNumber;
-
-
-                    if(hour == 0)
-                        hour = 12;
-
-                    if(dayNight == 1)
-                        dayNightCycle = "pm";
-                    else
-                        dayNightCycle = "am";
-
-                    //Checks the time to see if it's 10 min after the current event
-                    if(second%60 == 0) {
-                        rink1CheckPane = new FlowPane(checkTimes(hour, min, dayNightCycle, events[today], currentEventNbr1));
-                        rink2CheckPane = new FlowPane(checkTimes(hour, min, dayNightCycle, events[today+7], currentEventNbr2));
-
-                        rink1CheckPane.setAlignment(Pos.CENTER);
-                        rink2CheckPane.setAlignment(Pos.CENTER);
-
-                        Platform.runLater(()->{
-                            upperBorder.setLeft(rink1CheckPane);
-                            upperBorder.setRight(rink2CheckPane);
-                        });
-                    }
-
-                    if(savedDay != day){
-                        savedDay = day;
-                        events[(today+6)%7].clear();
-                        displayNewDay(today);
-                        currentEventNbr1 = 0;
-                        currentEventNbr2 = 0;
-
-                        Platform.runLater(()->innerBorder.setTop(null));
-                    }
-
-                    String time;
-
-                    if(min < 10)
-                        if(second < 10)
-                            time = weekDay[weekDayNumber] + " " + day + ", " + hour + ":0"+ min + ".0" + second + " "+ dayNightCycle;
-                        else
-                            time = weekDay[weekDayNumber] + " " + day + ", " + hour + ":0"+ min + "." + second + " "+ dayNightCycle;
-                    else
-                        if(second < 10)
-                            time = weekDay[weekDayNumber] + " " + day + ", " + hour + ":" + min + ".0" + second + " "+ dayNightCycle;
-                        else
-                            time = weekDay[weekDayNumber] + " " + day + ", " + hour + ":"+ min + "." + second + " "+ dayNightCycle;
-
-                    Platform.runLater(() ->clock.setText(time));
-
-                    Thread.sleep(1000);
-                }
-            } catch (InterruptedException ex) {ex.printStackTrace(); new Thread(new RunClock());
-            }
         }
     }
 
     //Image work at the bottom of the program
     private void runImage() throws IOException{
 
+        //The program crashes if there are more then 8 pictures at a time. I don't know why
         int amountOfPics = 8;
 
         Timeline timeline = new Timeline();
         ImageView[] pictures = new ImageView[amountOfPics];
         int x = 0;
 
+        //Sets up the display settings of the pictures
         for(int i = 0; i < amountOfPics; i++) {
             pictures[i] = new ImageView(getImage());
             pictures[i].setFitWidth(275);
@@ -454,6 +404,8 @@ public class Main extends Application {
             imagePane.getChildren().add(pictures[i]);
         }
 
+        //Sets up the pictures so they will scroll until a certain point which they will be off screen and the pictures
+        // will reset
         for( ImageView pic: pictures){
             timeline.getKeyFrames().addAll(
                     new KeyFrame(Duration.ZERO,new KeyValue(pic.translateXProperty(),x + 1500)),
@@ -471,19 +423,21 @@ public class Main extends Application {
     }
 
     //Collects a Random Image from the Pictures folder in the project
-    private Image getImage() throws IOException {
+    private Image getImage() throws IOException, ArrayIndexOutOfBoundsException{
 
         int index = (int) (Math.random() * files.length);
 
-        File f = new File(files[index].toString());
-        FileInputStream fi = new FileInputStream(f);
-        Image i = new Image(fi);
-
-        return i;
+        if(files.length != 0) {
+            File f = new File(files[index].toString());
+            FileInputStream fi = new FileInputStream(f);
+            return new Image(fi);
+        }
+        return null;
     }
 
+    //Runs the promotional message displayed at the bottom of the screen
     private void runMessage(String message){
-        messagePath = new PathTransition();
+        PathTransition messagePath = new PathTransition();
         Line line = new Line(message.length()+1600,25,-300-message.length(),25);
 
         messagePath.setDuration(Duration.millis(40000));
@@ -494,62 +448,72 @@ public class Main extends Application {
         messageTxt.setText(message);
     }
 
-    private GridPane setUpDisplay(GridPane pane, ArrayList<Event> day, String rink){
+    //Changes the settings of the GridPane, it is used to set up the Pane and supposed to be left alone if data is manipulated
+    private GridPane setUpDisplay(GridPane pane, int num) {
 
-        ColumnConstraints col1 = new ColumnConstraints(85);
-        ColumnConstraints col2 = new ColumnConstraints(150);
-        ColumnConstraints col3 = new ColumnConstraints(85);
-        ColumnConstraints col4 = new ColumnConstraints(150);
-        ColumnConstraints col5 = new ColumnConstraints(85);
+        ColumnConstraints[] col = new ColumnConstraints[5];
+
+        for(int i = 0; i < col.length; i+=2){
+            col[i] = new ColumnConstraints(85);
+            if(i < 4)
+                col[i+1] = new ColumnConstraints(150);
+        }
+
         RowConstraints row0 = new RowConstraints(30);
         RowConstraints row1 = new RowConstraints(20);
 
-        String[] text = {"Time", "Team 1", "Locker", "Team 2", "Locker"};
-
-        pane.getColumnConstraints().addAll(col1,col2,col3,col4,col5);
-        pane.getRowConstraints().addAll(row0,row1);
+        pane.getColumnConstraints().addAll(col[0],col[1],col[2],col[3],col[4]);
+        pane.getRowConstraints().addAll(row0, row1);
 
         pane.setStyle("-fx-font-size: 25");
-        pane.setHgap(15);
+
+        text[num+5].setStyle("-fx-font-size: 30;");
+        pane.add(text[num+5], 2, 0);
+
+        pane.add(text[num], 0, 1);
+        pane.add(text[num + 1], 1, 1);
+        pane.add(text[num + 2], 2, 1);
+        pane.add(text[num + 3], 3, 1);
+        pane.add(text[num + 4], 4, 1);
+
+        return pane;
+    }
+
+    //Changes the information that is to be displayed on the GridPane. It styles the information and displays it.
+    private GridPane setRinkInfo(GridPane pane, ArrayList<Event> day){
 
         Text time;
-        Text rink1t = new Text(rink);
-        rink1t.setStyle("-fx-font-size: 30;");
-        pane.add(rink1t,2,0);
 
-        pane.add(new Text(text[0]),0,1);
-        pane.add(new Text(text[1]),1,1);
-        pane.add(new Text(text[2]),2,1);
-        pane.add(new Text(text[3]),3,1);
-        pane.add(new Text(text[4]),4,1);
+        pane.getChildren().retainAll(text);
+
 
         for(int i = 0; i < day.size(); i++) {
             Text team1 = new Text(day.get(i).getTeam1());
             team1.setStyle("-fx-font-size: 18;");
-            pane.add(team1,1,i+2);
+            pane.add(new FlowPane(team1),1,i+2);
 
             if(day.get(i).getStartMin() < 10)
                 time = new Text(day.get(i).getStartHour()+":0"+day.get(i).getStartMin()+
                         "  "+day.get(i).getDayNightCycle());
             else
                 time = new Text(day.get(i).getStartHour()+":"+day.get(i).getStartMin()+
-                    "  "+day.get(i).getDayNightCycle());
+                        "  "+day.get(i).getDayNightCycle());
 
             time.setStyle("-fx-font-size: 18;");
-            pane.add(time,0,i+2);
+            pane.add(new FlowPane(time),0,i+2);
 
             Text locker1 = new Text(day.get(i).getLocker1()+"");
             locker1.setStyle("-fx-font-size: 18;");
-            pane.add(locker1,2,i+2);
+            pane.add(new FlowPane(locker1),2,i+2);
 
             if(day.get(i).getTeam2() != null){
                 Text team2 = new Text(day.get(i).getTeam2());
                 team2.setStyle("-fx-font-size: 18;");
-                pane.add(team2,3,i+2);
+                pane.add(new FlowPane(team2),3,i+2);
 
                 Text locker2 = new Text(day.get(i).getLocker2()+"");
                 locker2.setStyle("-fx-font-size: 18;");
-                pane.add(locker2,4,i+2);
+                pane.add(new FlowPane(locker2),4,i+2);
 
             }
 
@@ -558,7 +522,7 @@ public class Main extends Application {
         return pane;
     }
 
-    private void writeToFile(Object objectToFile, String nameOfFile) throws IOException{
+    public static void writeToFile(Object objectToFile, String nameOfFile) throws IOException{
         File f = new File(nameOfFile+".dat");
         FileOutputStream fs = new FileOutputStream(f);
         ObjectOutputStream os = new ObjectOutputStream(fs);
@@ -570,7 +534,7 @@ public class Main extends Application {
         fs.close();
     }
 
-    private Object readFromFile(String nameOfFile) throws IOException, ClassNotFoundException{
+    public static Object readFromFile(String nameOfFile) throws IOException, ClassNotFoundException{
         File f = new File(nameOfFile+".dat");
         FileInputStream fi = new FileInputStream(f);
         ObjectInputStream oi = new ObjectInputStream(fi);
@@ -578,11 +542,48 @@ public class Main extends Application {
         return oi.readObject();
     }
 
-    private Image readImageFile(String nameOfFile) throws IOException{
+    //Images need to be set as a JPG otherwise the exception is thrown. You have to reset the board to fix the problem
+    private Image readImageFile(String nameOfFile) throws IOException, ArrayIndexOutOfBoundsException{
         File f = new File(nameOfFile+".JPG");
         FileInputStream fi = new FileInputStream(f);
 
         return new Image(fi);
+    }
+
+    public void changeDay(int week_day_number){
+        displayNewDay(week_day_number);
+        if(week_day_number != 0) {
+            events[week_day_number - 1].clear();
+            events[week_day_number + 6].clear();
+        }else{
+            events[week_day_number + 6].clear();
+            events[week_day_number + 13].clear();
+        }
+        nextEventNbr1 = 0;
+        nextEventNbr2 = 0;
+
+        Platform.runLater(()->innerBorder.setTop(null));
+    }
+
+    public void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
+        nextEventNbr1 = checkTimes(hour, min, dayNightCycle, events[week_day_number], nextEventNbr1);
+        nextEventNbr2 = checkTimes(hour, min, dayNightCycle, events[week_day_number+7], nextEventNbr2);
+
+                        /*If the time surpasses the next events time. This will changed they Style of the desired
+                          FlowPanes and save the new event.
+                        */
+        if(savedEventNbr1 != nextEventNbr1 || savedEventNbr2 != nextEventNbr2) {
+            Platform.runLater(() -> {
+                rink1 = changeCurrentEvent(nextEventNbr1, rink1);
+                rink2 = changeCurrentEvent(nextEventNbr2, rink2);
+            });
+            savedEventNbr1 = nextEventNbr1;
+            savedEventNbr2 = nextEventNbr2;
+        }
+    }
+
+    public void setClock(String time){
+        this.clockText.setText(time);
     }
 
     public static void main(String[] args) {

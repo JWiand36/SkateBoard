@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_skateboard" default="compile.module.skateboard">
+  <dirname property="module.skateboard.basedir" file="${ant.file.module_skateboard}"/>
+  
+  <property name="module.jdk.home.skateboard" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.skateboard" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.skateboard" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.skateboard" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="skateboard.output.dir" value="${module.skateboard.basedir}/out/production/SkateBoard"/>
+  <property name="skateboard.testoutput.dir" value="${module.skateboard.basedir}/out/test/SkateBoard"/>
+  
+  <path id="skateboard.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="skateboard.module.production.classpath">
+    <path refid="${module.jdk.classpath.skateboard}"/>
+  </path>
+  
+  <path id="skateboard.runtime.production.module.classpath">
+    <pathelement location="${skateboard.output.dir}"/>
+  </path>
+  
+  <path id="skateboard.module.classpath">
+    <path refid="${module.jdk.classpath.skateboard}"/>
+    <pathelement location="${skateboard.output.dir}"/>
+  </path>
+  
+  <path id="skateboard.runtime.module.classpath">
+    <pathelement location="${skateboard.testoutput.dir}"/>
+    <pathelement location="${skateboard.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.skateboard">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.skateboard">
+    <patternset refid="excluded.from.module.skateboard"/>
+  </patternset>
+  
+  <path id="skateboard.module.sourcepath">
+    <dirset dir="${module.skateboard.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.skateboard" depends="compile.module.skateboard.production,compile.module.skateboard.tests" description="Compile module SkateBoard"/>
+  
+  <target name="compile.module.skateboard.production" depends="register.custom.compilers" description="Compile module SkateBoard; production classes">
+    <mkdir dir="${skateboard.output.dir}"/>
+    <javac2 destdir="${skateboard.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.skateboard}/javac">
+      <compilerarg line="${compiler.args.skateboard}"/>
+      <bootclasspath refid="skateboard.module.bootclasspath"/>
+      <classpath refid="skateboard.module.production.classpath"/>
+      <src refid="skateboard.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.skateboard"/>
+    </javac2>
+    
+    <copy todir="${skateboard.output.dir}">
+      <fileset dir="${module.skateboard.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.skateboard.tests" depends="register.custom.compilers,compile.module.skateboard.production" description="compile module SkateBoard; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.skateboard" description="cleanup module">
+    <delete dir="${skateboard.output.dir}"/>
+    <delete dir="${skateboard.testoutput.dir}"/>
+  </target>
+</project>
