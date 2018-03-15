@@ -30,8 +30,6 @@ import sample.Event;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class Main extends Application {
@@ -44,7 +42,6 @@ public class Main extends Application {
     private int nextEventNbr2;
     private int savedEventNbr1;
     private int savedEventNbr2;
-    private int stop;
 
     private ArrayList<sample.Event>[] events = new ArrayList[14];
     private Text clockText;
@@ -58,6 +55,7 @@ public class Main extends Application {
     private File[] files;
     private Pane imagePane;
     private ImageView logo;
+    private Server server;
     private Clock clock;
 
     @Override
@@ -71,8 +69,6 @@ public class Main extends Application {
         BorderPane mainBorder = new BorderPane();
         imagePane = new Pane();
 
-        stop = 1;
-
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
 
@@ -82,6 +78,7 @@ public class Main extends Application {
 
         clockText = new Text();
         specialMessage = new Text("");
+        specialMessage.setFont(new Font(20));
         messageTxt = new Text("");
 
         try {
@@ -130,7 +127,7 @@ public class Main extends Application {
         Scene scene = new Scene(mainBorder, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
 
         new Thread(clock = new Clock(this)).start();
-        new Thread(new RunServer()).start();
+        new Thread(server = new Server(this, clock)).start();
 
         runMessage("");
 
@@ -151,8 +148,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    /*An If Nightmare, tread carefully, checks the time for the next event and continues if the event has already passed
-      Still needs to be thoroughly tested.
+    /*
+    An If Nightmare, tread carefully, checks the time for the next event and continues if the event has already passed
     */
     private int checkTimes(int currentHour, int currentMin, String dayNightCycle, ArrayList<sample.Event> dayList, int counter){
 
@@ -211,7 +208,7 @@ public class Main extends Application {
         return pane;
     }
 
-    private void displayNewDay(int today){
+    void displayNewDay(int today){
 
         System.out.println("Displaying new Day" + today);
         //This method is used to manipulate the GridPane if the data is changed.
@@ -237,7 +234,7 @@ public class Main extends Application {
     }
 
     //Sorts the arrays of Events to be in ascending order of time, it uses the merge sorting technique.
-    private ArrayList<sample.Event>[] sortEvents(ArrayList<sample.Event>[] events){
+    void sortEvents(ArrayList<sample.Event>[] events){
         ArrayList<sample.Event>[] result = new ArrayList[events.length];
         ArrayList<sample.Event>[] sortArrays = new ArrayList[12];
         ArrayList<sample.Event> am = new ArrayList<>();
@@ -315,7 +312,9 @@ public class Main extends Application {
             }
             pm.clear();
         }
-        return result;
+        this.events = result;
+        displayNewDay(clock.getDay());
+        setNextEvent(0,0);
     }
 
     @Override
@@ -323,68 +322,12 @@ public class Main extends Application {
         try {
             writeToFile(events, "Events");
         }catch (IOException io){io.getStackTrace();}
-        stop = 0;
+        clock.stop();
+        server.stop();
         System.exit(0);
     }
 
     //The networking of the program.
-    private class RunServer implements Runnable{
-        @Override
-        public void run(){
-            try {
-                ServerSocket serverSocket = new ServerSocket(36);
-
-                while(stop == 1) {
-
-                    //Looks for the communication of the client, the Input/Output Stream must be in order
-                    Socket socket = serverSocket.accept();
-                    DataInputStream input = new DataInputStream(socket.getInputStream());
-                    ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
-                    ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
-
-
-                    byte selection = input.readByte();
-
-                    //Sends the data
-                    if(selection == 1){
-                        objOutput.writeObject(events);
-                        objOutput.flush();
-                        objOutput.close();
-                    }
-
-                    //Receive the data
-                    if(selection == 2) {
-                        events = (ArrayList<sample.Event>[]) objInput.readObject();
-                        events = sortEvents(events);
-                        displayNewDay(clock.getDay());
-                        nextEventNbr1 = 0;
-                        nextEventNbr2 = 0;
-                    }
-
-                    //Sets the alert message if there is an emergency. The FlowPane is red to attract attention
-                    if(selection == 3){
-                        specialMessage.setText((String)objInput.readObject());
-                        specialMessage.setFont(new Font(20));
-
-                        Platform.runLater(()->innerBorder.setTop(specialMessagePane));
-                    }
-
-                    //Hides the alert message if the emergency is over.
-                    if(selection == 4){
-                        Platform.runLater(()->innerBorder.setTop(null));
-                    }
-
-                    //Displays a promotional message that scrolls on the bottom
-                    if(selection == 5){
-                        runMessage((String)objInput.readObject());
-                    }
-
-                    socket.close();
-                }
-            }catch (IOException | ClassNotFoundException e){e.printStackTrace(); new Thread(new RunServer()).start();}
-
-        }
-    }
 
     //Image work at the bottom of the program
     private void runImage() throws IOException{
@@ -436,7 +379,7 @@ public class Main extends Application {
     }
 
     //Runs the promotional message displayed at the bottom of the screen
-    private void runMessage(String message){
+    void runMessage(String message){
         PathTransition messagePath = new PathTransition();
         Line line = new Line(message.length()+1600,25,-300-message.length(),25);
 
@@ -550,7 +493,7 @@ public class Main extends Application {
         return new Image(fi);
     }
 
-    public void changeDay(int week_day_number){
+    void changeDay(int week_day_number){
         displayNewDay(week_day_number);
         if(week_day_number != 0) {
             events[week_day_number - 1].clear();
@@ -565,7 +508,7 @@ public class Main extends Application {
         Platform.runLater(()->innerBorder.setTop(null));
     }
 
-    public void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
+    void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
         nextEventNbr1 = checkTimes(hour, min, dayNightCycle, events[week_day_number], nextEventNbr1);
         nextEventNbr2 = checkTimes(hour, min, dayNightCycle, events[week_day_number+7], nextEventNbr2);
 
@@ -582,11 +525,31 @@ public class Main extends Application {
         }
     }
 
-    public void setClock(String time){
+    void setClock(String time){
         this.clockText.setText(time);
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    void setNextEvent(int nextEventNbr1, int nextEventNbr2){
+        this.nextEventNbr1 = nextEventNbr1;
+        this.nextEventNbr2 = nextEventNbr2;
+    }
+
+    void setSpecialMessage(String text){
+        specialMessage.setText(text);
+    }
+
+    void displaySpecialMessage(boolean display){
+        if(display)
+            innerBorder.setTop(specialMessagePane);
+        else
+            innerBorder.setTop(null);
+    }
+
+    ArrayList<Event>[] getEvents(){
+        return events;
     }
 }

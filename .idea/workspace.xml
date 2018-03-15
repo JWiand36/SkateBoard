@@ -1,51 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="76cbff06-44a6-4238-bbb6-5ef260136793" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/Client.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/Server.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/Client/Client.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/Client/Data.dat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/Client/Events.dat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/Server/Board.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client$IPPane.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client$MainPane.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client$MenuPane.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client$MessagePane.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client$ModifyPane.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Client.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Controller.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Main$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Main$RunClock.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Main$RunServer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Main.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sample/Controller.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/sample/Client.java" afterPath="$PROJECT_DIR$/src/sample/client/Client.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/sample/Main.java" afterPath="$PROJECT_DIR$/src/sample/board/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Data.dat" afterPath="$PROJECT_DIR$/Data.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events.dat" afterPath="$PROJECT_DIR$/Events.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IP.dat" afterPath="$PROJECT_DIR$/IP.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/Client.jar" afterPath="$PROJECT_DIR$/out/artifacts/Client.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/Data.dat" afterPath="$PROJECT_DIR$/out/artifacts/Data.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/Events.dat" afterPath="$PROJECT_DIR$/out/artifacts/Events.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/Event.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/Event.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="76cbff06-44a6-4238-bbb6-5ef260136793" name="Default" comment="Refactoring the Server File out of the">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main$RunServer.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/out/production/SkateBoard/META-INF/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/sample.fxml" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/sample.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/Event.java" afterPath="$PROJECT_DIR$/src/sample/Event.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/sample.fxml" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/board/Main.java" afterPath="$PROJECT_DIR$/src/sample/board/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,26 +18,55 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1683">
-              <caret line="131" column="52" lean-forward="false" selection-start-line="131" selection-start-column="52" selection-end-line="131" selection-end-column="52" />
+            <state relative-caret-position="210">
+              <caret line="548" column="37" lean-forward="true" selection-start-line="548" selection-start-column="37" selection-end-line="548" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
                 <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-                <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-                <element signature="e#22026#22027#0" expanded="true" />
-                <element signature="e#22070#22071#0" expanded="true" />
+                <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+                <element signature="method#stop#0;class#Main#0" expanded="false" />
+                <element signature="method#runImage#0;class#Main#0" expanded="false" />
+                <element signature="method#getImage#0;class#Main#0" expanded="false" />
+                <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+                <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+                <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+                <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+                <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+                <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+                <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+                <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+                <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+                <element signature="e#19973#19974#0" expanded="true" />
+                <element signature="e#20017#20018#0" expanded="true" />
+                <element signature="e#20233#20234#0" expanded="true" />
+                <element signature="e#20262#20263#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Clock.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="24">
+              <caret line="53" column="44" lean-forward="false" selection-start-line="53" selection-start-column="44" selection-end-line="53" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2584#2585#0" expanded="true" />
+                <element signature="e#2608#2609#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Clock.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/board/Clock.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
+            <state relative-caret-position="-624">
               <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -90,10 +80,15 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14654">
-              <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
+            <state relative-caret-position="204">
+              <caret line="819" column="8" lean-forward="false" selection-start-line="819" selection-start-column="8" selection-end-line="819" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+                <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+                <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+                <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+                <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -137,9 +132,10 @@
         <option value="$PROJECT_DIR$/src/sample/Client/Client.java" />
         <option value="$PROJECT_DIR$/src/sample/board/Event.java" />
         <option value="$PROJECT_DIR$/src/sample/Event.java" />
-        <option value="$PROJECT_DIR$/src/sample/client/Client.java" />
-        <option value="$PROJECT_DIR$/src/sample/board/Main.java" />
         <option value="$PROJECT_DIR$/src/sample/board/Clock.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/Client.java" />
+        <option value="$PROJECT_DIR$/src/sample/board/Server.java" />
+        <option value="$PROJECT_DIR$/src/sample/board/Main.java" />
       </list>
     </option>
   </component>
@@ -216,6 +212,9 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="skateboard" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -363,13 +362,14 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3284553" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32646593" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32646593" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -384,7 +384,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3284553" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280507" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -393,7 +392,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -403,10 +404,25 @@
           <caret line="131" column="52" lean-forward="false" selection-start-line="131" selection-start-column="52" selection-end-line="131" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
             <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -417,6 +433,11 @@
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -439,10 +460,25 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
             <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -465,6 +501,11 @@
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -475,10 +516,25 @@
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
             <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -492,6 +548,11 @@
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -502,10 +563,25 @@
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
             <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -519,6 +595,11 @@
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -529,10 +610,25 @@
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
             <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -546,6 +642,11 @@
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -556,10 +657,25 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
             <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -574,6 +690,11 @@
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -650,33 +771,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14654">
-          <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1683">
-          <caret line="131" column="52" lean-forward="false" selection-start-line="131" selection-start-column="52" selection-end-line="131" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="e#22026#22027#0" expanded="true" />
-            <element signature="e#22070#22071#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/board/Clock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
+        <state relative-caret-position="-624">
           <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -686,12 +783,140 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="819" column="8" lean-forward="false" selection-start-line="819" selection-start-column="8" selection-end-line="819" selection-end-column="8" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#IPPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
+            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
+            <element signature="class#MainPane#0;class#Client#0" expanded="false" />
+            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="24">
+          <caret line="53" column="44" lean-forward="false" selection-start-line="53" selection-start-column="44" selection-end-line="53" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2584#2585#0" expanded="true" />
+            <element signature="e#2608#2609#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="548" column="37" lean-forward="true" selection-start-line="548" selection-start-column="37" selection-end-line="548" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#checkTimes#0;class#Main#0" expanded="false" />
+            <element signature="method#changeCurrentEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
+            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#runImage#0;class#Main#0" expanded="false" />
+            <element signature="method#getImage#0;class#Main#0" expanded="false" />
+            <element signature="method#runMessage#0;class#Main#0" expanded="false" />
+            <element signature="method#setUpDisplay#0;class#Main#0" expanded="false" />
+            <element signature="method#setRinkInfo#0;class#Main#0" expanded="false" />
+            <element signature="method#writeToFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#readImageFile#0;class#Main#0" expanded="false" />
+            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
+            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
+            <element signature="method#setNextEvent#0;class#Main#0" expanded="false" />
+            <element signature="e#19973#19974#0" expanded="true" />
+            <element signature="e#20017#20018#0" expanded="true" />
+            <element signature="e#20233#20234#0" expanded="true" />
+            <element signature="e#20262#20263#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>SkateBoard</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>artifacts</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
