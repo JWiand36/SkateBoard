@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -23,6 +24,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sample.Event;
@@ -57,6 +59,7 @@ public class Main extends Application {
     private ImageView logo;
     private Server server;
     private Clock clock;
+    private ImageView[] pictures;
 
     @Override
     public void start(Stage primaryStage) {
@@ -327,55 +330,85 @@ public class Main extends Application {
         System.exit(0);
     }
 
-    //The networking of the program.
-
     //Image work at the bottom of the program
     private void runImage() throws IOException{
+//
+        int amountOfPics = 3;
+        //This gets the center of the primary stage
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        double centerX = bounds.getWidth() / 2;
+        try {
 
-        //The program crashes if there are more then 8 pictures at a time. I don't know why
-        int amountOfPics = 8;
+//        Timeline timeline = new Timeline();
+           pictures = new ImageView[amountOfPics];
+           for(int i = 0; i < pictures.length; i++)
+               pictures[i] = new ImageView();
 
-        Timeline timeline = new Timeline();
-        ImageView[] pictures = new ImageView[amountOfPics];
-        int x = 0;
-
+           pictures = getImages(pictures);
+        ;
+//        int x = 0;
+//
         //Sets up the display settings of the pictures
         for(int i = 0; i < amountOfPics; i++) {
-            pictures[i] = new ImageView(getImage());
             pictures[i].setFitWidth(275);
             pictures[i].setFitHeight(150);
+
+
+            pictures[i].setX((centerX - 550) + i * 400);
             imagePane.getChildren().add(pictures[i]);
         }
 
-        //Sets up the pictures so they will scroll until a certain point which they will be off screen and the pictures
-        // will reset
-        for( ImageView pic: pictures){
-            timeline.getKeyFrames().addAll(
-                    new KeyFrame(Duration.ZERO,new KeyValue(pic.translateXProperty(),x + 1500)),
-                    new KeyFrame(Duration.millis(200000), e-> {
-                        try {
-                            pic.setImage(getImage());
-                        } catch (IOException io) {io.printStackTrace();}
-                    }, new KeyValue(pic.translateXProperty(), x - 300 * amountOfPics))
-            );
-            x += 300;
-        }
 
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+            FadeTransition[] transitions = new FadeTransition[amountOfPics];
+            ParallelTransition parallelTransition = new ParallelTransition();
+
+            for (int i = 0; i < transitions.length; i++) {
+                transitions[i] = new FadeTransition(Duration.seconds(10), pictures[i]);
+                transitions[i].setToValue(1.0);
+                transitions[i].setFromValue(0);
+                parallelTransition.getChildren().add(transitions[i]);
+            }
+
+            parallelTransition.setOnFinished(e -> {
+                if(transitions[amountOfPics-1].getToValue() == 1.0){
+                    for (FadeTransition transition: transitions) {
+                        transition.setToValue(0.0);
+                        transition.setFromValue(1.0);
+                    }
+                }else{
+                    for (int i = 0; i < transitions.length; i++) {
+                        transitions[i].setToValue(1.0);
+                        transitions[i].setFromValue(0);
+                        try {
+                            pictures = getImages(pictures);
+                        }catch (IOException io){io.printStackTrace();}
+                    }
+                }
+
+                parallelTransition.play();
+            });
+
+            parallelTransition.play();
+        }catch (Exception e){e.printStackTrace();}
+
     }
 
     //Collects a Random Image from the Pictures folder in the project
-    private Image getImage() throws IOException, ArrayIndexOutOfBoundsException{
+    private ImageView[] getImages(ImageView[] pictures) throws IOException, ArrayIndexOutOfBoundsException{
 
-        int index = (int) (Math.random() * files.length);
-
-        if(files.length != 0) {
-            File f = new File(files[index].toString());
-            FileInputStream fi = new FileInputStream(f);
-            return new Image(fi);
-        }
-        return null;
+        try {
+            for (int i = 0; i < pictures.length; i++) {
+                int index = (int) (Math.random() * files.length);
+                if (files.length != 0) {
+                    File f = new File(files[index].toString());
+                    FileInputStream fi = new FileInputStream(f);
+                    if (pictures[i].getImage() != null)
+                        pictures[i].getImage().cancel();
+                    pictures[i].setImage(new Image(fi));
+                }
+            }
+        }catch(OutOfMemoryError mem){mem.printStackTrace();}
+        return pictures;
     }
 
     //Runs the promotional message displayed at the bottom of the screen
@@ -512,7 +545,7 @@ public class Main extends Application {
         nextEventNbr1 = checkTimes(hour, min, dayNightCycle, events[week_day_number], nextEventNbr1);
         nextEventNbr2 = checkTimes(hour, min, dayNightCycle, events[week_day_number+7], nextEventNbr2);
 
-                        /*If the time surpasses the next events time. This will changed they Style of the desired
+                        /*If the time surpasses the next events time. This will change the Style of the desired
                           FlowPanes and save the new event.
                         */
         if(savedEventNbr1 != nextEventNbr1 || savedEventNbr2 != nextEventNbr2) {
