@@ -1,7 +1,6 @@
 package sample.board;
 
 import javafx.application.Platform;
-import javafx.scene.text.Font;
 import sample.Event;
 
 import java.io.DataInputStream;
@@ -33,6 +32,7 @@ public class Server implements Runnable{
             while(stop == 1) {
 
                 //Looks for the communication of the client, the Input/Output Stream must be in order
+                //Input, Input, Output
                 Socket socket = serverSocket.accept();
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
@@ -72,7 +72,11 @@ public class Server implements Runnable{
 
                 socket.close();
             }
-        }catch (IOException | ClassNotFoundException e){e.printStackTrace(); new Thread(new Server(main, clock)).start();}
+        }catch (IOException | ClassNotFoundException e){
+            stop = 0;
+            e.printStackTrace();
+            new Thread(new Server(main, clock)).start();
+        }
 
     }
 

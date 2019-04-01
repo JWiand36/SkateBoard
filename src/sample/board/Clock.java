@@ -6,17 +6,8 @@ import java.util.Calendar;
 
 public class Clock implements Runnable{
 
-    private Calendar calendar = Calendar.getInstance();
-    private int stop = 1;
-    private int second;
-    private int min;
-    private int hour;
-    private int day_of_month;
-    private int dayNight;
+    private boolean stop = true;
     private int week_day_number;
-    private int savedDay = calendar.get(Calendar.DAY_OF_MONTH);
-    private String dayNightCycle;
-    private String[] weekDayString = {"Sunday","Monday","Tuesday", "Wednesday", "Thursday", "Friday","Saturday"};
     private Main main;
 
 
@@ -26,10 +17,25 @@ public class Clock implements Runnable{
 
     @Override
     public void run(){
+
+        Calendar calendar = Calendar.getInstance();
+
+        int second;
+        int min;
+        int hour;
+        int day_of_month;
+        int dayNight;
+        int savedDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String dayNightCycle;
+
+        String[] weekDayString = {"Sunday","Monday","Tuesday", "Wednesday", "Thursday", "Friday","Saturday"};
+
+
         System.out.println("Running Clock");
         try {
 
-            while (stop == 1) {
+            while (stop) {
                 //Checks the system clock for the time
                 calendar = Calendar.getInstance();
                 second = calendar.get(Calendar.SECOND);
@@ -50,12 +56,13 @@ public class Clock implements Runnable{
 
                 //Checks the time to see if the time is after the next event
                 if(second%60 == 0) {
-                    this.nextEvent();
+                    this.nextEvent(hour, min, dayNightCycle, week_day_number);
                 }
 
                 //Resets the day and manipulates the GridPane to display the correct information.
                 if(savedDay != day_of_month){
-                    this.nextDay();
+                    this.nextDay(week_day_number);
+                    savedDay = day_of_month;
                 }
 
                 //Sets up the time that is displayed at the top, it's a series of If statements to add Zeros if Min
@@ -77,23 +84,27 @@ public class Clock implements Runnable{
 
                 Thread.sleep(1000);
             }
-        } catch (InterruptedException ex) {ex.printStackTrace(); new Thread(new Clock(main));
+        } catch (InterruptedException ex) {
+            stop = false;
+            ex.printStackTrace();
+            System.out.println("Running New Clock");
+            new Thread(new Clock(main));
         }
     }
 
-    public void stop(){
-        stop = 0;
+    void stop(){
+        stop = false;
     }
 
-    private void nextEvent(){
+    private void nextEvent(int hour, int min, String dayNightCycle, int week_day_number){
         main.changeEvent(hour, min, dayNightCycle, week_day_number);
     }
 
-    private void nextDay(){
+    private void nextDay(int week_day_number){
         main.changeDay(week_day_number);
     }
 
-    public int getDay() {
+    int getDay() {
         System.out.println("Getting New Day " + week_day_number);
         return week_day_number;
     }

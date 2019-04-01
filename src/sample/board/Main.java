@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -20,7 +22,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -44,6 +45,10 @@ public class Main extends Application {
     private int nextEventNbr2;
     private int savedEventNbr1;
     private int savedEventNbr2;
+    private int fontSize = 35; //35 for production.
+
+    private double xOffset;
+    private double yOffset;
 
     private ArrayList<sample.Event>[] events = new ArrayList[14];
     private Text clockText;
@@ -54,12 +59,10 @@ public class Main extends Application {
     private FlowPane specialMessagePane;
     private GridPane rink1 = new GridPane();
     private GridPane rink2 = new GridPane();
-    private File[] files;
-    private Pane imagePane;
     private ImageView logo;
     private Server server;
     private Clock clock;
-    private ImageView[] pictures;
+    private PictureController picture;
 
     @Override
     public void start(Stage primaryStage) {
@@ -70,20 +73,31 @@ public class Main extends Application {
         specialMessagePane = new FlowPane();
         Pane messagePane = new Pane();
         BorderPane mainBorder = new BorderPane();
-        imagePane = new Pane();
 
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
 
-        try{
-            events = (ArrayList<sample.Event>[]) readFromFile("Events");
-        }catch (IOException | ClassNotFoundException e){e.getStackTrace();}
-
+        messageTxt = new Text("");
         clockText = new Text();
         specialMessage = new Text("");
-        specialMessage.setFont(new Font(20));
-        messageTxt = new Text("");
+        specialMessage.setFont(new Font(fontSize));
 
+        /*
+            Each import has their own try catch in case one of them fails it doesn't effect the others
+         */
+
+        //Imports the events from file
+        try{
+            events = (ArrayList<sample.Event>[]) readFromFile("Events");
+
+        }catch (IOException | ClassNotFoundException e){e.getStackTrace();}
+
+        //Imports the promotional message from file
+        try{
+            runMessage((String)readFromFile("Message"));
+        }catch (IOException | ClassNotFoundException e){e.getStackTrace();}
+
+        //Imports photos from files
         try {
             logo = new ImageView(readImageFile("logo"));
 
@@ -92,17 +106,16 @@ public class Main extends Application {
                     new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
         }catch (IOException io){io.printStackTrace();}
 
-        logo.setFitHeight(75);
-        logo.setFitWidth(75);
+        logo.setFitHeight(125);
+        logo.setFitWidth(275);
 
-        clockText.setFont(new Font(20));
+        clockText.setFont(new Font(fontSize));
 
         specialMessage.setStyle("-fx-font-weight: bold; " +
                 "-fx-fill: white;");
 
-        messageTxt.setFont(new Font((18)));
+        messageTxt.setFont(new Font((fontSize)));
 
-        imagePane.setPrefHeight(150);
 
         messagePane.getChildren().add(messageTxt);
         messagePane.setMinHeight(40);
@@ -115,8 +128,10 @@ public class Main extends Application {
                 "-fx-pref-height: 40");
         specialMessagePane.getChildren().add(specialMessage);
 
+        picture = new PictureController();
+
         innerBorder.setBottom(messagePane);
-        innerBorder.setCenter(imagePane);
+        innerBorder.setCenter(picture.getImagePane());
 
         upperBorder.setCenter(clockPane);
 
@@ -132,19 +147,35 @@ public class Main extends Application {
         new Thread(clock = new Clock(this)).start();
         new Thread(server = new Server(this, clock)).start();
 
-        runMessage("");
-
         rink1 = setUpDisplay(rink1, 0);
         rink2 = setUpDisplay(rink2, 6);
 
+        picture.runImage();
+
+        //The next to listeners allow the user to click anywheres and drag the board.
+        //grab the main border
+        mainBorder.setOnMousePressed(e-> {
+                xOffset = e.getSceneX();
+                yOffset = e.getSceneY();
+        });
+
+        //move around here
+        mainBorder.setOnMouseDragged(e -> {
+                primaryStage.setX(e.getScreenX() - xOffset);
+                primaryStage.setY(e.getScreenY() - yOffset);
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, e-> {
+            if(e.getCode()== KeyCode.SPACE) {
+                primaryStage.setFullScreen(true);
+            }
+
+            if(e.getCode() == KeyCode.BACK_SPACE){
+                primaryStage.close();
+            }
+        });
+
         displayNewDay(clock.getDay());
-
-        try {
-            File dir = new File("Pictures");
-            files = dir.listFiles();
-
-            runImage();
-        }catch (IOException |ArrayIndexOutOfBoundsException nul){nul.printStackTrace();}
 
         primaryStage.setTitle("");
         primaryStage.setScene(scene);
@@ -211,7 +242,7 @@ public class Main extends Application {
         return pane;
     }
 
-    void displayNewDay(int today){
+    private void displayNewDay(int today){
 
         System.out.println("Displaying new Day" + today);
         //This method is used to manipulate the GridPane if the data is changed.
@@ -317,111 +348,32 @@ public class Main extends Application {
         }
         this.events = result;
         displayNewDay(clock.getDay());
-        setNextEvent(0,0);
+        this.nextEventNbr1 = 0;
+        this.nextEventNbr2 = 0;
     }
 
     @Override
     public void stop(){
         try {
             writeToFile(events, "Events");
+            writeToFile(messageTxt.getText(), "Message");
         }catch (IOException io){io.getStackTrace();}
         clock.stop();
         server.stop();
         System.exit(0);
     }
 
-    //Image work at the bottom of the program
-    private void runImage() throws IOException{
-//
-        int amountOfPics = 3;
-        //This gets the center of the primary stage
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-        double centerX = bounds.getWidth() / 2;
-        try {
-
-//        Timeline timeline = new Timeline();
-           pictures = new ImageView[amountOfPics];
-           for(int i = 0; i < pictures.length; i++)
-               pictures[i] = new ImageView();
-
-           pictures = getImages(pictures);
-        ;
-//        int x = 0;
-//
-        //Sets up the display settings of the pictures
-        for(int i = 0; i < amountOfPics; i++) {
-            pictures[i].setFitWidth(275);
-            pictures[i].setFitHeight(150);
-
-
-            pictures[i].setX((centerX - 550) + i * 400);
-            imagePane.getChildren().add(pictures[i]);
-        }
-
-
-            FadeTransition[] transitions = new FadeTransition[amountOfPics];
-            ParallelTransition parallelTransition = new ParallelTransition();
-
-            for (int i = 0; i < transitions.length; i++) {
-                transitions[i] = new FadeTransition(Duration.seconds(10), pictures[i]);
-                transitions[i].setToValue(1.0);
-                transitions[i].setFromValue(0);
-                parallelTransition.getChildren().add(transitions[i]);
-            }
-
-            parallelTransition.setOnFinished(e -> {
-                if(transitions[amountOfPics-1].getToValue() == 1.0){
-                    for (FadeTransition transition: transitions) {
-                        transition.setToValue(0.0);
-                        transition.setFromValue(1.0);
-                    }
-                }else{
-                    for (int i = 0; i < transitions.length; i++) {
-                        transitions[i].setToValue(1.0);
-                        transitions[i].setFromValue(0);
-                        try {
-                            pictures = getImages(pictures);
-                        }catch (IOException io){io.printStackTrace();}
-                    }
-                }
-
-                parallelTransition.play();
-            });
-
-            parallelTransition.play();
-        }catch (Exception e){e.printStackTrace();}
-
-    }
-
-    //Collects a Random Image from the Pictures folder in the project
-    private ImageView[] getImages(ImageView[] pictures) throws IOException, ArrayIndexOutOfBoundsException{
-
-        try {
-            for (int i = 0; i < pictures.length; i++) {
-                int index = (int) (Math.random() * files.length);
-                if (files.length != 0) {
-                    File f = new File(files[index].toString());
-                    FileInputStream fi = new FileInputStream(f);
-                    if (pictures[i].getImage() != null)
-                        pictures[i].getImage().cancel();
-                    pictures[i].setImage(new Image(fi));
-                }
-            }
-        }catch(OutOfMemoryError mem){mem.printStackTrace();}
-        return pictures;
-    }
-
     //Runs the promotional message displayed at the bottom of the screen
     void runMessage(String message){
+        messageTxt.setText(message);
         PathTransition messagePath = new PathTransition();
-        Line line = new Line(message.length()+1600,25,-300-message.length(),25);
+        Line line = new Line(message.length()+3000,25,-1400-message.length(),25);
 
-        messagePath.setDuration(Duration.millis(40000));
+        messagePath.setDuration(Duration.millis(50000));
         messagePath.setCycleCount(Timeline.INDEFINITE);
         messagePath.setNode(messageTxt);
         messagePath.setPath(line);
         messagePath.play();
-        messageTxt.setText(message);
     }
 
     //Changes the settings of the GridPane, it is used to set up the Pane and supposed to be left alone if data is manipulated
@@ -430,20 +382,15 @@ public class Main extends Application {
         ColumnConstraints[] col = new ColumnConstraints[5];
 
         for(int i = 0; i < col.length; i+=2){
-            col[i] = new ColumnConstraints(85);
+            col[i] = new ColumnConstraints((4*fontSize));
             if(i < 4)
-                col[i+1] = new ColumnConstraints(150);
+                col[i+1] = new ColumnConstraints((7*fontSize));
         }
 
-        RowConstraints row0 = new RowConstraints(30);
-        RowConstraints row1 = new RowConstraints(20);
-
         pane.getColumnConstraints().addAll(col[0],col[1],col[2],col[3],col[4]);
-        pane.getRowConstraints().addAll(row0, row1);
 
-        pane.setStyle("-fx-font-size: 25");
+        pane.setStyle("-fx-font-size: "+fontSize+";");
 
-        text[num+5].setStyle("-fx-font-size: 30;");
         pane.add(text[num+5], 2, 0);
 
         pane.add(text[num], 0, 1);
@@ -465,7 +412,7 @@ public class Main extends Application {
 
         for(int i = 0; i < day.size(); i++) {
             Text team1 = new Text(day.get(i).getTeam1());
-            team1.setStyle("-fx-font-size: 18;");
+            team1.setStyle("-fx-font-size: "+(fontSize-7)+";");
             pane.add(new FlowPane(team1),1,i+2);
 
             if(day.get(i).getStartMin() < 10)
@@ -475,20 +422,20 @@ public class Main extends Application {
                 time = new Text(day.get(i).getStartHour()+":"+day.get(i).getStartMin()+
                         "  "+day.get(i).getDayNightCycle());
 
-            time.setStyle("-fx-font-size: 18;");
+            time.setStyle("-fx-font-size: "+(fontSize-7)+";");
             pane.add(new FlowPane(time),0,i+2);
 
             Text locker1 = new Text(day.get(i).getLocker1()+"");
-            locker1.setStyle("-fx-font-size: 18;");
+            locker1.setStyle("-fx-font-size: "+(fontSize-7)+";");
             pane.add(new FlowPane(locker1),2,i+2);
 
             if(day.get(i).getTeam2() != null){
                 Text team2 = new Text(day.get(i).getTeam2());
-                team2.setStyle("-fx-font-size: 18;");
+                team2.setStyle("-fx-font-size: "+(fontSize-7)+";");
                 pane.add(new FlowPane(team2),3,i+2);
 
                 Text locker2 = new Text(day.get(i).getLocker2()+"");
-                locker2.setStyle("-fx-font-size: 18;");
+                locker2.setStyle("-fx-font-size: "+(fontSize-7)+";");
                 pane.add(new FlowPane(locker2),4,i+2);
 
             }
@@ -520,10 +467,22 @@ public class Main extends Application {
 
     //Images need to be set as a JPG otherwise the exception is thrown. You have to reset the board to fix the problem
     private Image readImageFile(String nameOfFile) throws IOException, ArrayIndexOutOfBoundsException{
-        File f = new File(nameOfFile+".JPG");
-        FileInputStream fi = new FileInputStream(f);
+        File f;
+        try {
+            f = new File(nameOfFile + ".JPG");
+            FileInputStream fi = new FileInputStream(f);
+            return new Image(fi);
+        }catch (Exception io){
+            try{
+                f = new File(nameOfFile + ".PNG");
+                FileInputStream fi = new FileInputStream(f);
+                return new Image(fi);
+            }catch (Exception i){
+                System.out.println("Can't find File");
+            }
+        }
 
-        return new Image(fi);
+        return new Image(nameOfFile + ".JPG");
     }
 
     void changeDay(int week_day_number){
@@ -564,11 +523,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    void setNextEvent(int nextEventNbr1, int nextEventNbr2){
-        this.nextEventNbr1 = nextEventNbr1;
-        this.nextEventNbr2 = nextEventNbr2;
     }
 
     void setSpecialMessage(String text){
