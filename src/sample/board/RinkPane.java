@@ -163,21 +163,25 @@ class RinkPane extends GridPane {
         }
     }
 
-    private void resetNextEvent(){
-        this.nextEventNbr = 0;
+    private void resetNewDay(int hour, int min, String dayNight, ArrayList<Event> events){
+
+        nextEventNbr = 0;
+
+        for(int i = 0; i < events.size(); i++){
+            checkTimes(hour, min, dayNight, events);
+        }
     }
 
-    void displayNewDay(int today, ArrayList<Event>[] events){
+    void displayNewDay(int hour, int min, String dayNight, ArrayList<Event> events){
 
-        System.out.println("Displaying new Day" + today);
         //This method is used to manipulate the GridPane if the data is changed.
         Platform.runLater(()->{
             try {
 
                 //Builds and fills the GridPane with data
-                setRinkInfo(events[today]);
+                setRinkInfo(events);
 
-                resetNextEvent();
+                resetNewDay(hour, min, dayNight, events);
 
                 //Styles the FlowPanes
                 changeCurrentEvent();
