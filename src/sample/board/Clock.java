@@ -9,6 +9,9 @@ public class Clock implements Runnable{
     private boolean stop = true;
     private boolean ready = false;
     private int week_day_number;
+    private int min;
+    private int hour;
+    private String dayNightCycle;
     private Main main;
 
 
@@ -22,13 +25,10 @@ public class Clock implements Runnable{
         Calendar calendar = Calendar.getInstance();
 
         int second;
-        int min;
-        int hour;
         int day_of_month;
-        int dayNight;
         int savedDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int dayNight;
 
-        String dayNightCycle;
 
         String[] weekDayString = {"Sunday","Monday","Tuesday", "Wednesday", "Thursday", "Friday","Saturday"};
 
@@ -112,8 +112,19 @@ public class Clock implements Runnable{
     }
 
     int getDay() {
-        System.out.println("Getting New Day " + week_day_number);
         return week_day_number;
+    }
+
+    int getHour(){
+        return hour;
+    }
+
+    int getMin(){
+        return min;
+    }
+
+    String dayNight(){
+        return dayNightCycle;
     }
 }
 

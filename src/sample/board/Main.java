@@ -176,6 +176,7 @@ public class Main extends Application {
 
     //Sorts the arrays of Events to be in ascending order of time, it uses the merge sorting technique.
     void sortEvents(ArrayList<sample.Event>[] events){
+        System.out.println("Sorting");
         ArrayList<sample.Event>[] result = new ArrayList[events.length];
         ArrayList<sample.Event>[] sortArrays = new ArrayList[12];
         ArrayList<sample.Event> am = new ArrayList<>();
@@ -206,16 +207,16 @@ public class Main extends Application {
 
             //Goes through the list of Arrays and puts it in the result. If there are multiple hours, sorts by the Min.
             for(int k = 0; k < sortArrays.length; k++){
-                int selection = 0;
+                int index = 0;
                 while(sortArrays[k].size() > 1){
                     for(int c = 1; c < sortArrays[k].size(); c++) {
-                        if(sortArrays[k].get(selection).getStartMin() > sortArrays[k].get(c).getStartMin())
-                            selection += 1;
-                        c++;
+                        if(sortArrays[k].get(index).getStartMin() > sortArrays[k].get(c).getStartMin()){
+                            index = sortArrays[k].indexOf(sortArrays[k].get(c));
+                        }
                     }
-                    result[i].add(sortArrays[k].get(selection));
-                    sortArrays[k].remove(selection);
-                    selection = 0;
+                    result[i].add(sortArrays[k].get(index));
+                    sortArrays[k].remove(index);
+                    index = 0;
                 }
 
                 if(sortArrays[k].size() == 0)
@@ -233,16 +234,17 @@ public class Main extends Application {
 
             //Goes through the list of Arrays and puts it in the result. If there are multiple hours, sorts by the Min.
             for(int k = 0; k < sortArrays.length; k++){
-                int selection = 0;
+                int index = 0;
                 while(sortArrays[k].size() > 1){
+                    System.out.println("Size: " + sortArrays[k].size()+", Index: "+k);
                     for(int c = 1; c < sortArrays[k].size(); c++) {
-                        if(sortArrays[k].get(selection).getStartMin() > sortArrays[k].get(c).getStartMin())
-                            selection += 1;
-                        c++;
+                        if(sortArrays[k].get(index).getStartMin() > sortArrays[k].get(c).getStartMin()){
+                            index = sortArrays[k].indexOf(sortArrays[k].get(c));
+                        }
                     }
-                    result[i].add(sortArrays[k].get(selection));
-                    sortArrays[k].remove(selection);
-                    selection = 0;
+                    result[i].add(sortArrays[k].get(index));
+                    sortArrays[k].remove(index);
+                    index = 0;
                 }
 
                 if(sortArrays[k].size() == 0)
@@ -254,6 +256,7 @@ public class Main extends Application {
             pm.clear();
         }
         this.events = result;
+
         displayNewDay();
     }
 
@@ -357,13 +360,12 @@ public class Main extends Application {
     }
 
     void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
-        System.out.println("Week day Number: " + week_day_number);
         rink1.changeEvent(hour, min, dayNightCycle, events[week_day_number]);
         rink2.changeEvent(hour, min, dayNightCycle, events[week_day_number+7]);
     }
 
     private void displayNewDay(){
-        rink1.displayNewDay(clock.getDay(), events);
-        rink2.displayNewDay(clock.getDay(), events);
+        rink1.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), events[clock.getDay()]);
+        rink2.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), events[clock.getDay()+7]);
     }
 }
