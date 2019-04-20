@@ -60,7 +60,6 @@ public class Main extends Application {
     private ImageView logo;
     private Server server;
     private Clock clock;
-    private ErrorLogHandler errorLog = new ErrorLogHandler();
 
     @Override
     public void start(Stage primaryStage) {
@@ -71,8 +70,6 @@ public class Main extends Application {
         specialMessagePane = new FlowPane();
         Pane messagePane = new Pane();
         BorderPane mainBorder = new BorderPane();
-
-        PictureController picture;
 
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
@@ -89,20 +86,15 @@ public class Main extends Application {
         //Imports the events from file
         try{
             events = (ArrayList<sample.Event>[]) readFromFile("Events");
-
         }catch (IOException | ClassNotFoundException e){
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            errorLog.processError(sw.toString());
+            e.printStackTrace();
         }
 
         //Imports the promotional message from file
         try{
             runMessage((String)readFromFile("Message"));
         }catch (IOException | ClassNotFoundException e){
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            errorLog.processError(sw.toString());
+            e.printStackTrace();
         }
 
         //Imports photos from files
@@ -113,9 +105,7 @@ public class Main extends Application {
                     BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,
                     new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
         }catch (IOException e){
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            errorLog.processError(sw.toString());
+            e.printStackTrace();
         }
 
         logo.setFitHeight(125);
@@ -140,10 +130,7 @@ public class Main extends Application {
                 "-fx-pref-height: 40");
         specialMessagePane.getChildren().add(specialMessage);
 
-        picture = new PictureController(errorLog);
-
         innerBorder.setBottom(messagePane);
-        innerBorder.setCenter(picture.getImagePane());
 
         upperBorder.setCenter(clockPane);
 
@@ -156,13 +143,11 @@ public class Main extends Application {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Scene scene = new Scene(mainBorder, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
 
-        new Thread(clock = new Clock(this, errorLog)).start();
-        new Thread(server = new Server(this, clock, errorLog)).start();
+        new Thread(clock = new Clock(this)).start();
+        new Thread(server = new Server(this)).start();
 
         rink1 = setUpDisplay(rink1, 0);
         rink2 = setUpDisplay(rink2, 6);
-
-        picture.runImage();
 
         //The next to listeners allow the user to click anywheres and drag the board.
         //grab the main border
@@ -239,9 +224,7 @@ public class Main extends Application {
 
         }catch (NullPointerException np){
             System.out.println("No Event Found - NP");
-            StringWriter sw = new StringWriter();
-            np.printStackTrace(new PrintWriter(sw));
-            errorLog.processError(sw.toString());
+            np.printStackTrace();
 
         }catch (IndexOutOfBoundsException iob){
             System.out.println("No Event Found - IOB");
@@ -286,9 +269,7 @@ public class Main extends Application {
 
 
             }catch (IndexOutOfBoundsException | NullPointerException id){
-                StringWriter sw = new StringWriter();
-                id.printStackTrace(new PrintWriter(sw));
-                errorLog.processError(sw.toString());
+                id.printStackTrace();
             }
         });
 
@@ -504,10 +485,7 @@ public class Main extends Application {
                 FileInputStream fi = new FileInputStream(f);
                 return new Image(fi);
             }catch (Exception i){
-
-                StringWriter sw = new StringWriter();
-                i.printStackTrace(new PrintWriter(sw));
-                errorLog.processError(sw.toString());
+                i.printStackTrace();
             }
         }
 

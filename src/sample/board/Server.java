@@ -12,13 +12,9 @@ public class Server implements Runnable{
 
     private int stop = 1;
     private Main main;
-    private Clock clock;
-    private ErrorLogHandler errorLog;
 
-    Server(Main main, Clock clock, ErrorLogHandler errorLog){
+    Server(Main main){
         this.main = main;
-        this.errorLog = errorLog;
-        this.clock = clock;
     }
 
     @Override
@@ -73,10 +69,8 @@ public class Server implements Runnable{
                 socket.close();
             }
         }catch (IOException | ClassNotFoundException e){
-            stop = 0;    StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            errorLog.processError(sw.toString());
-            new Thread(new Server(main, clock, errorLog)).start();
+            stop = 0;
+            e.printStackTrace();
         }
 
     }

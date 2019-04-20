@@ -2,8 +2,6 @@ package sample.board;
 
 import javafx.application.Platform;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Calendar;
 
 public class Clock implements Runnable{
@@ -12,11 +10,9 @@ public class Clock implements Runnable{
     private boolean ready = false;
     private int week_day_number;
     private Main main;
-    private ErrorLogHandler errorLog;
 
 
-    Clock(Main main, ErrorLogHandler errorLog){
-        this.errorLog = errorLog;
+    Clock(Main main){
         this.main = main;
     }
 
@@ -94,12 +90,10 @@ public class Clock implements Runnable{
             }
         } catch (InterruptedException ex) {
             stop = false;
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-            errorLog.processError(sw.toString());
+            ex.printStackTrace();
 
             System.out.println("Running New Clock");
-            new Thread(new Clock(main, errorLog));
+            new Thread(new Clock(main));
         }
     }
 
