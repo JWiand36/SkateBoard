@@ -62,7 +62,7 @@ public class Clock implements Runnable{
 
                 //Resets the day and manipulates the GridPane to display the correct information.
                 if(savedDay != day_of_month){
-                    this.nextDay(week_day_number);
+                    this.nextDay();
                     savedDay = day_of_month;
                 }
 
@@ -107,7 +107,7 @@ public class Clock implements Runnable{
         main.changeEvent(hour, min, dayNightCycle, week_day_number);
     }
 
-    private void nextDay(int week_day_number){
+    private void nextDay(){
         main.changeDay(week_day_number);
     }
 
