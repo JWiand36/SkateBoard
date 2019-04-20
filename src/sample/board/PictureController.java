@@ -9,9 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 class PictureController {
 
@@ -19,10 +17,12 @@ class PictureController {
     private ImageView[] pictures;
     private Pane imagePane = new Pane();
     private Thread thread;
+    private ErrorLogHandler errorLog;
 
-    PictureController(){
+    PictureController(ErrorLogHandler errorLog){
         File dir = new File("Pictures");
         files = dir.list();
+        this.errorLog = errorLog;
 
         imagePane.setPrefHeight(150);
     }
@@ -43,7 +43,11 @@ class PictureController {
                             pictures[i].setImage(new Image(fi));
                         }
                     }
-                }catch(OutOfMemoryError | IOException mem){mem.printStackTrace();}
+                }catch(Exception mem){
+                    StringWriter sw = new StringWriter();
+                    mem.printStackTrace(new PrintWriter(sw));
+                    errorLog.processError(sw.toString());
+                }
                 thread = null;
             }
         });
@@ -105,7 +109,11 @@ class PictureController {
             });
 
             parallelTransition.play();
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+        }
 
     }
 

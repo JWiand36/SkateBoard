@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -25,7 +24,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sample.Event;
@@ -62,7 +60,7 @@ public class Main extends Application {
     private ImageView logo;
     private Server server;
     private Clock clock;
-    private PictureController picture;
+    private ErrorLogHandler errorLog = new ErrorLogHandler();
 
     @Override
     public void start(Stage primaryStage) {
@@ -73,6 +71,8 @@ public class Main extends Application {
         specialMessagePane = new FlowPane();
         Pane messagePane = new Pane();
         BorderPane mainBorder = new BorderPane();
+
+        PictureController picture;
 
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
@@ -90,12 +90,20 @@ public class Main extends Application {
         try{
             events = (ArrayList<sample.Event>[]) readFromFile("Events");
 
-        }catch (IOException | ClassNotFoundException e){e.getStackTrace();}
+        }catch (IOException | ClassNotFoundException e){
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+        }
 
         //Imports the promotional message from file
         try{
             runMessage((String)readFromFile("Message"));
-        }catch (IOException | ClassNotFoundException e){e.getStackTrace();}
+        }catch (IOException | ClassNotFoundException e){
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+        }
 
         //Imports photos from files
         try {
@@ -104,7 +112,11 @@ public class Main extends Application {
             mainBorder.setBackground(new Background(new BackgroundImage(readImageFile("Ice"),
                     BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,
                     new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
-        }catch (IOException io){io.printStackTrace();}
+        }catch (IOException e){
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+        }
 
         logo.setFitHeight(125);
         logo.setFitWidth(275);
@@ -128,7 +140,7 @@ public class Main extends Application {
                 "-fx-pref-height: 40");
         specialMessagePane.getChildren().add(specialMessage);
 
-        picture = new PictureController();
+        picture = new PictureController(errorLog);
 
         innerBorder.setBottom(messagePane);
         innerBorder.setCenter(picture.getImagePane());
@@ -144,8 +156,8 @@ public class Main extends Application {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Scene scene = new Scene(mainBorder, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
 
-        new Thread(clock = new Clock(this)).start();
-        new Thread(server = new Server(this, clock)).start();
+        new Thread(clock = new Clock(this, errorLog)).start();
+        new Thread(server = new Server(this, clock, errorLog)).start();
 
         rink1 = setUpDisplay(rink1, 0);
         rink2 = setUpDisplay(rink2, 6);
@@ -174,6 +186,12 @@ public class Main extends Application {
                 primaryStage.close();
             }
         });
+
+        //I don't like how this is solved, but this allows the program to wait until the clock is ready before
+        // displaying the day
+        while(!clock.isReady()){
+            System.out.println("Waiting for the clock");
+        }
 
         displayNewDay(clock.getDay());
 
@@ -219,7 +237,13 @@ public class Main extends Application {
 
             return counter;
 
-        }catch (NullPointerException np){System.out.println("No Event Found - NP");}catch (IndexOutOfBoundsException iob){
+        }catch (NullPointerException np){
+            System.out.println("No Event Found - NP");
+            StringWriter sw = new StringWriter();
+            np.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+
+        }catch (IndexOutOfBoundsException iob){
             System.out.println("No Event Found - IOB");
         }
 
@@ -261,8 +285,11 @@ public class Main extends Application {
                 savedEventNbr2 = nextEventNbr2;
 
 
-            }catch (IndexOutOfBoundsException id){id.printStackTrace();}
-            catch (NullPointerException nul){System.out.println("Null Value in displayNewDay");}
+            }catch (IndexOutOfBoundsException | NullPointerException id){
+                StringWriter sw = new StringWriter();
+                id.printStackTrace(new PrintWriter(sw));
+                errorLog.processError(sw.toString());
+            }
         });
 
     }
@@ -367,7 +394,7 @@ public class Main extends Application {
     void runMessage(String message){
         messageTxt.setText(message);
         PathTransition messagePath = new PathTransition();
-        Line line = new Line(message.length()+3000,25,-1400-message.length(),25);
+        Line line = new Line(message.length()+3500,25,-1400-message.length(),25);
 
         messagePath.setDuration(Duration.millis(50000));
         messagePath.setCycleCount(Timeline.INDEFINITE);
@@ -453,8 +480,6 @@ public class Main extends Application {
         os.writeObject(objectToFile);
         os.flush();
         os.close();
-        fs.flush();
-        fs.close();
     }
 
     public static Object readFromFile(String nameOfFile) throws IOException, ClassNotFoundException{
@@ -465,7 +490,7 @@ public class Main extends Application {
         return oi.readObject();
     }
 
-    //Images need to be set as a JPG otherwise the exception is thrown. You have to reset the board to fix the problem
+    //This pulls the background and logo images.
     private Image readImageFile(String nameOfFile) throws IOException, ArrayIndexOutOfBoundsException{
         File f;
         try {
@@ -473,12 +498,16 @@ public class Main extends Application {
             FileInputStream fi = new FileInputStream(f);
             return new Image(fi);
         }catch (Exception io){
+            //I don't like this method, need to look in a better way to fix this.
             try{
                 f = new File(nameOfFile + ".PNG");
                 FileInputStream fi = new FileInputStream(f);
                 return new Image(fi);
             }catch (Exception i){
-                System.out.println("Can't find File");
+
+                StringWriter sw = new StringWriter();
+                i.printStackTrace(new PrintWriter(sw));
+                errorLog.processError(sw.toString());
             }
         }
 
@@ -487,13 +516,14 @@ public class Main extends Application {
 
     void changeDay(int week_day_number){
         displayNewDay(week_day_number);
-        if(week_day_number != 0) {
-            events[week_day_number - 1].clear();
-            events[week_day_number + 6].clear();
-        }else{
-            events[week_day_number + 6].clear();
-            events[week_day_number + 13].clear();
-        }
+            if (week_day_number != 0) {
+                events[week_day_number - 1].clear();
+                events[week_day_number + 6].clear();
+            } else {
+                events[week_day_number + 6].clear();
+                events[week_day_number + 13].clear();
+            }
+
         nextEventNbr1 = 0;
         nextEventNbr2 = 0;
 

@@ -2,16 +2,21 @@ package sample.board;
 
 import javafx.application.Platform;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Calendar;
 
 public class Clock implements Runnable{
 
     private boolean stop = true;
+    private boolean ready = false;
     private int week_day_number;
     private Main main;
+    private ErrorLogHandler errorLog;
 
 
-    Clock(Main main){
+    Clock(Main main, ErrorLogHandler errorLog){
+        this.errorLog = errorLog;
         this.main = main;
     }
 
@@ -82,19 +87,27 @@ public class Clock implements Runnable{
 
                 Platform.runLater(() -> main.setClock(time));
 
+                if(!ready)
+                    ready = true;
+
                 Thread.sleep(1000);
             }
         } catch (InterruptedException ex) {
             stop = false;
-            ex.printStackTrace();
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+
             System.out.println("Running New Clock");
-            new Thread(new Clock(main));
+            new Thread(new Clock(main, errorLog));
         }
     }
 
     void stop(){
         stop = false;
     }
+
+    boolean isReady(){ return ready; }
 
     private void nextEvent(int hour, int min, String dayNightCycle, int week_day_number){
         main.changeEvent(hour, min, dayNightCycle, week_day_number);

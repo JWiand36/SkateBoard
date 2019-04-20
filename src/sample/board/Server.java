@@ -3,10 +3,7 @@ package sample.board;
 import javafx.application.Platform;
 import sample.Event;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -14,14 +11,14 @@ import java.util.ArrayList;
 public class Server implements Runnable{
 
     private int stop = 1;
-    private ArrayList<Event>[] events;
     private Main main;
     private Clock clock;
+    private ErrorLogHandler errorLog;
 
-    Server(Main main, Clock clock){
+    Server(Main main, Clock clock, ErrorLogHandler errorLog){
         this.main = main;
+        this.errorLog = errorLog;
         this.clock = clock;
-        this.events = main.getEvents();
     }
 
     @Override
@@ -41,8 +38,11 @@ public class Server implements Runnable{
 
                 byte selection = input.readByte();
 
+
+                ArrayList<Event>[] events;
                 //Sends the data
                 if(selection == 1){
+                    events = main.getEvents();
                     objOutput.writeObject(events);
                     objOutput.flush();
                     objOutput.close();
@@ -73,14 +73,13 @@ public class Server implements Runnable{
                 socket.close();
             }
         }catch (IOException | ClassNotFoundException e){
-            stop = 0;
-            e.printStackTrace();
-            new Thread(new Server(main, clock)).start();
+            stop = 0;    StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            errorLog.processError(sw.toString());
+            new Thread(new Server(main, clock, errorLog)).start();
         }
 
     }
 
-    void stop(){
-        stop = 0;
-    }
+    void stop(){ stop = 0;}
 }
