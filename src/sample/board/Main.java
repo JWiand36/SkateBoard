@@ -35,14 +35,7 @@ import java.util.ArrayList;
 
 public class Main extends Application {
 
-    /*The nextEventNbr 1 & 2 helps the program discover the next event. It holds the value of next event until the time
-      pass the time of the event.
-      savedEventNbr 1 & 2 is used to work with the styling of FlowPanes
-    */
-    private int nextEventNbr1;
-    private int nextEventNbr2;
-    private int savedEventNbr1;
-    private int savedEventNbr2;
+
     private int fontSize = 35; //35 for production.
 
     private double xOffset;
@@ -52,11 +45,10 @@ public class Main extends Application {
     private Text clockText;
     private Text messageTxt;
     private Text specialMessage;
-    private Text[] text = {new Text("Time"), new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Rink 1"), new Text("Time"), new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Rink 2")};
     private BorderPane innerBorder;
     private FlowPane specialMessagePane;
-    private GridPane rink1 = new GridPane();
-    private GridPane rink2 = new GridPane();
+    private RinkPane rink1 = new RinkPane(fontSize, 1);
+    private RinkPane rink2 = new RinkPane(fontSize, 2);
     private ImageView logo;
     private Server server;
     private Clock clock;
@@ -146,9 +138,6 @@ public class Main extends Application {
         new Thread(clock = new Clock(this)).start();
         new Thread(server = new Server(this)).start();
 
-        rink1 = setUpDisplay(rink1, 0);
-        rink2 = setUpDisplay(rink2, 6);
-
         //The next to listeners allow the user to click anywheres and drag the board.
         //grab the main border
         mainBorder.setOnMousePressed(e-> {
@@ -175,104 +164,14 @@ public class Main extends Application {
         //I don't like how this is solved, but this allows the program to wait until the clock is ready before
         // displaying the day
         while(!clock.isReady()){
-            System.out.println("Waiting for the clock");
+            System.out.print("");
         }
 
-        displayNewDay(clock.getDay());
+        displayNewDay();
 
         primaryStage.setTitle("");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    /*
-    An If Nightmare, tread carefully, checks the time for the next event and continues if the event has already passed
-    */
-    private int checkTimes(int currentHour, int currentMin, String dayNightCycle, ArrayList<sample.Event> dayList, int counter){
-
-        try {
-            sample.Event currentEvent1 = dayList.get(counter);
-
-            //If the current hour doesn't equal the start time of the event
-            if(currentHour != currentEvent1.getStartHour()) {
-
-                if (currentEvent1.getDayNightCycle().equals(dayNightCycle)) {
-                    if (currentHour % 12 > currentEvent1.getStartHour() % 12)
-                        counter = (counter + 1) % dayList.size();
-
-                }else
-                if(dayNightCycle.equals("pm"))
-                    if (currentHour % 12 < currentEvent1.getStartHour() % 12 || currentEvent1.getDayNightCycle().equals("am"))
-                        counter = (counter + 1) % dayList.size();
-            }
-
-            //Current hour and the event start time equals but the day night cycle are off then it goes to the next event
-            if(currentHour == currentEvent1.getStartHour() && !dayNightCycle.equals(currentEvent1.getDayNightCycle())) {
-                counter = (counter + 1) % dayList.size();
-            }
-
-            /*If the current hour and the start hour are the same and Day/Night cycle match it checks the Mins,
-              if the current times Mins are greater then the current event's start time then is takes the next
-              event, else it moves on.
-             */
-            if(currentHour == currentEvent1.getStartHour() && dayNightCycle.equals(currentEvent1.getDayNightCycle())) {
-                if (currentMin > currentEvent1.getStartMin())
-                    counter = (counter + 1) % dayList.size();
-            }
-
-            return counter;
-
-        }catch (NullPointerException np){
-            System.out.println("No Event Found - NP");
-            np.printStackTrace();
-
-        }catch (IndexOutOfBoundsException iob){
-            System.out.println("No Event Found - IOB");
-        }
-
-        return counter;
-    }
-
-    private GridPane changeCurrentEvent(int currentEvent, GridPane pane){
-
-        /*This styles the FlowPanes of the desired cells in the GridPane. It will change to the next event to blue and
-          the last event to clear.
-         */
-        for(Node node : pane.getChildren()){
-            if (GridPane.getRowIndex(node) == currentEvent + 2)
-                node.setStyle("-fx-background-color: #99C0E6;");
-            else
-                node.setStyle("-fx-background-color: null;");
-
-        }
-
-        return pane;
-    }
-
-    private void displayNewDay(int today){
-
-        System.out.println("Displaying new Day" + today);
-        //This method is used to manipulate the GridPane if the data is changed.
-        Platform.runLater(()->{
-            try {
-
-                //Builds and fills the GridPane with data
-                rink1 = setRinkInfo(rink1, events[today]);
-                rink2 = setRinkInfo(rink2, events[today + 7]);
-
-                //Styles the FlowPanes
-                rink1 = changeCurrentEvent(nextEventNbr1, rink1);
-                rink2 = changeCurrentEvent(nextEventNbr2, rink2);
-
-                savedEventNbr1 = nextEventNbr1;
-                savedEventNbr2 = nextEventNbr2;
-
-
-            }catch (IndexOutOfBoundsException | NullPointerException id){
-                id.printStackTrace();
-            }
-        });
-
     }
 
     //Sorts the arrays of Events to be in ascending order of time, it uses the merge sorting technique.
@@ -355,9 +254,7 @@ public class Main extends Application {
             pm.clear();
         }
         this.events = result;
-        displayNewDay(clock.getDay());
-        this.nextEventNbr1 = 0;
-        this.nextEventNbr2 = 0;
+        displayNewDay();
     }
 
     @Override
@@ -382,75 +279,6 @@ public class Main extends Application {
         messagePath.setNode(messageTxt);
         messagePath.setPath(line);
         messagePath.play();
-    }
-
-    //Changes the settings of the GridPane, it is used to set up the Pane and supposed to be left alone if data is manipulated
-    private GridPane setUpDisplay(GridPane pane, int num) {
-
-        ColumnConstraints[] col = new ColumnConstraints[5];
-
-        for(int i = 0; i < col.length; i+=2){
-            col[i] = new ColumnConstraints((4*fontSize));
-            if(i < 4)
-                col[i+1] = new ColumnConstraints((7*fontSize));
-        }
-
-        pane.getColumnConstraints().addAll(col[0],col[1],col[2],col[3],col[4]);
-
-        pane.setStyle("-fx-font-size: "+fontSize+";");
-
-        pane.add(text[num+5], 2, 0);
-
-        pane.add(text[num], 0, 1);
-        pane.add(text[num + 1], 1, 1);
-        pane.add(text[num + 2], 2, 1);
-        pane.add(text[num + 3], 3, 1);
-        pane.add(text[num + 4], 4, 1);
-
-        return pane;
-    }
-
-    //Changes the information that is to be displayed on the GridPane. It styles the information and displays it.
-    private GridPane setRinkInfo(GridPane pane, ArrayList<Event> day){
-
-        Text time;
-
-        pane.getChildren().retainAll(text);
-
-
-        for(int i = 0; i < day.size(); i++) {
-            Text team1 = new Text(day.get(i).getTeam1());
-            team1.setStyle("-fx-font-size: "+(fontSize-7)+";");
-            pane.add(new FlowPane(team1),1,i+2);
-
-            if(day.get(i).getStartMin() < 10)
-                time = new Text(day.get(i).getStartHour()+":0"+day.get(i).getStartMin()+
-                        "  "+day.get(i).getDayNightCycle());
-            else
-                time = new Text(day.get(i).getStartHour()+":"+day.get(i).getStartMin()+
-                        "  "+day.get(i).getDayNightCycle());
-
-            time.setStyle("-fx-font-size: "+(fontSize-7)+";");
-            pane.add(new FlowPane(time),0,i+2);
-
-            Text locker1 = new Text(day.get(i).getLocker1()+"");
-            locker1.setStyle("-fx-font-size: "+(fontSize-7)+";");
-            pane.add(new FlowPane(locker1),2,i+2);
-
-            if(day.get(i).getTeam2() != null){
-                Text team2 = new Text(day.get(i).getTeam2());
-                team2.setStyle("-fx-font-size: "+(fontSize-7)+";");
-                pane.add(new FlowPane(team2),3,i+2);
-
-                Text locker2 = new Text(day.get(i).getLocker2()+"");
-                locker2.setStyle("-fx-font-size: "+(fontSize-7)+";");
-                pane.add(new FlowPane(locker2),4,i+2);
-
-            }
-
-        }
-
-        return pane;
     }
 
     public static void writeToFile(Object objectToFile, String nameOfFile) throws IOException{
@@ -493,7 +321,7 @@ public class Main extends Application {
     }
 
     void changeDay(int week_day_number){
-        displayNewDay(week_day_number);
+        displayNewDay();
             if (week_day_number != 0) {
                 events[week_day_number - 1].clear();
                 events[week_day_number + 6].clear();
@@ -502,27 +330,7 @@ public class Main extends Application {
                 events[week_day_number + 13].clear();
             }
 
-        nextEventNbr1 = 0;
-        nextEventNbr2 = 0;
-
         Platform.runLater(()->innerBorder.setTop(null));
-    }
-
-    void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
-        nextEventNbr1 = checkTimes(hour, min, dayNightCycle, events[week_day_number], nextEventNbr1);
-        nextEventNbr2 = checkTimes(hour, min, dayNightCycle, events[week_day_number+7], nextEventNbr2);
-
-                        /*If the time surpasses the next events time. This will change the Style of the desired
-                          FlowPanes and save the new event.
-                        */
-        if(savedEventNbr1 != nextEventNbr1 || savedEventNbr2 != nextEventNbr2) {
-            Platform.runLater(() -> {
-                rink1 = changeCurrentEvent(nextEventNbr1, rink1);
-                rink2 = changeCurrentEvent(nextEventNbr2, rink2);
-            });
-            savedEventNbr1 = nextEventNbr1;
-            savedEventNbr2 = nextEventNbr2;
-        }
     }
 
     void setClock(String time){
@@ -546,5 +354,16 @@ public class Main extends Application {
 
     ArrayList<Event>[] getEvents(){
         return events;
+    }
+
+    void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
+        System.out.println("Week day Number: " + week_day_number);
+        rink1.changeEvent(hour, min, dayNightCycle, events[week_day_number]);
+        rink2.changeEvent(hour, min, dayNightCycle, events[week_day_number+7]);
+    }
+
+    private void displayNewDay(){
+        rink1.displayNewDay(clock.getDay(), events);
+        rink2.displayNewDay(clock.getDay(), events);
     }
 }
