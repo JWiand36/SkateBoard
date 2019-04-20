@@ -170,6 +170,8 @@ class RinkPane extends GridPane {
         for(int i = 0; i < events.size(); i++){
             checkTimes(hour, min, dayNight, events);
         }
+
+        savedEventNbr = nextEventNbr;
     }
 
     void displayNewDay(int hour, int min, String dayNight, ArrayList<Event> events){
