@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import sample.Event;
+import sample.board.FileIO;
 import sample.board.Main;
 
 /**
@@ -62,7 +63,7 @@ public class Client extends Application {
         primaryStage.setScene(new Scene(mainPane, 600,650));
 
         try{
-            ip = (String)Main.readFromFile("IP");
+            ip = (String) FileIO.readFromFile("IP");
             inputData(ip);
             primaryStage.show();
         }catch(IOException io){io.printStackTrace(); secondaryStage.show();}
@@ -99,7 +100,7 @@ public class Client extends Application {
                             primaryStage.show();
                             incorrect.setText("");
                             try {
-                                Main.writeToFile(ip, "IP");
+                                FileIO.writeToFile(ip, "IP");
                             }catch (IOException io){io.printStackTrace();System.out.println("Error Writing");}
                         });
                     } catch (IOException io) {Platform.runLater(()->incorrect.setText("Can't find Server, Please check your IP Address"));}
@@ -148,7 +149,7 @@ public class Client extends Application {
             //Exits the project and saves the data in the saved array
             exit.setOnAction(e->{
                 try {
-                    Main.writeToFile(savedData, "Data");
+                    FileIO.writeToFile(savedData, "Data");
                 }catch (IOException io){io.printStackTrace();}
                 System.exit(0);
             });
@@ -407,7 +408,7 @@ public class Client extends Application {
             Button remove = new Button("Remove");
 
             try {
-                savedData = (ArrayList<Event>) Main.readFromFile("Data");
+                savedData = (ArrayList<Event>) FileIO.readFromFile("Data");
             } catch (IOException |ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -871,7 +872,7 @@ public class Client extends Application {
     @Override
     public void stop(){
         try {
-            Main.writeToFile(savedData, "Data");
+            FileIO.writeToFile(savedData, "Data");
         }catch (IOException io){io.printStackTrace();}
         System.exit(0);
     }

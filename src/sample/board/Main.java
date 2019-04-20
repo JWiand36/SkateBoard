@@ -77,23 +77,23 @@ public class Main extends Application {
 
         //Imports the events from file
         try{
-            events = (ArrayList<sample.Event>[]) readFromFile("Events");
+            events = (ArrayList<sample.Event>[]) FileIO.readFromFile("Events");
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
 
         //Imports the promotional message from file
         try{
-            runMessage((String)readFromFile("Message"));
+            runMessage((String)FileIO.readFromFile("Message"));
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
 
         //Imports photos from files
         try {
-            logo = new ImageView(readImageFile("logo"));
+            logo = new ImageView(FileIO.readImageFile("logo"));
 
-            mainBorder.setBackground(new Background(new BackgroundImage(readImageFile("Ice"),
+            mainBorder.setBackground(new Background(new BackgroundImage(FileIO.readImageFile("Ice"),
                     BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,
                     new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
         }catch (IOException e){
@@ -263,8 +263,8 @@ public class Main extends Application {
     @Override
     public void stop(){
         try {
-            writeToFile(events, "Events");
-            writeToFile(messageTxt.getText(), "Message");
+            FileIO.writeToFile(events, "Events");
+            FileIO.writeToFile(messageTxt.getText(), "Message");
         }catch (IOException io){io.getStackTrace();}
         clock.stop();
         server.stop();
@@ -282,45 +282,6 @@ public class Main extends Application {
         messagePath.setNode(messageTxt);
         messagePath.setPath(line);
         messagePath.play();
-    }
-
-    public static void writeToFile(Object objectToFile, String nameOfFile) throws IOException{
-        File f = new File(nameOfFile+".dat");
-        FileOutputStream fs = new FileOutputStream(f);
-        ObjectOutputStream os = new ObjectOutputStream(fs);
-
-        os.writeObject(objectToFile);
-        os.flush();
-        os.close();
-    }
-
-    public static Object readFromFile(String nameOfFile) throws IOException, ClassNotFoundException{
-        File f = new File(nameOfFile+".dat");
-        FileInputStream fi = new FileInputStream(f);
-        ObjectInputStream oi = new ObjectInputStream(fi);
-
-        return oi.readObject();
-    }
-
-    //This pulls the background and logo images.
-    private Image readImageFile(String nameOfFile) throws IOException, ArrayIndexOutOfBoundsException{
-        File f;
-        try {
-            f = new File(nameOfFile + ".JPG");
-            FileInputStream fi = new FileInputStream(f);
-            return new Image(fi);
-        }catch (Exception io){
-            //I don't like this method, need to look in a better way to fix this.
-            try{
-                f = new File(nameOfFile + ".PNG");
-                FileInputStream fi = new FileInputStream(f);
-                return new Image(fi);
-            }catch (Exception i){
-                i.printStackTrace();
-            }
-        }
-
-        return new Image(nameOfFile + ".JPG");
     }
 
     void changeDay(int week_day_number){
