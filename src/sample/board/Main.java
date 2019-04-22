@@ -1,12 +1,9 @@
 package sample.board;
 
-import javafx.animation.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -15,13 +12,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import sample.Event;
 
 import java.awt.GraphicsDevice;
@@ -38,13 +29,12 @@ public class Main extends Application {
     private double yOffset;
 
     private ArrayList<sample.Event>[] events = new ArrayList[14];
-    private Text clockText;
     private BorderPane innerBorder;
     private AlertMessagePane alertMessagePane;
     private PromotionalMessagePane promotionalMessagePane;
+    private ClockPane clockPane;
     private RinkPane rink1 = new RinkPane(fontSize, 1);
     private RinkPane rink2 = new RinkPane(fontSize, 2);
-    private ImageView logo;
     private Server server;
     private Clock clock;
 
@@ -52,20 +42,13 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         innerBorder = new BorderPane();
-        BorderPane upperBorder = new BorderPane();
-        FlowPane clockPane = new FlowPane();
+        clockPane = new ClockPane(fontSize);
         alertMessagePane = new AlertMessagePane(fontSize);
         promotionalMessagePane = new PromotionalMessagePane(fontSize);
         BorderPane mainBorder = new BorderPane();
 
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
-
-        clockText = new Text();
-
-        /*
-            Each import has their own try catch in case one of them fails it doesn't effect the others
-         */
 
         //Imports the events from file
         try{
@@ -76,8 +59,6 @@ public class Main extends Application {
 
         //Imports photos from files
         try {
-            logo = new ImageView(FileIO.readImageFile("logo", ".JPG"));
-
             mainBorder.setBackground(new Background(new BackgroundImage(FileIO.readImageFile("Ice", ".JPG"),
                     BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,
                     new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
@@ -85,22 +66,12 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-        logo.setFitHeight(125);
-        logo.setFitWidth(275);
-
-        clockText.setFont(new Font(fontSize));
-
-        clockPane.getChildren().addAll(logo,clockText);
-        clockPane.setAlignment(Pos.CENTER);
-
         innerBorder.setBottom(promotionalMessagePane);
-
-        upperBorder.setCenter(clockPane);
 
         mainBorder.setBottom(innerBorder);
         mainBorder.setLeft(rink1);
         mainBorder.setRight(rink2);
-        mainBorder.setTop(upperBorder);
+        mainBorder.setTop(clockPane);
         mainBorder.setPadding(new Insets(5,5,0,20));
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -265,7 +236,7 @@ public class Main extends Application {
     }
 
     void setClock(String time){
-        this.clockText.setText(time);
+        clockPane.setClock(time);
     }
 
     void setAlertMessage(String message){
