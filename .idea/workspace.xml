@@ -7,9 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76cbff06-44a6-4238-bbb6-5ef260136793" name="Default" comment="Refactoring the Server File out of the">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events.dat" afterPath="$PROJECT_DIR$/Events.dat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Server.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Server.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/board/Main.java" afterPath="$PROJECT_DIR$/src/sample/board/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/board/Server.java" afterPath="$PROJECT_DIR$/src/sample/board/Server.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,13 +27,11 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-595">
-              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+            <state relative-caret-position="-1207">
+              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#stop#0;class#Main#0" expanded="false" />
+                <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
                 <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-                <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
                 <element signature="method#changeDay#0;class#Main#0" expanded="false" />
                 <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
                 <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
@@ -39,44 +40,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClockPane.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/ClockPane.java">
+      <file leaf-file-name="EventCollection.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/board/EventCollection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="35" column="31" lean-forward="false" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
+            <state relative-caret-position="238">
+              <caret line="29" column="21" lean-forward="true" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#808#809#0" expanded="true" />
-                <element signature="e#847#848#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PromotionalMessagePane.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/PromotionalMessagePane.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="33" column="15" lean-forward="true" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#setNewMessage#0;class#PromotionalMessagePane#0" expanded="false" />
-                <element signature="e#1396#1397#0" expanded="true" />
-                <element signature="e#1436#1437#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AlertMessagePane.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/AlertMessagePane.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="40" lean-forward="true" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#664#665#0" expanded="true" />
-                <element signature="e#708#709#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -94,25 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RinkPane.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/RinkPane.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-124">
-              <caret line="174" column="5" lean-forward="false" selection-start-line="174" selection-start-column="5" selection-end-line="174" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#RinkPane#0;class#RinkPane#0" expanded="false" />
-                <element signature="method#setUpDisplay#0;class#RinkPane#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="145">
-              <caret line="46" column="34" lean-forward="true" selection-start-line="46" selection-start-column="34" selection-end-line="46" selection-end-column="34" />
+              <caret line="49" column="28" lean-forward="false" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -164,7 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>text</find>
       <find>pane =</find>
       <find>rink1 = new</find>
       <find>= new Grid</find>
@@ -194,6 +149,7 @@
       <find>platform</find>
       <find>changeEvent</find>
       <find>insets</find>
+      <find>innerBorder</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -226,9 +182,10 @@
         <option value="$PROJECT_DIR$/src/sample/board/RinkPane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/AlertMessagePane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/PromotionalMessagePane.java" />
-        <option value="$PROJECT_DIR$/src/sample/board/Server.java" />
         <option value="$PROJECT_DIR$/src/sample/board/FileIO.java" />
         <option value="$PROJECT_DIR$/src/sample/board/ClockPane.java" />
+        <option value="$PROJECT_DIR$/src/sample/board/EventCollection.java" />
+        <option value="$PROJECT_DIR$/src/sample/board/Server.java" />
         <option value="$PROJECT_DIR$/src/sample/board/Main.java" />
       </list>
     </option>
@@ -531,22 +488,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
-            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
-            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-            <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
-            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/board/Clock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1496">
@@ -581,10 +522,8 @@
         <state relative-caret-position="1989">
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
@@ -617,10 +556,8 @@
         <state relative-caret-position="1989">
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
@@ -653,10 +590,8 @@
         <state relative-caret-position="1989">
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
@@ -689,10 +624,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
+            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
@@ -871,16 +804,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="46" column="34" lean-forward="true" selection-start-line="46" selection-start-column="34" selection-end-line="46" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/board/FileIO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="111">
@@ -903,15 +826,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-595">
-          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        <state relative-caret-position="145">
+          <caret line="49" column="28" lean-forward="false" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/EventCollection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="29" column="21" lean-forward="true" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1207">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding>
+            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />

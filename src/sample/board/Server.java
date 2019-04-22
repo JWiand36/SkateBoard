@@ -47,7 +47,7 @@ public class Server implements Runnable{
                 //Receive the data
                 if(selection == 2) {
                     events = (ArrayList<Event>[]) objInput.readObject();
-                    main.sortEvents(events);
+                    main.setEvents(events);
                 }
 
                 //Sets the alert message if there is an emergency. The FlowPane is red to attract attention
