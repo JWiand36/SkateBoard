@@ -25,7 +25,7 @@ public class FileIO {
     }
 
     //This pulls the background and logo images.
-    public static Image readImageFile(String nameOfFile, String ext) throws IOException, ArrayIndexOutOfBoundsException{
+    static Image readImageFile(String nameOfFile, String ext) throws IOException, ArrayIndexOutOfBoundsException{
         File f;
         try {
             f = new File(nameOfFile + ext);

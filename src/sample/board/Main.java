@@ -39,9 +39,9 @@ public class Main extends Application {
 
     private ArrayList<sample.Event>[] events = new ArrayList[14];
     private Text clockText;
-    private Text messageTxt;
     private BorderPane innerBorder;
     private AlertMessagePane alertMessagePane;
+    private PromotionalMessagePane promotionalMessagePane;
     private RinkPane rink1 = new RinkPane(fontSize, 1);
     private RinkPane rink2 = new RinkPane(fontSize, 2);
     private ImageView logo;
@@ -55,13 +55,12 @@ public class Main extends Application {
         BorderPane upperBorder = new BorderPane();
         FlowPane clockPane = new FlowPane();
         alertMessagePane = new AlertMessagePane(fontSize);
-        Pane messagePane = new Pane();
+        promotionalMessagePane = new PromotionalMessagePane(fontSize);
         BorderPane mainBorder = new BorderPane();
 
         for (int i = 0; i < events.length; i++)
             events[i] = new ArrayList<>();
 
-        messageTxt = new Text("");
         clockText = new Text();
 
         /*
@@ -71,13 +70,6 @@ public class Main extends Application {
         //Imports the events from file
         try{
             events = (ArrayList<sample.Event>[]) FileIO.readFromFile("Events");
-        }catch (IOException | ClassNotFoundException e){
-            e.printStackTrace();
-        }
-
-        //Imports the promotional message from file
-        try{
-            runMessage((String)FileIO.readFromFile("Message"));
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
@@ -98,16 +90,10 @@ public class Main extends Application {
 
         clockText.setFont(new Font(fontSize));
 
-        messageTxt.setFont(new Font((fontSize)));
-
-
-        messagePane.getChildren().add(messageTxt);
-        messagePane.setMinHeight(40);
-
         clockPane.getChildren().addAll(logo,clockText);
         clockPane.setAlignment(Pos.CENTER);
 
-        innerBorder.setBottom(messagePane);
+        innerBorder.setBottom(promotionalMessagePane);
 
         upperBorder.setCenter(clockPane);
 
@@ -157,6 +143,26 @@ public class Main extends Application {
         primaryStage.setTitle("");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void stop(){
+        try {
+            FileIO.writeToFile(events, "Events");
+            FileIO.writeToFile(promotionalMessagePane.getText(), "Message");
+        }catch (IOException io){io.getStackTrace();}
+        clock.stop();
+        server.stop();
+        System.exit(0);
+    }
+
+    private void displayNewDay(){
+        rink1.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), events[clock.getDay()]);
+        rink2.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), events[clock.getDay()+7]);
     }
 
     //Sorts the arrays of Events to be in ascending order of time, it uses the merge sorting technique.
@@ -245,30 +251,6 @@ public class Main extends Application {
         displayNewDay();
     }
 
-    @Override
-    public void stop(){
-        try {
-            FileIO.writeToFile(events, "Events");
-            FileIO.writeToFile(messageTxt.getText(), "Message");
-        }catch (IOException io){io.getStackTrace();}
-        clock.stop();
-        server.stop();
-        System.exit(0);
-    }
-
-    //Runs the promotional message displayed at the bottom of the screen
-    void runMessage(String message){
-        messageTxt.setText(message);
-        PathTransition messagePath = new PathTransition();
-        Line line = new Line(message.length()+3500,25,-1400-message.length(),25);
-
-        messagePath.setDuration(Duration.millis(50000));
-        messagePath.setCycleCount(Timeline.INDEFINITE);
-        messagePath.setNode(messageTxt);
-        messagePath.setPath(line);
-        messagePath.play();
-    }
-
     void changeDay(int week_day_number){
         displayNewDay();
             if (week_day_number != 0) {
@@ -286,10 +268,6 @@ public class Main extends Application {
         this.clockText.setText(time);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     void setAlertMessage(String message){
         alertMessagePane.setAlertMessage(message);
     }
@@ -301,8 +279,8 @@ public class Main extends Application {
             innerBorder.setTop(null);
     }
 
-    ArrayList<Event>[] getEvents(){
-        return events;
+    void setPromotionalMessage(String message){
+        promotionalMessagePane.setNewMessage(message);
     }
 
     void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
@@ -310,8 +288,7 @@ public class Main extends Application {
         rink2.changeEvent(hour, min, dayNightCycle, events[week_day_number+7]);
     }
 
-    private void displayNewDay(){
-        rink1.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), events[clock.getDay()]);
-        rink2.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), events[clock.getDay()+7]);
+    ArrayList<Event>[] getEvents(){
+        return events;
     }
 }

@@ -63,7 +63,7 @@ public class Server implements Runnable{
 
                 //Displays a promotional message that scrolls on the bottom
                 if(selection == 5){
-                    main.runMessage((String)objInput.readObject());
+                    main.setPromotionalMessage((String)objInput.readObject());
                 }
 
                 socket.close();
