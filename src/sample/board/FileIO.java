@@ -25,21 +25,18 @@ public class FileIO {
     }
 
     //This pulls the background and logo images.
-    public static Image readImageFile(String nameOfFile) throws IOException, ArrayIndexOutOfBoundsException{
+    public static Image readImageFile(String nameOfFile, String ext) throws IOException, ArrayIndexOutOfBoundsException{
         File f;
         try {
-            f = new File(nameOfFile + ".JPG");
+            f = new File(nameOfFile + ext);
             FileInputStream fi = new FileInputStream(f);
             return new Image(fi);
         }catch (Exception io){
             //I don't like this method, need to look in a better way to fix this.
-            try{
-                f = new File(nameOfFile + ".PNG");
-                FileInputStream fi = new FileInputStream(f);
-                return new Image(fi);
-            }catch (Exception i){
-                i.printStackTrace();
-            }
+            if(!ext.equals(".PNG"))
+                return readImageFile(nameOfFile, ".PNG");
+            else
+                io.printStackTrace();
         }
 
         return new Image(nameOfFile + ".JPG");

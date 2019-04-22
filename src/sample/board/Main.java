@@ -5,9 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -17,9 +15,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
@@ -44,9 +40,8 @@ public class Main extends Application {
     private ArrayList<sample.Event>[] events = new ArrayList[14];
     private Text clockText;
     private Text messageTxt;
-    private Text specialMessage;
     private BorderPane innerBorder;
-    private FlowPane specialMessagePane;
+    private AlertMessagePane alertMessagePane;
     private RinkPane rink1 = new RinkPane(fontSize, 1);
     private RinkPane rink2 = new RinkPane(fontSize, 2);
     private ImageView logo;
@@ -59,7 +54,7 @@ public class Main extends Application {
         innerBorder = new BorderPane();
         BorderPane upperBorder = new BorderPane();
         FlowPane clockPane = new FlowPane();
-        specialMessagePane = new FlowPane();
+        alertMessagePane = new AlertMessagePane(fontSize);
         Pane messagePane = new Pane();
         BorderPane mainBorder = new BorderPane();
 
@@ -68,8 +63,6 @@ public class Main extends Application {
 
         messageTxt = new Text("");
         clockText = new Text();
-        specialMessage = new Text("");
-        specialMessage.setFont(new Font(fontSize));
 
         /*
             Each import has their own try catch in case one of them fails it doesn't effect the others
@@ -91,9 +84,9 @@ public class Main extends Application {
 
         //Imports photos from files
         try {
-            logo = new ImageView(FileIO.readImageFile("logo"));
+            logo = new ImageView(FileIO.readImageFile("logo", ".JPG"));
 
-            mainBorder.setBackground(new Background(new BackgroundImage(FileIO.readImageFile("Ice"),
+            mainBorder.setBackground(new Background(new BackgroundImage(FileIO.readImageFile("Ice", ".JPG"),
                     BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,
                     new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
         }catch (IOException e){
@@ -105,9 +98,6 @@ public class Main extends Application {
 
         clockText.setFont(new Font(fontSize));
 
-        specialMessage.setStyle("-fx-font-weight: bold; " +
-                "-fx-fill: white;");
-
         messageTxt.setFont(new Font((fontSize)));
 
 
@@ -117,11 +107,6 @@ public class Main extends Application {
         clockPane.getChildren().addAll(logo,clockText);
         clockPane.setAlignment(Pos.CENTER);
 
-        specialMessagePane.setStyle("-fx-background-color: #cc0000;" +
-                "-fx-alignment: top-center;" +
-                "-fx-pref-height: 40");
-        specialMessagePane.getChildren().add(specialMessage);
-
         innerBorder.setBottom(messagePane);
 
         upperBorder.setCenter(clockPane);
@@ -130,7 +115,7 @@ public class Main extends Application {
         mainBorder.setLeft(rink1);
         mainBorder.setRight(rink2);
         mainBorder.setTop(upperBorder);
-        mainBorder.setPadding(new Insets(5,5,0,5));
+        mainBorder.setPadding(new Insets(5,5,0,20));
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Scene scene = new Scene(mainBorder, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
@@ -305,13 +290,13 @@ public class Main extends Application {
         launch(args);
     }
 
-    void setSpecialMessage(String text){
-        specialMessage.setText(text);
+    void setAlertMessage(String message){
+        alertMessagePane.setAlertMessage(message);
     }
 
-    void displaySpecialMessage(boolean display){
+    void displayAlertMessage(boolean display){
         if(display)
-            innerBorder.setTop(specialMessagePane);
+            innerBorder.setTop(alertMessagePane);
         else
             innerBorder.setTop(null);
     }

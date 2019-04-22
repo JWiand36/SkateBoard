@@ -52,13 +52,13 @@ public class Server implements Runnable{
 
                 //Sets the alert message if there is an emergency. The FlowPane is red to attract attention
                 if(selection == 3){
-                    main.setSpecialMessage((String)objInput.readObject());
-                    Platform.runLater(()-> main.displaySpecialMessage(true));
+                    main.setAlertMessage((String)objInput.readObject());
+                    Platform.runLater(()-> main.displayAlertMessage(true));
                 }
 
                 //Hides the alert message if the emergency is over.
                 if(selection == 4){
-                    Platform.runLater(()->main.displaySpecialMessage(false));
+                    Platform.runLater(()->main.displayAlertMessage(false));
                 }
 
                 //Displays a promotional message that scrolls on the bottom
