@@ -47,11 +47,25 @@ public class Main extends Application {
 
         eventCollection = new EventCollection(this);
 
-        //Imports photos from files
+        //Imports background photo from files
         try {
-            mainBorder.setBackground(new Background(new BackgroundImage(FileIO.readImageFile("Ice", ".JPG"),
-                    BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,
-                    new BackgroundSize(mainBorder.getWidth(),mainBorder.getHeight(),false,false,false,true))));
+            mainBorder.setBackground(
+                    new Background(
+                            new BackgroundImage(
+                                    FileIO.readImageFile("Ice", ".JPG"),
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundPosition.DEFAULT,
+                                    new BackgroundSize(
+                                            mainBorder.getWidth(),
+                                            mainBorder.getHeight(),
+                                            false,
+                                            false,
+                                            false,
+                                            true)
+                            )
+                    )
+            );
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -73,7 +87,7 @@ public class Main extends Application {
 
         displayNewDay();
 
-        Scene scene = new Scene(mainBorder);
+        Scene scene = new Scene(mainBorder, 1200, 650);
         setScreenListeners(mainBorder, primaryStage, scene);
 
         primaryStage.setTitle("");
@@ -121,26 +135,6 @@ public class Main extends Application {
         });
     }
 
-    void setEvents(ArrayList<Event>[] events) { eventCollection.setEvents(events); }
-
-    void displayNewDay(){
-        rink1.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), eventCollection.getWeek(clock.getDay()));
-        rink2.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), eventCollection.getWeek(clock.getDay()+7));
-    }
-
-    void changeDay(int week_day_number){
-        displayNewDay();
-            if (week_day_number != 0) {
-                eventCollection.getWeek(week_day_number - 1).clear();
-                eventCollection.getWeek(week_day_number + 6).clear();
-            } else {
-                eventCollection.getWeek(week_day_number + 6).clear();
-                eventCollection.getWeek(week_day_number + 13).clear();
-            }
-
-        Platform.runLater(()->messageBorder.setTop(null));
-    }
-
     void setClock(String time){
         clockPane.setClock(time);
     }
@@ -161,9 +155,24 @@ public class Main extends Application {
     }
 
     void changeEvent(int hour, int min, String dayNightCycle, int week_day_number){
-        rink1.changeEvent(hour, min, dayNightCycle, eventCollection.getWeek(week_day_number));
-        rink2.changeEvent(hour, min, dayNightCycle, eventCollection.getWeek(week_day_number+7));
+        rink1.changeEvent(hour, min, dayNightCycle, eventCollection.getDay(week_day_number));
+        rink2.changeEvent(hour, min, dayNightCycle, eventCollection.getDay(week_day_number+7));
     }
+
+    void changeDay(int week_day_number){
+        displayNewDay();
+
+        eventCollection.clearLastDay(week_day_number);
+
+        Platform.runLater(()->messageBorder.setTop(null));
+    }
+
+    void displayNewDay(){
+        rink1.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), eventCollection.getDay(clock.getDay()));
+        rink2.displayNewDay(clock.getHour(), clock.getMin(), clock.dayNight(), eventCollection.getDay(clock.getDay()+7));
+    }
+
+    void setEvents(ArrayList<Event>[] events) { eventCollection.setEvents(events); }
 
     ArrayList<Event>[] getEvents(){
         return eventCollection.getEvents();
