@@ -22,13 +22,13 @@ import sample.board.FileIO;
  */
 public class Client extends Application {
 
-    private Stage secondaryStage;
     private ListView<String> savedInfo = new ListView<>();
     private ListView<String>[] lists;
 
     private EventCollection eventCollection;
     private NetworkService networkService;
     private FileData fileData = new FileData();
+    private IPPane ipPane;
 
     @Override
     public void start(Stage primaryStage){
@@ -39,8 +39,7 @@ public class Client extends Application {
         MainPane pane = new MainPane(this);
         eventCollection = new EventCollection(this);
         networkService = new NetworkService(this, eventCollection);
-
-        secondaryStage = new Stage();
+        ipPane = new IPPane(primaryStage, networkService);
 
         pane.setPadding(new Insets(5));
         pane.setVgap(5);
@@ -50,7 +49,6 @@ public class Client extends Application {
         mainPane.setTop(new MenuPane(networkService, this, eventCollection));
         mainPane.setCenter(pane);
 
-        new IPPane(primaryStage);
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(mainPane, 600,650));
 
@@ -58,53 +56,10 @@ public class Client extends Application {
             networkService.setIPAddress((String) FileIO.readFromFile("IP"));
             networkService.inputData();
             primaryStage.show();
-        }catch(IOException io){io.printStackTrace(); secondaryStage.show();}
+        }catch(IOException io){io.printStackTrace(); ipPane.showSecondStage();}
         catch (ClassNotFoundException not){System.out.println("Error");}
     }
 
-    //Displays the window asking for the Servers IP Address
-    private class IPPane extends VBox{
-
-        private IPPane(Stage primaryStage){
-
-
-            Text incorrect = new Text();
-            Text ipText = new Text("What is the Ip Address of the Server?");
-            TextField ipTF = new TextField();
-            Button connect = new Button("Connect");
-
-            this.getChildren().addAll(incorrect,ipText,ipTF,connect);
-            this.setPadding(new Insets(5));
-            this.setAlignment(Pos.TOP_CENTER);
-
-            incorrect.setStyle("-fx-fill: Red;");
-
-            //Once the connect button is pressed, the Program will collect data from the Server and save the IP address
-            //giving to a file. If an IP error occurs the IP Address will continue to display and provide an error message
-            connect.setOnAction(e->{
-                networkService.setIPAddress(ipTF.getText());
-
-                new Thread(()-> {
-                    try {
-                        networkService.inputData();
-                        Platform.runLater(()->{
-                            secondaryStage.close();
-                            primaryStage.show();
-                            incorrect.setText("");
-                            try {
-                                FileIO.writeToFile(networkService.getIPAddress(), "IP");
-                            }catch (IOException io){io.printStackTrace();System.out.println("Error Writing");}
-                        });
-                    } catch (IOException io) {Platform.runLater(()->incorrect.setText("Can't find Server, Please check your IP Address"));}
-                    catch (ClassNotFoundException not) {not.printStackTrace();}
-                }).start();
-            });
-
-            secondaryStage.setScene(new Scene(this,255,125));
-            secondaryStage.setTitle("Skate board");
-            secondaryStage.setResizable(false);
-        }
-    }
 
     //The MainPane of the client, it displays the days and allows you to pick your desired day.
     class MainPane extends GridPane{
@@ -258,7 +213,7 @@ public class Client extends Application {
     void setCombinedEvents(ArrayList<Event>[] events){ this.eventCollection.setEvents(events); }
 
     void showSecondWindow(){
-        secondaryStage.show();
+        ipPane.showSecondStage();
     }
 
     ArrayList<Event> getSavedData(){ return fileData.getSavedData(); }
