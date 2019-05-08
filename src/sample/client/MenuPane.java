@@ -3,17 +3,15 @@ package sample.client;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import sample.Event;
 import sample.board.FileIO;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 //This pane displays the menu bar at the top
 class MenuPane extends MenuBar {
 
     //Sets up the MenuPane
-    MenuPane(NetworkService networkService, Client client, EventCollection eventCollection){
+    MenuPane(Client client){
 
         Menu file = new Menu("File");
         Menu server = new Menu("Server");
@@ -35,7 +33,7 @@ class MenuPane extends MenuBar {
 
         //Clears all events from the arraylist to start new
         newfile.setOnAction(e->{
-            eventCollection.resetCollection();
+            client.resetCollection();
         });
 
         //Exits the project and saves the data in the saved array
@@ -47,35 +45,22 @@ class MenuPane extends MenuBar {
         });
 
         //Retrieves data from the server
-        input.setOnAction(e -> {
-            try {
-                networkService.inputData();
-            } catch (IOException io) {client.showSecondWindow();
-            } catch (ClassNotFoundException not) {not.printStackTrace();}
-        });
+        input.setOnAction(e -> client.inputData());
 
         //Sends data to the server
-        output.setOnAction(e -> {
-            try {
-                networkService.outputData();
-            } catch (IOException io) {client.showSecondWindow();}
-        });
+        output.setOnAction(e -> client.outputData());
 
         //Allows the user to change the server
         change.setOnAction(e-> client.showSecondWindow());
 
         //Sends a message that displays promotional message
-        promotion.setOnAction(e-> new MessagePane(1, networkService, client));
+        promotion.setOnAction(e-> new MessagePane(1, client));
 
         //Sends a message that displays any emergency messages
-        alert.setOnAction(e-> new MessagePane(0, networkService, client));
+        alert.setOnAction(e-> new MessagePane(0, client));
 
         //Removes the alert message being displayed
-        remove.setOnAction(e-> {
-            try {
-                networkService.removeAlertMessage();
-            } catch (IOException io) {client.showSecondWindow();}
-        });
+        remove.setOnAction(e-> client.removeAlertMessage());
     }
 
 

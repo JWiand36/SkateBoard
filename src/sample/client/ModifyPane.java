@@ -2,7 +2,6 @@ package sample.client;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
@@ -11,7 +10,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import sample.Event;
 
 import java.util.ArrayList;
@@ -22,13 +20,11 @@ class ModifyPane extends GridPane {
     private ArrayList<String> n;
     private ListView<String> list;
     private Client client;
-    private EventCollection eventCollection;
 
     //Sets up the view of the Modify Pane. It creates 20 rows of TextFields to allow the user to enter in multiple
     //events at once
-    ModifyPane(int modifyingDay, Client client, EventCollection eventCollection){
+    ModifyPane(int modifyingDay, Client client){
         this.client = client;
-        this.eventCollection = eventCollection;
 
         list = new ListView<>();
 
@@ -58,7 +54,7 @@ class ModifyPane extends GridPane {
         add.setOnAction(e->{
             for(int i = 0; i < tf.length; i++) {
                 if (checkInfoAdd(tf[i], n, ampm[i].isSelected())) {
-                    eventCollection.addEvent(modifyingDay, modifyInfo(tf[i], ampm[i]));
+                    client.addEvent(modifyingDay, modifyInfo(tf[i], ampm[i]));
                     update(modifyingDay);
                 }
             }
@@ -69,8 +65,8 @@ class ModifyPane extends GridPane {
             try {
                 if (checkInfo(tf[0])) {
                     int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                    eventCollection.removeEvent(modifyingDay, selected);
-                    eventCollection.addEvent(modifyingDay, modifyInfo(tf[0], ampm[0]));
+                    client.removeEvent(modifyingDay, selected);
+                    client.addEvent(modifyingDay, modifyInfo(tf[0], ampm[0]));
                     update(modifyingDay);
                 }
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
@@ -80,7 +76,7 @@ class ModifyPane extends GridPane {
         remove.setOnAction(e->{
             try {
                 int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                eventCollection.removeEvent(modifyingDay, selected);
+                client.removeEvent(modifyingDay, selected);
                 update(modifyingDay);
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
         });
@@ -91,7 +87,7 @@ class ModifyPane extends GridPane {
 //new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Hour"),new Text("Minute"), new Text("Am?")
             try {
                 int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                Event event = eventCollection.getEvent(modifyingDay, selected);
+                Event event = client.getEvent(modifyingDay, selected);
                 tf[0][0].setText(event.getTeam1());
                 tf[0][1].setText(event.getLocker1() + "");
                 tf[0][2].setText(event.getTeam2());
@@ -310,7 +306,7 @@ class ModifyPane extends GridPane {
 
         String time;
 
-        ArrayList<Event>[] combinedEvents = eventCollection.getEvents();
+        ArrayList<Event>[] combinedEvents = client.getEvents();
 
         for(int i = 0; i < combinedEvents[d].size(); i++) {
 

@@ -6,7 +6,7 @@ import sample.board.FileIO;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FileData {
+class FileData {
 
     private ArrayList<Event> savedData = new ArrayList<>();
 

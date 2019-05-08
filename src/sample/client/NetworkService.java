@@ -13,11 +13,9 @@ class NetworkService {
 
     private Client client;
     private String ip = "localhost";
-    private EventCollection eventCollection;
 
-    NetworkService(Client client, EventCollection eventCollection){
+    NetworkService(Client client){
         this.client = client;
-        this.eventCollection = eventCollection;
     }
 
     //Retrieves the data from the server
@@ -31,7 +29,7 @@ class NetworkService {
         ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
 
         output.writeByte(1);
-        eventCollection.combineEvents((ArrayList<Event>[]) objInput.readObject());
+        client.combineEvents((ArrayList<Event>[]) objInput.readObject());
         socket.close();
     }
 
@@ -45,7 +43,7 @@ class NetworkService {
         ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
 
         output.writeByte(2);
-        objOutput.writeObject(eventCollection.getSeparatedEvents());
+        objOutput.writeObject(client.getSeparatedEvents());
 
         objOutput.flush();
         objOutput.close();

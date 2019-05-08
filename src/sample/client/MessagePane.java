@@ -10,12 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 //Sets up the MessagePane for both the Promotional message and the Alert message
 class MessagePane extends VBox {
 
-    MessagePane(int typeOfMessage, NetworkService networkService, Client client){
+    MessagePane(int typeOfMessage, Client client){
 
         Stage thirdStage = new Stage();
 
@@ -27,19 +25,15 @@ class MessagePane extends VBox {
             t.setText("The Promotional Message");
 
             submit.setOnAction(e -> {
-                try {
-                    networkService.sendMessage(tf.getText());
+                    client.sendMessage(tf.getText());
                     thirdStage.close();
-                } catch (IOException io) {client.showSecondWindow();}
             });
         }else {
             t.setText("The Alert Message");
 
             submit.setOnAction(e -> {
-                try {
-                    networkService.sendAlertMessage(tf.getText());
+                    client.sendAlertMessage(tf.getText());
                     thirdStage.close();
-                } catch (IOException io) {client.showSecondWindow();}
             });
         }
 

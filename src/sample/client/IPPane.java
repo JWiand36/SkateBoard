@@ -17,9 +17,10 @@ import java.io.IOException;
 class IPPane extends VBox {
 
     private Stage secondaryStage = new Stage();
+    private Client client;
 
-    IPPane(Stage primaryStage, NetworkService networkService){
-
+    IPPane(Client client){
+        this.client = client;
 
         Text incorrect = new Text();
         Text ipText = new Text("What is the Ip Address of the Server?");
@@ -35,21 +36,18 @@ class IPPane extends VBox {
         //Once the connect button is pressed, the Program will collect data from the Server and save the IP address
         //giving to a file. If an IP error occurs the IP Address will continue to display and provide an error message
         connect.setOnAction(e->{
-            networkService.setIPAddress(ipTF.getText());
+            client.setIPAddress(ipTF.getText());
 
             new Thread(()-> {
-                try {
-                    networkService.inputData();
+                    client.inputData();
                     Platform.runLater(()->{
                         secondaryStage.close();
-                        primaryStage.show();
+                        client.showPrimary();
                         incorrect.setText("");
                         try {
-                            FileIO.writeToFile(networkService.getIPAddress(), "IP");
+                            FileIO.writeToFile(client.getIPAddress(), "IP");
                         }catch (IOException io){io.printStackTrace();System.out.println("Error Writing");}
                     });
-                } catch (IOException io) {Platform.runLater(()->incorrect.setText("Can't find Server, Please check your IP Address"));}
-                catch (ClassNotFoundException not) {not.printStackTrace();}
             }).start();
         });
 
