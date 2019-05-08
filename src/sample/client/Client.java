@@ -22,14 +22,13 @@ import sample.board.FileIO;
  */
 public class Client extends Application {
 
-    private ArrayList<Event> savedData = new ArrayList<>();
-
     private Stage secondaryStage;
     private ListView<String> savedInfo = new ListView<>();
     private ListView<String>[] lists;
 
     private EventCollection eventCollection;
     private NetworkService networkService;
+    private FileData fileData = new FileData();
 
     @Override
     public void start(Stage primaryStage){
@@ -164,14 +163,8 @@ public class Client extends Application {
             Button add = new Button("Add");
             Button remove = new Button("Remove");
 
-            try {
-                savedData = (ArrayList<Event>) FileIO.readFromFile("Data");
-            } catch (IOException |ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
             //Sets up how the ListView will be displayed
-            for (Event event : savedData) {
+            for (Event event : fileData.getSavedData()) {
                 if (event.getTeam2() != null)
                     nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
                             " " + event.getStartHour() + ":" + event.getStartMin() +
@@ -197,7 +190,7 @@ public class Client extends Application {
             //Adds the selected data to the desired day
             add.setOnAction(e->{
                 try {
-                    Event event = savedData.get(savedInfo.getSelectionModel().getSelectedIndex());
+                    Event event = fileData.getEvent(savedInfo.getSelectionModel().getSelectedIndex());
                     eventCollection.addEvent(dates.getSelectionModel().getSelectedIndex(), event);
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list or choose a day.");}
             });
@@ -205,10 +198,10 @@ public class Client extends Application {
             //Allows the user to remove the data from the saved list
             remove.setOnAction(e->{
                 try {
-                    savedData.remove(savedInfo.getSelectionModel().getSelectedIndex());
+                    fileData.removeEvent(savedInfo.getSelectionModel().getSelectedIndex());
                     nameOfData = new ArrayList<>();
 
-                    for (Event event : savedData) {
+                    for (Event event : fileData.getSavedData()) {
                         if (event.getTeam2() != null)
                             nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
                                     " " + event.getStartHour() + ":" + event.getStartMin() +
@@ -232,7 +225,7 @@ public class Client extends Application {
             fourthStage.setResizable(false);
 
         }
-        
+
         private void setModify(int dayNumber){
             fourthStage.close();
             fourthPane.setCenter(new ModifyPane(dayNumber, client, eventCollection));
@@ -240,10 +233,7 @@ public class Client extends Application {
         }
     }
 
-    ListView<String> getSavedInfo(){
-        return savedInfo;
-    }
-
+    ListView<String> getSavedInfo(){ return savedInfo; }
 
     //Displays if the user makes a mistake
     void displayError(String message){
@@ -265,16 +255,13 @@ public class Client extends Application {
         s.show();
     }
 
-    ArrayList<Event> getSavedData(){
-        return savedData;
-    }
-
     void setCombinedEvents(ArrayList<Event>[] events){ this.eventCollection.setEvents(events); }
 
     void showSecondWindow(){
         secondaryStage.show();
     }
 
+    ArrayList<Event> getSavedData(){ return fileData.getSavedData(); }
 
     //Updates the lists on the MainPane
     void updateLists(ArrayList<Event>[] combinedEvents){
@@ -296,9 +283,7 @@ public class Client extends Application {
 
     @Override
     public void stop(){
-        try {
-            FileIO.writeToFile(savedData, "Data");
-        }catch (IOException io){io.printStackTrace();}
+        fileData.saveData();
         System.exit(0);
     }
 
