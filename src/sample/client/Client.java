@@ -29,29 +29,36 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        this.primaryStage = primaryStage;
 
-        BorderPane pane;
+        try {
+            this.primaryStage = primaryStage;
 
-        //The eventCollection is init here because it needs lists created which is done in MainPane
-        mainPane = new MainPane(this);
-        eventCollection = new EventCollection(this);
-        networkService = new NetworkService(this);
-        ipPane = new IPPane(this);
+            BorderPane pane;
 
-        pane = new BorderPane();
-        pane.setTop(new MenuPane(this));
-        pane.setCenter(pane);
+            //The eventCollection is init here because it needs lists created which is done in MainPane
+            mainPane = new MainPane(this);
+            eventCollection = new EventCollection(this);
+            networkService = new NetworkService(this);
+            ipPane = new IPPane(this);
 
-        primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(mainPane, 600,650));
+            pane = new BorderPane();
+            pane.setTop(new MenuPane(this));
+            pane.setCenter(mainPane);
 
-        try{
-            networkService.setIPAddress((String) FileIO.readFromFile("IP"));
-            networkService.inputData();
-            primaryStage.show();
-        }catch(IOException io){io.printStackTrace(); ipPane.showSecondStage();}
-        catch (ClassNotFoundException not){System.out.println("Error");}
+            primaryStage.setResizable(false);
+            primaryStage.setScene(new Scene(pane, 600, 650));
+
+            try {
+                networkService.setIPAddress((String) FileIO.readFromFile("IP"));
+                networkService.inputData();
+                primaryStage.show();
+            } catch (IOException io) {
+                io.printStackTrace();
+                ipPane.showSecondStage();
+            } catch (ClassNotFoundException not) {
+                System.out.println("Error");
+            }
+        }catch (Exception e){e.printStackTrace();}
     }
 
 
