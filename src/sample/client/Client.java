@@ -12,24 +12,21 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import sample.Event;
 import sample.board.FileIO;
-import sample.board.Main;
 
 /**
  * Created by John Wiand on 10/29/2016.
  */
 public class Client extends Application {
 
-    private String ip = "localhost";
-
     private ArrayList<Event> savedData = new ArrayList<>();
 
+    private NetworkService networkService = new NetworkService(this);
+
     private Stage secondaryStage;
-    private Stage thirdStage;
     private Stage fourthStage;
     private ArrayList<Event>[] combinedEvents;
     private ListView<String> savedInfo = new ListView<>();
@@ -46,7 +43,6 @@ public class Client extends Application {
             combinedEvents[i] = new ArrayList<>();
 
         secondaryStage = new Stage();
-        thirdStage = new Stage();
         fourthStage = new Stage();
 
         pane = new MainPane();
@@ -55,7 +51,7 @@ public class Client extends Application {
         pane.setHgap(5);
 
         mainPane = new BorderPane();
-        mainPane.setTop(new MenuPane());
+        mainPane.setTop(new MenuPane(networkService, this));
         mainPane.setCenter(pane);
 
         new IPPane(primaryStage);
@@ -63,8 +59,8 @@ public class Client extends Application {
         primaryStage.setScene(new Scene(mainPane, 600,650));
 
         try{
-            ip = (String) FileIO.readFromFile("IP");
-            inputData(ip);
+            networkService.setIPAddress((String) FileIO.readFromFile("IP"));
+            networkService.inputData();
             primaryStage.show();
         }catch(IOException io){io.printStackTrace(); secondaryStage.show();}
         catch (ClassNotFoundException not){System.out.println("Error");}
@@ -90,17 +86,17 @@ public class Client extends Application {
             //Once the connect button is pressed, the Program will collect data from the Server and save the IP address
             //giving to a file. If an IP error occurs the IP Address will continue to display and provide an error message
             connect.setOnAction(e->{
-                ip = ipTF.getText();
+                networkService.setIPAddress(ipTF.getText());
 
                 new Thread(()-> {
                     try {
-                        inputData(ip);
+                        combinedEvents = networkService.inputData();
                         Platform.runLater(()->{
                             secondaryStage.close();
                             primaryStage.show();
                             incorrect.setText("");
                             try {
-                                FileIO.writeToFile(ip, "IP");
+                                FileIO.writeToFile(networkService.getIPAddress(), "IP");
                             }catch (IOException io){io.printStackTrace();System.out.println("Error Writing");}
                         });
                     } catch (IOException io) {Platform.runLater(()->incorrect.setText("Can't find Server, Please check your IP Address"));}
@@ -111,225 +107,6 @@ public class Client extends Application {
             secondaryStage.setScene(new Scene(this,255,125));
             secondaryStage.setTitle("Skate board");
             secondaryStage.setResizable(false);
-        }
-    }
-
-    //This pane displays the menu bar at the top
-    class MenuPane extends MenuBar{
-
-        Menu file = new Menu("File");
-        Menu server = new Menu("Server");
-        Menu message = new Menu("Message");
-        MenuItem newfile = new MenuItem("New");
-        MenuItem exit = new MenuItem("Exit");
-        MenuItem input = new MenuItem("Import");
-        MenuItem output = new MenuItem("Export");
-        MenuItem change = new MenuItem("Change Server");
-        MenuItem promotion = new MenuItem("Promotional");
-        MenuItem alert = new MenuItem("Alert");
-        MenuItem remove = new MenuItem("Remove Alert");
-
-        //Sets up the MenuPane
-        private MenuPane(){
-            this.getMenus().addAll(file, server, message);
-            file.getItems().addAll(newfile,exit);
-            server.getItems().addAll(input, output, change);
-            message.getItems().addAll(promotion, alert, remove);
-
-            //Clears all events from the arraylist to start new
-            newfile.setOnAction(e->{
-                combinedEvents = new ArrayList[7];
-
-                for(int i = 0; i < combinedEvents.length; i++)
-                    combinedEvents[i] = new ArrayList<>();
-
-                updateLists(combinedEvents);
-            });
-
-            //Exits the project and saves the data in the saved array
-            exit.setOnAction(e->{
-                try {
-                    FileIO.writeToFile(savedData, "Data");
-                }catch (IOException io){io.printStackTrace();}
-                System.exit(0);
-            });
-
-            //Retrieves data from the server
-            input.setOnAction(e -> {
-                try {
-                    inputData(ip);
-                } catch (IOException io) {secondaryStage.show();
-                } catch (ClassNotFoundException not) {not.printStackTrace();}
-            });
-
-            //Sends data to the server
-            output.setOnAction(e -> {
-                try {
-                    outputData(ip);
-                } catch (IOException io) {secondaryStage.show();}
-            });
-
-            //Allows the user to change the server
-            change.setOnAction(e-> secondaryStage.show());
-
-            //Sends a message that displays promotional message
-            promotion.setOnAction(e-> new MessagePane(1));
-
-            //Sends a message that displays any emergency messages
-            alert.setOnAction(e-> new MessagePane(0));
-
-            //Removes the alert message being displayed
-            remove.setOnAction(e-> {
-                try {
-                    removeAlertMessage(ip);
-                } catch (IOException io) {secondaryStage.show();}
-            });
-        }
-
-        //Sends the data to the Server
-        private void outputData(String ip) throws IOException {
-            Socket socket = new Socket(ip, 36);
-
-            //The streams are in order with the server. Even if it isn't used
-            DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-            ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
-
-            output.writeByte(2);
-            objOutput.writeObject(separateEvents(combinedEvents));
-
-            objOutput.flush();
-            objOutput.close();
-            socket.close();
-        }
-
-        //Removes the alert message on the Server
-        private void removeAlertMessage(String ip) throws IOException {
-            try {
-                Socket socket = new Socket(ip, 36);
-
-                //The streams are in order with the server. Even if it isn't used
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
-
-                output.writeByte(4);
-                socket.close();
-
-
-            } catch (IOException io) {io.printStackTrace();}
-
-        }
-
-        //The Event list coming from the server is 14 different ArrayLists but the client uses only 7, this method
-        //separates the ArrayLists based on which rink they are used. Makes it easier to handle the data for the Server
-        private ArrayList<Event>[] separateEvents(ArrayList<Event>[] combinedEvents){
-
-            //Just checks if the first locker room is higher then 4. If the first locker is higher then 4 then the Event
-            //takes place on Rink 2, otherwise the Event is on Rink 1.
-            ArrayList<Event>[] result = new ArrayList[14];
-
-            for(int i = 0; i < result.length; i++)
-                result[i] = new ArrayList<>();
-
-            for(int i = 0; i < combinedEvents.length; i++){
-                for(int k = 0; k < combinedEvents[i].size(); k++){
-
-                    if(combinedEvents[i].get(k).getLocker1()<5)
-                        result[i].add(combinedEvents[i].get(k));
-                    else
-                        result[i+7].add(combinedEvents[i].get(k));
-
-                }
-            }
-
-            return result;
-        }
-    }
-
-    //Sets up the MessagePane for both the Promotional message and the Alert message
-    class MessagePane extends VBox{
-
-        Text t;
-        TextField tf;
-        Button submit;
-
-        private MessagePane(int typeOfMessage){
-
-            t = new Text();
-            tf = new TextField();
-            submit = new Button("Submit");
-
-            if(typeOfMessage == 1) {
-                t.setText("The Promotional Message");
-
-                submit.setOnAction(e -> {
-                    try {
-                        sendMessage(ip, tf.getText());
-                        Platform.runLater(()->thirdStage.close());
-                    } catch (IOException io) {secondaryStage.show();}
-                });
-            }else {
-                t.setText("The Alert Message");
-
-                submit.setOnAction(e -> {
-                    try {
-                        sendAlertMessage(ip, tf.getText());
-                        Platform.runLater(()->thirdStage.close());
-                    } catch (IOException io) {secondaryStage.show();}
-                });
-            }
-
-            this.getChildren().addAll(t,tf,submit);
-            this.setPadding(new Insets(5));
-            this.setSpacing(5);
-            this.setAlignment(Pos.TOP_CENTER);
-
-            Platform.runLater(()->{
-                thirdStage.setScene(new Scene(this, 250, 100));
-                thirdStage.setTitle("Message");
-                thirdStage.setResizable(false);
-                thirdStage.show();
-            });
-
-        }
-
-        //Sends the Alert message to the server
-        private void sendAlertMessage(String ip, String message) throws IOException {
-            try {
-                Socket socket = new Socket(ip, 36);
-
-                //The streams are in order with the server. Even if it isn't used
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
-
-                output.writeByte(3);
-                objOutput.writeObject(message);
-
-                objOutput.flush();
-                objOutput.close();
-                socket.close();
-            }catch (IOException io){io.printStackTrace();}
-        }
-
-        //Sends a Promotional message to the server
-        private void sendMessage(String ip, String message)throws IOException {
-            try {
-                Socket socket = new Socket(ip, 36);
-
-                //The streams are in order with the server. Even if it isn't used
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
-
-                output.writeByte(5);
-                objOutput.writeObject(message);
-
-                objOutput.flush();
-                objOutput.close();
-                socket.close();
-            }catch (IOException io){io.printStackTrace();}
         }
     }
 
@@ -442,7 +219,7 @@ public class Client extends Application {
                 try {
                     Event event = savedData.get(savedInfo.getSelectionModel().getSelectedIndex());
                     combinedEvents[dates.getSelectionModel().getSelectedIndex()].add(event);
-                    updateLists(combinedEvents);
+                    networkService.updateLists(combinedEvents);
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list or choose a day.");}
             });
 
@@ -776,7 +553,7 @@ public class Client extends Application {
             }
 
             list.setItems(FXCollections.observableArrayList(n));
-            updateLists(combinedEvents);
+            networkService.updateLists(combinedEvents);
         }
 
         //Checks Locker Room1, Locker Room2, Hour and Min TextFields are numbers
@@ -794,58 +571,6 @@ public class Client extends Application {
             }
 
             return c <= 0;
-        }
-    }
-
-    //Retrieves the data from the server
-    private void inputData(String ip) throws IOException, ClassNotFoundException {
-
-        Socket socket = new Socket(ip, 36);
-
-        //The streams are in order with the server. Even if it isn't used
-        DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-        ObjectOutputStream objOutput = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream objInput = new ObjectInputStream(socket.getInputStream());
-
-        output.writeByte(1);
-        combinedEvents = combineEvents((ArrayList<Event>[]) objInput.readObject());
-        updateLists(combinedEvents);
-        socket.close();
-
-    }
-
-    //The client manipulates the data with 7 ArrayLists but the Server uses 14 ArrayLists, makes it easier to manipulate
-    //the data. This combines the data into 7 ArrayLists
-    private ArrayList<Event>[] combineEvents(ArrayList<Event>[] events){
-
-        ArrayList<Event>[] result = new ArrayList[7];
-
-        for(int i = 0; i < result.length; i++)
-            result[i] = new ArrayList<>();
-
-        for(int i = 0; i < events.length; i++) {
-            for (int k = 0; k < events[i].size(); k++)
-                result[i % 7].add(events[i].get(k));
-        }
-
-        return result;
-    }
-
-    //Updates the lists on the MainPane
-    private void updateLists(ArrayList<Event>[] combinedEvents){
-
-        ArrayList<String>[] names = new ArrayList[7];
-
-        for (int i = 0; i < combinedEvents.length; i++) {
-            names[i] = new ArrayList<>();
-
-            for (int k = 0; k < combinedEvents[i].size(); k++)
-                if(combinedEvents[i].get(k).getTeam2() != null)
-                    names[i].add(combinedEvents[i].get(k).getTeam1() + " vs " + combinedEvents[i].get(k).getTeam2());
-                else
-                    names[i].add(combinedEvents[i].get(k).getTeam1());
-
-            lists[i].setItems(FXCollections.observableArrayList(names[i]));
         }
     }
 
@@ -867,6 +592,26 @@ public class Client extends Application {
         s.setTitle("Error Message!!");
         s.setResizable(false);
         s.show();
+    }
+
+    ListView<String>[] getLists(){
+        return lists;
+    }
+
+    ArrayList<Event>[] getCombinedEvents(){
+        return combinedEvents;
+    }
+
+    ArrayList<Event> getSavedData(){
+        return savedData;
+    }
+
+    void setCombinedEvents(ArrayList<Event>[] events){
+        this.combinedEvents = events;
+    }
+
+    void showSecondWindow(){
+        secondaryStage.show();
     }
 
     @Override

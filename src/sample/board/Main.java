@@ -70,7 +70,9 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-        mainBorder.setBottom(promotionalMessagePane);
+        messageBorder.setBottom(promotionalMessagePane);
+
+        mainBorder.setBottom(messageBorder);
         mainBorder.setLeft(rink1);
         mainBorder.setRight(rink2);
         mainBorder.setTop(clockPane);
