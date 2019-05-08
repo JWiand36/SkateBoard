@@ -13,7 +13,7 @@ import java.util.ArrayList;
 class MenuPane extends MenuBar {
 
     //Sets up the MenuPane
-    MenuPane(NetworkService networkService, Client client){
+    MenuPane(NetworkService networkService, Client client, EventCollection eventCollection){
 
         Menu file = new Menu("File");
         Menu server = new Menu("Server");
@@ -35,12 +35,7 @@ class MenuPane extends MenuBar {
 
         //Clears all events from the arraylist to start new
         newfile.setOnAction(e->{
-            ArrayList<Event>[] events = new ArrayList[7];
-
-            for(int i = 0; i < events.length; i++)
-                events[i] = new ArrayList<>();
-
-            networkService.updateLists(events);
+            eventCollection.resetCollection();
         });
 
         //Exits the project and saves the data in the saved array
@@ -54,7 +49,7 @@ class MenuPane extends MenuBar {
         //Retrieves data from the server
         input.setOnAction(e -> {
             try {
-                client.setCombinedEvents(networkService.inputData());
+                networkService.inputData();
             } catch (IOException io) {client.showSecondWindow();
             } catch (ClassNotFoundException not) {not.printStackTrace();}
         });

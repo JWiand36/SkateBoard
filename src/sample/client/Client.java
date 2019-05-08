@@ -24,34 +24,33 @@ public class Client extends Application {
 
     private ArrayList<Event> savedData = new ArrayList<>();
 
-    private NetworkService networkService = new NetworkService(this);
-
     private Stage secondaryStage;
     private Stage fourthStage;
-    private ArrayList<Event>[] combinedEvents;
     private ListView<String> savedInfo = new ListView<>();
     private ListView<String>[] lists;
+
+    private EventCollection eventCollection;
+    private NetworkService networkService;
 
     @Override
     public void start(Stage primaryStage){
 
         BorderPane mainPane;
-        MainPane pane;
 
-        combinedEvents = new ArrayList[7];
-        for(int i = 0; i < combinedEvents.length; i++)
-            combinedEvents[i] = new ArrayList<>();
+        //The eventCollection is init here because it needs lists created which is done in MainPane
+        MainPane pane = new MainPane();
+        eventCollection = new EventCollection(this);
+        networkService = new NetworkService(this, eventCollection);
 
         secondaryStage = new Stage();
         fourthStage = new Stage();
 
-        pane = new MainPane();
         pane.setPadding(new Insets(5));
         pane.setVgap(5);
         pane.setHgap(5);
 
         mainPane = new BorderPane();
-        mainPane.setTop(new MenuPane(networkService, this));
+        mainPane.setTop(new MenuPane(networkService, this, eventCollection));
         mainPane.setCenter(pane);
 
         new IPPane(primaryStage);
@@ -90,7 +89,7 @@ public class Client extends Application {
 
                 new Thread(()-> {
                     try {
-                        combinedEvents = networkService.inputData();
+                        networkService.inputData();
                         Platform.runLater(()->{
                             secondaryStage.close();
                             primaryStage.show();
@@ -218,8 +217,7 @@ public class Client extends Application {
             add.setOnAction(e->{
                 try {
                     Event event = savedData.get(savedInfo.getSelectionModel().getSelectedIndex());
-                    combinedEvents[dates.getSelectionModel().getSelectedIndex()].add(event);
-                    networkService.updateLists(combinedEvents);
+                    eventCollection.addEvent(dates.getSelectionModel().getSelectedIndex(), event);
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list or choose a day.");}
             });
 
@@ -289,7 +287,7 @@ public class Client extends Application {
             add.setOnAction(e->{
                 for(int i = 0; i < tf.length; i++) {
                     if (checkInfoAdd(tf[i], n, ampm[i].isSelected())) {
-                        combinedEvents[modifyingDay].add(modifyInfo(tf[i], ampm[i]));
+                        eventCollection.addEvent(modifyingDay, modifyInfo(tf[i], ampm[i]));
                         update(modifyingDay);
                     }
                 }
@@ -300,8 +298,8 @@ public class Client extends Application {
                 try {
                     if (checkInfo(tf[0])) {
                         int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                        combinedEvents[modifyingDay].remove(selected);
-                        combinedEvents[modifyingDay].add(modifyInfo(tf[0], ampm[0]));
+                        eventCollection.removeEvent(modifyingDay, selected);
+                        eventCollection.addEvent(modifyingDay, modifyInfo(tf[0], ampm[0]));
                         update(modifyingDay);
                     }
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list.");}
@@ -311,22 +309,25 @@ public class Client extends Application {
             remove.setOnAction(e->{
                 try {
                     int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                    combinedEvents[modifyingDay].remove(selected);
+                    eventCollection.removeEvent(modifyingDay, selected);
                     update(modifyingDay);
                 }catch (ArrayIndexOutOfBoundsException out){displayError("Select an Event from the list.");}
             });
 
             //Sets the look of the text in the ListView
             list.getSelectionModel().selectedItemProperty().addListener(e-> {
+
+//new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Hour"),new Text("Minute"), new Text("Am?")
                 try {
                     int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                    tf[0][0].setText(combinedEvents[modifyingDay].get(selected).getTeam1());
-                    tf[0][1].setText(combinedEvents[modifyingDay].get(selected).getLocker1() + "");
-                    tf[0][2].setText(combinedEvents[modifyingDay].get(selected).getTeam2());
-                    tf[0][3].setText(combinedEvents[modifyingDay].get(selected).getLocker2() + "");
-                    tf[0][4].setText(combinedEvents[modifyingDay].get(selected).getStartHour() + "");
-                    tf[0][5].setText(combinedEvents[modifyingDay].get(selected).getStartMin() + "");
-                    if (combinedEvents[modifyingDay].get(selected).getDayNightCycle().equals("am"))
+                    Event event = eventCollection.getEvent(modifyingDay, selected);
+                    tf[0][0].setText(event.getTeam1());
+                    tf[0][1].setText(event.getLocker1() + "");
+                    tf[0][2].setText(event.getTeam2());
+                    tf[0][3].setText(event.getLocker2() + "");
+                    tf[0][4].setText(event.getStartHour() + "");
+                    tf[0][5].setText(event.getStartMin() + "");
+                    if (event.getDayNightCycle().equals("am"))
                         ampm[0].selectedProperty().setValue(true);
                     else
                         ampm[0].selectedProperty().setValue(false);
@@ -540,6 +541,8 @@ public class Client extends Application {
 
             String time;
 
+            ArrayList<Event>[] combinedEvents = eventCollection.getEvents();
+
             for(int i = 0; i < combinedEvents[d].size(); i++) {
 
                 time = combinedEvents[d].get(i).getStartHour() + ":" + combinedEvents[d].get(i).getStartMin() +
@@ -553,7 +556,7 @@ public class Client extends Application {
             }
 
             list.setItems(FXCollections.observableArrayList(n));
-            networkService.updateLists(combinedEvents);
+            updateLists(combinedEvents);
         }
 
         //Checks Locker Room1, Locker Room2, Hour and Min TextFields are numbers
@@ -594,24 +597,33 @@ public class Client extends Application {
         s.show();
     }
 
-    ListView<String>[] getLists(){
-        return lists;
-    }
-
-    ArrayList<Event>[] getCombinedEvents(){
-        return combinedEvents;
-    }
-
     ArrayList<Event> getSavedData(){
         return savedData;
     }
 
-    void setCombinedEvents(ArrayList<Event>[] events){
-        this.combinedEvents = events;
-    }
+    void setCombinedEvents(ArrayList<Event>[] events){ this.eventCollection.setEvents(events); }
 
     void showSecondWindow(){
         secondaryStage.show();
+    }
+
+
+    //Updates the lists on the MainPane
+    void updateLists(ArrayList<Event>[] combinedEvents){
+
+        ArrayList<String>[] names = new ArrayList[7];
+
+        for (int i = 0; i < combinedEvents.length; i++) {
+            names[i] = new ArrayList<>();
+
+            for (int k = 0; k < combinedEvents[i].size(); k++)
+                if(combinedEvents[i].get(k).getTeam2() != null)
+                    names[i].add(combinedEvents[i].get(k).getTeam1() + " vs " + combinedEvents[i].get(k).getTeam2());
+                else
+                    names[i].add(combinedEvents[i].get(k).getTeam1());
+
+            lists[i].setItems(FXCollections.observableArrayList(names[i]));
+        }
     }
 
     @Override
