@@ -7,12 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76cbff06-44a6-4238-bbb6-5ef260136793" name="Default" comment="Refactoring the Server File out of the">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/Client$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/Client$MainPane.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events.dat" afterPath="$PROJECT_DIR$/Events.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/EventCollection.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/EventCollection.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/board/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Message.dat" afterPath="$PROJECT_DIR$/Message.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/Client.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/Client.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/FileData.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/FileData.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/IPPane.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/IPPane.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/MenuPane.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/MenuPane.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/MessagePane.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/MessagePane.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/ModifyPane.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/ModifyPane.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/NetworkService.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/NetworkService.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/board/EventCollection.java" afterPath="$PROJECT_DIR$/src/sample/board/EventCollection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/board/Main.java" afterPath="$PROJECT_DIR$/src/sample/board/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/client/Client.java" afterPath="$PROJECT_DIR$/src/sample/client/Client.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,47 +31,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
+      <file leaf-file-name="MessagePane.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/MessagePane.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1020">
-              <caret line="169" column="0" lean-forward="false" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#start#0;class#Main#0" expanded="false" />
-                <element signature="method#stop#0;class#Main#0" expanded="false" />
-                <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-                <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
-                <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-                <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-                <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventCollection.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/EventCollection.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="25" column="5" lean-forward="true" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#EventCollection#0;class#EventCollection#0" expanded="false" />
-                <element signature="method#setEvents#0;class#EventCollection#0" expanded="false" />
-                <element signature="method#clearLastDay#0;class#EventCollection#0" expanded="false" />
-                <element signature="method#sortEvents#0;class#EventCollection#0" expanded="false" />
-                <element signature="method#sortPeriod#0;class#EventCollection#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileIO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/FileIO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="23" column="31" lean-forward="false" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
+            <state relative-caret-position="170">
+              <caret line="10" column="26" lean-forward="false" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -72,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
+      <file leaf-file-name="MenuPane.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/MenuPane.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="49" column="28" lean-forward="false" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
+            <state relative-caret-position="1054">
+              <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -84,34 +55,104 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Clock.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/board/Clock.java">
+      <file leaf-file-name="NetworkService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/NetworkService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1887">
-              <caret line="126" column="28" lean-forward="false" selection-start-line="126" selection-start-column="28" selection-end-line="126" selection-end-column="28" />
+            <state relative-caret-position="68">
+              <caret line="16" column="32" lean-forward="false" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3754#3755#0" expanded="true" />
-                <element signature="e#3790#3791#0" expanded="true" />
+                <element signature="e#351#352#0" expanded="true" />
+                <element signature="e#387#388#0" expanded="true" />
+                <element signature="e#3852#3853#0" expanded="true" />
+                <element signature="e#3877#3878#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1445">
-              <caret line="102" column="38" lean-forward="false" selection-start-line="102" selection-start-column="32" selection-end-line="102" selection-end-column="38" />
+            <state relative-caret-position="118">
+              <caret line="48" column="45" lean-forward="false" selection-start-line="48" selection-start-column="45" selection-end-line="48" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-                <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-                <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-                <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-                <element signature="method#inputData#0;class#Client#0" expanded="false" />
-                <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-                <element signature="method#updateLists#0;class#Client#0" expanded="false" />
+                <element signature="method#displayError#0;class#Client#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainPane.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/MainPane.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1904">
+              <caret line="112" column="63" lean-forward="false" selection-start-line="112" selection-start-column="63" selection-end-line="112" selection-end-column="63" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IPPane.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/IPPane.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="867">
+              <caret line="51" column="11" lean-forward="true" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2018#2019#0" expanded="true" />
+                <element signature="e#2056#2057#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileData.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/FileData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#455#456#0" expanded="true" />
+                <element signature="e#487#488#0" expanded="true" />
+                <element signature="e#519#520#0" expanded="true" />
+                <element signature="e#562#563#0" expanded="true" />
+                <element signature="e#596#597#0" expanded="true" />
+                <element signature="e#635#636#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModifyPane.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/ModifyPane.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-5392">
+              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EventCollection.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/client/EventCollection.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="43">
+              <caret line="75" column="0" lean-forward="true" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#320#321#0" expanded="true" />
+                <element signature="e#359#360#0" expanded="true" />
+                <element signature="e#396#397#0" expanded="true" />
+                <element signature="e#433#434#0" expanded="true" />
+                <element signature="e#2226#2227#0" expanded="true" />
+                <element signature="e#2280#2281#0" expanded="true" />
+                <element signature="e#2321#2322#0" expanded="true" />
+                <element signature="e#2374#2375#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -128,15 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rink1 = new</find>
-      <find>= new Grid</find>
-      <find>getImages</find>
-      <find>readFromFile</find>
-      <find />
-      <find>nextDay</find>
-      <find>columnconstraints</find>
-      <find>setStyle</find>
-      <find>Display</find>
       <find>getting New Day</find>
       <find>runMessage</find>
       <find>messageTxt</find>
@@ -158,6 +190,15 @@
       <find>insets</find>
       <find>innerBorder</find>
       <find>eventCollection.getDay</find>
+      <find>combineEvents</find>
+      <find>savedData</find>
+      <find>messagePane</find>
+      <find>Menu</find>
+      <find>inputData</find>
+      <find>upda</find>
+      <find>lists</find>
+      <find>fourthStage</find>
+      <find>sendAlertMessage</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -186,15 +227,25 @@
         <option value="$PROJECT_DIR$/src/sample/board/PictureController.java" />
         <option value="$PROJECT_DIR$/src/sample/board/LockerPane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/Clock.java" />
-        <option value="$PROJECT_DIR$/src/sample/client/Client.java" />
         <option value="$PROJECT_DIR$/src/sample/board/RinkPane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/AlertMessagePane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/PromotionalMessagePane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/FileIO.java" />
         <option value="$PROJECT_DIR$/src/sample/board/ClockPane.java" />
         <option value="$PROJECT_DIR$/src/sample/board/Server.java" />
-        <option value="$PROJECT_DIR$/src/sample/board/Main.java" />
         <option value="$PROJECT_DIR$/src/sample/board/EventCollection.java" />
+        <option value="$PROJECT_DIR$/src/sample/board/Main.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/Server.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/NetworkOutput.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/EventCollection.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/MainPane.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/MessagePane.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/MenuPane.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/IPPane.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/FileData.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/ModifyPane.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/NetworkService.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/Client.java" />
       </list>
     </option>
   </component>
@@ -222,7 +273,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -246,22 +296,16 @@
               <item name="SkateBoard" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sample" type="462c0819:PsiDirectoryNode" />
-              <item name="board" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SkateBoard" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SkateBoard" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
               <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -287,7 +331,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Client">
     <configuration name="Client" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="sample.client.Client" />
@@ -432,7 +476,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.016837481" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21742313" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -491,36 +535,21 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="7" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Clock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
-          <caret line="96" column="43" lean-forward="false" selection-start-line="96" selection-start-column="43" selection-end-line="96" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3754#3755#0" expanded="true" />
-            <element signature="e#3790#3791#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/Controller.java" />
+    <entry file="file://$PROJECT_DIR$/src/sample/board/Module.java" />
+    <entry file="file://$PROJECT_DIR$/src/sample/board/View.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14926">
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-            <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-            <element signature="method#inputData#0;class#Client#0" expanded="false" />
-            <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-            <element signature="method#updateLists#0;class#Client#0" expanded="false" />
+            <element signature="method#displayError#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -530,11 +559,9 @@
         <state relative-caret-position="1989">
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#start#0;class#Main#0" expanded="false" />
+            <element signature="imports" expanded="false" />
             <element signature="method#stop#0;class#Main#0" expanded="false" />
             <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
@@ -551,87 +578,7 @@
           <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-            <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-            <element signature="method#inputData#0;class#Client#0" expanded="false" />
-            <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-            <element signature="method#updateLists#0;class#Client#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1989">
-          <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#start#0;class#Main#0" expanded="false" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
-            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
-            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Controller.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Module.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/board/View.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14926">
-          <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-            <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-            <element signature="method#inputData#0;class#Client#0" expanded="false" />
-            <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-            <element signature="method#updateLists#0;class#Client#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1989">
-          <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#start#0;class#Main#0" expanded="false" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
-            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
-            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Controller.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/board/Module.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/board/View.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14926">
-          <caret line="878" column="1" lean-forward="false" selection-start-line="878" selection-start-column="1" selection-end-line="878" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-            <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-            <element signature="method#inputData#0;class#Client#0" expanded="false" />
-            <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-            <element signature="method#updateLists#0;class#Client#0" expanded="false" />
+            <element signature="method#displayError#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -641,11 +588,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#start#0;class#Main#0" expanded="false" />
+            <element signature="imports" expanded="false" />
             <element signature="method#stop#0;class#Main#0" expanded="false" />
             <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
@@ -663,13 +608,7 @@
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-            <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-            <element signature="method#inputData#0;class#Client#0" expanded="false" />
-            <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-            <element signature="method#updateLists#0;class#Client#0" expanded="false" />
+            <element signature="method#displayError#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -760,44 +699,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1445">
-          <caret line="102" column="38" lean-forward="false" selection-start-line="102" selection-start-column="32" selection-end-line="102" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="class#MenuPane#0;class#Client#0" expanded="false" />
-            <element signature="class#MessagePane#0;class#Client#0" expanded="false" />
-            <element signature="method#MainPane#0;class#MainPane#0;class#Client#0" expanded="false" />
-            <element signature="class#ModifyPane#0;class#Client#0" expanded="false" />
-            <element signature="method#inputData#0;class#Client#0" expanded="false" />
-            <element signature="method#combineEvents#0;class#Client#0" expanded="false" />
-            <element signature="method#updateLists#0;class#Client#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/board/Clock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1887">
           <caret line="126" column="28" lean-forward="false" selection-start-line="126" selection-start-column="28" selection-end-line="126" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3754#3755#0" expanded="true" />
-            <element signature="e#3790#3791#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/AlertMessagePane.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="40" lean-forward="true" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#664#665#0" expanded="true" />
-            <element signature="e#708#709#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -805,11 +710,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-124">
           <caret line="174" column="5" lean-forward="false" selection-start-line="174" selection-start-column="5" selection-end-line="174" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#RinkPane#0;class#RinkPane#0" expanded="false" />
-            <element signature="method#setUpDisplay#0;class#RinkPane#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -817,12 +717,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
           <caret line="33" column="15" lean-forward="true" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#setNewMessage#0;class#PromotionalMessagePane#0" expanded="false" />
-            <element signature="e#1396#1397#0" expanded="true" />
-            <element signature="e#1436#1437#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -840,34 +734,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="349">
           <caret line="35" column="31" lean-forward="false" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/EventCollection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="25" column="5" lean-forward="false" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#808#809#0" expanded="true" />
-            <element signature="e#847#848#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#EventCollection#0;class#EventCollection#0" expanded="false" />
+            <element signature="method#setEvents#0;class#EventCollection#0" expanded="false" />
+            <element signature="method#clearLastDay#0;class#EventCollection#0" expanded="false" />
+            <element signature="method#sortEvents#0;class#EventCollection#0" expanded="false" />
+            <element signature="method#sortPeriod#0;class#EventCollection#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/board/AlertMessagePane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="40" lean-forward="false" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/board/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="49" column="28" lean-forward="false" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="196">
+          <caret line="55" column="16" lean-forward="false" selection-start-line="55" selection-start-column="16" selection-end-line="55" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/board/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="169" column="0" lean-forward="false" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+        <state relative-caret-position="17">
+          <caret line="81" column="54" lean-forward="false" selection-start-line="81" selection-start-column="54" selection-end-line="81" selection-end-column="54" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#start#0;class#Main#0" expanded="false" />
+            <element signature="imports" expanded="false" />
             <element signature="method#stop#0;class#Main#0" expanded="false" />
             <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#displayAlertMessage#0;class#Main#0" expanded="false" />
             <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
             <element signature="method#changeDay#0;class#Main#0" expanded="false" />
             <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
@@ -875,17 +781,111 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/board/EventCollection.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/client/MainPane.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="25" column="5" lean-forward="true" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
+        <state relative-caret-position="1904">
+          <caret line="112" column="63" lean-forward="false" selection-start-line="112" selection-start-column="63" selection-end-line="112" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#EventCollection#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#setEvents#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#clearLastDay#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#sortPeriod#0;class#EventCollection#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/MenuPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/MessagePane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="26" lean-forward="false" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/IPPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="867">
+          <caret line="51" column="11" lean-forward="true" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2018#2019#0" expanded="true" />
+            <element signature="e#2056#2057#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/FileData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#455#456#0" expanded="true" />
+            <element signature="e#487#488#0" expanded="true" />
+            <element signature="e#519#520#0" expanded="true" />
+            <element signature="e#562#563#0" expanded="true" />
+            <element signature="e#596#597#0" expanded="true" />
+            <element signature="e#635#636#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/EventCollection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="43">
+          <caret line="75" column="0" lean-forward="true" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#320#321#0" expanded="true" />
+            <element signature="e#359#360#0" expanded="true" />
+            <element signature="e#396#397#0" expanded="true" />
+            <element signature="e#433#434#0" expanded="true" />
+            <element signature="e#2226#2227#0" expanded="true" />
+            <element signature="e#2280#2281#0" expanded="true" />
+            <element signature="e#2321#2322#0" expanded="true" />
+            <element signature="e#2374#2375#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/NetworkService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="16" column="32" lean-forward="false" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#351#352#0" expanded="true" />
+            <element signature="e#387#388#0" expanded="true" />
+            <element signature="e#3852#3853#0" expanded="true" />
+            <element signature="e#3877#3878#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/ModifyPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5392">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="48" column="45" lean-forward="false" selection-start-line="48" selection-start-column="45" selection-end-line="48" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#displayError#0;class#Client#0" expanded="false" />
           </folding>
         </state>
       </provider>
