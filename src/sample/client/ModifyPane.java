@@ -80,10 +80,10 @@ class ModifyPane extends GridPane {
         modify.setOnAction(e->{
             try {
                 if(automate.isSelected()){
-                    if (checkInfo(locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0])) {
+                    if (checkInfo(hourFields[0], minuteFields[0])) {
                         int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                         client.removeEvent(modifyingDay, selected);
-                        client.addEvent(modifyingDay, modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
+                        client.addEvent(modifyingDay, modifyInfo(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], ampm[0], rink1[0]));
                         update(modifyingDay, automate.isSelected());
                     }
                 }else {
@@ -109,7 +109,6 @@ class ModifyPane extends GridPane {
         //Sets the look of the text in the ListView
         list.getSelectionModel().selectedItemProperty().addListener(e-> {
 
-//new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Hour"),new Text("Minute"), new Text("Am?")
             try {
                 int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                 Event event = client.getEvent(modifyingDay, selected);
@@ -123,6 +122,12 @@ class ModifyPane extends GridPane {
                     ampm[0].selectedProperty().setValue(true);
                 else
                     ampm[0].selectedProperty().setValue(false);
+
+                if (event.getRinkNum() == 1)
+                    rink1[0].selectedProperty().setValue(true);
+                else
+                    rink1[0].selectedProperty().setValue(false);
+
             }catch (ArrayIndexOutOfBoundsException IOB){IOB.getStackTrace();}
         });
 
@@ -132,22 +137,44 @@ class ModifyPane extends GridPane {
 
                 ArrayList<Event> savedData = client.getSavedData();
 
-                if (checkInfoAdd(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], savedData, ampm[0].isSelected())) {
-                    savedData.add(modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
-                    ArrayList<String> nameOfData = new ArrayList<>();
+                if(automate.isSelected()){
 
-                    for (Event event : savedData) {
-                        if (event.getTeam2() != null)
-                            nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
-                                    " " + event.getStartHour() + ":" + event.getStartMin() +
-                                    event.getDayNightCycle() + " R:" + event.getRinkNum());
-                        else
-                            nameOfData.add(event.getTeam1() +
-                                    " " + event.getStartHour() + ":" + event.getStartMin() +
-                                    event.getDayNightCycle() + " R:" + event.getRinkNum());
+                    if (checkInfoAdd(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], savedData, ampm[0].isSelected(), rink1[0].isSelected())) {
+                        savedData.add(modifyInfo(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], ampm[0], rink1[0]));
+                        ArrayList<String> nameOfData = new ArrayList<>();
+
+                        for (Event event : savedData) {
+                            if (event.getTeam2() != null)
+                                nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
+                                        " " + event.getStartHour() + ":" + event.getStartMin() +
+                                        event.getDayNightCycle() + " R:" + event.getRinkNum());
+                            else
+                                nameOfData.add(event.getTeam1() +
+                                        " " + event.getStartHour() + ":" + event.getStartMin() +
+                                        event.getDayNightCycle() + " R:" + event.getRinkNum());
+                        }
+
+                        client.getSavedInfo().setItems(FXCollections.observableArrayList(nameOfData));
                     }
+                }else {
 
-                    client.getSavedInfo().setItems(FXCollections.observableArrayList(nameOfData));
+                    if (checkInfoAdd(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], savedData, ampm[0].isSelected())) {
+                        savedData.add(modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
+                        ArrayList<String> nameOfData = new ArrayList<>();
+
+                        for (Event event : savedData) {
+                            if (event.getTeam2() != null)
+                                nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
+                                        " " + event.getStartHour() + ":" + event.getStartMin() +
+                                        event.getDayNightCycle() + " R:" + event.getRinkNum());
+                            else
+                                nameOfData.add(event.getTeam1() +
+                                        " " + event.getStartHour() + ":" + event.getStartMin() +
+                                        event.getDayNightCycle() + " R:" + event.getRinkNum());
+                        }
+
+                        client.getSavedInfo().setItems(FXCollections.observableArrayList(nameOfData));
+                    }
                 }
 
             }catch (ArrayIndexOutOfBoundsException out){out.getStackTrace();}
@@ -222,7 +249,7 @@ class ModifyPane extends GridPane {
     //Checks the data when the user hits the add button. Data can't match other data and the list and it has to meet
     //certain requirements. Team 1 needs to be filled, as Locker Room 1, Hour, Min are all required
     //The data is matched with the ListView's String values to see if the event matches
-    private boolean checkInfoAdd(TextField team1, TextField lock1, TextField team2, TextField lock2, TextField hour, TextField min, ArrayList n, Boolean ampm){
+    private boolean checkInfoAdd(TextField team1, TextField lock1, TextField team2, TextField lock2, TextField hour, TextField min, ArrayList n, boolean ampm){
 
         //Team1, Locker1, Team2, Locker2, Hour, Min,
 
@@ -267,7 +294,7 @@ class ModifyPane extends GridPane {
             return false;
     }
 
-    private boolean checkInfoAdd(TextField team1, TextField team2, TextField hour, TextField min, ArrayList n, Boolean ampm, boolean rink1){
+    private boolean checkInfoAdd(TextField team1, TextField team2, TextField hour, TextField min, ArrayList n, boolean ampm, boolean rink1){
 
         //Checks if if their are vales to meet requirements
         if(hour.getText() != null && min.getText() != null &&
@@ -329,6 +356,25 @@ class ModifyPane extends GridPane {
 
             //Checks Locker1 and time
             return l1 >= 1 && l1 <= 8 && h >= 0 && h <= 24 && m >= 0 && m <= 60;
+        }else
+            return false;
+    }
+
+    //Same as CheckInfoAdd with minor differences, it doesn't check for Am/Pm. Used for the Modify Button
+    private boolean checkInfo(TextField hour, TextField min){
+
+        //Team1, Locker1, Team2, Locker2, Hour, Min,
+
+        //Checks to see if Team1, Locker1, Hour and Min, all have values
+        if(hour.getText() != null && min.getText() != null &&
+                hour.getText().length() > 0 && min.getText().length() > 0&&
+                isNumber(hour.getText()) && isNumber(min.getText())){
+
+            int h = Integer.parseInt(hour.getText());
+            int m = Integer.parseInt(min.getText());
+
+            //Checks Locker1 and time
+            return h >= 0 && h <= 24 && m >= 0 && m <= 60;
         }else
             return false;
     }

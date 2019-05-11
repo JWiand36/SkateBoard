@@ -105,10 +105,15 @@ class EventCollection {
             events.clear();
             if(assign)
                 rink1 = assignLockers(sortEvents(rink1));
+            else
+                rink1 = sortEvents(rink1);
             events.addAll(rink1);
+
             if(assign)
                 rink2 = assignLockers(sortEvents(rink2));
-            events.addAll(sortEvents(rink2));
+            else
+                rink2 = sortEvents(rink2);
+            events.addAll(rink2);
             rink1.clear();
             rink2.clear();
         }

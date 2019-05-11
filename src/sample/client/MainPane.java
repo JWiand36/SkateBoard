@@ -86,12 +86,11 @@ class MainPane extends GridPane {
             if (event.getTeam2() != null)
                 nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
                         " " + event.getStartHour() + ":" + event.getStartMin() +
-                        event.getDayNightCycle() + " L:" + event.getLocker1() + "/" +
-                        event.getLocker2());
+                        event.getDayNightCycle() + " R:" + event.getRinkNum());
             else
                 nameOfData.add(event.getTeam1() +
                         " " + event.getStartHour() + ":" + event.getStartMin() +
-                        event.getDayNightCycle() + " L:" + event.getLocker1());
+                        event.getDayNightCycle() + " R:" + event.getRinkNum());
         }
 
         dates.getItems().addAll(FXCollections.observableArrayList(days));
@@ -110,6 +109,13 @@ class MainPane extends GridPane {
             try {
                 Event event = client.getSavedEvent(savedInfo.getSelectionModel().getSelectedIndex());
                 client.addEvent(dates.getSelectionModel().getSelectedIndex(), event);
+                if(event.getLocker1() == -1) {
+                    event.setLocker1(0);
+                    if(event.getTeam2() != null)
+                        event.setLocker2(0);
+                }
+                client.sortEvents(false);
+                client.updateLists(client.getEvents());
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list or choose a day.");}
         });
 
@@ -123,12 +129,11 @@ class MainPane extends GridPane {
                     if (event.getTeam2() != null)
                         nameOfData.add(event.getTeam1() + " vs " + event.getTeam2() +
                                 " " + event.getStartHour() + ":" + event.getStartMin() +
-                                event.getDayNightCycle() + " L:" + event.getLocker1() + "/" +
-                                event.getLocker2());
+                                event.getDayNightCycle() + " R:" + event.getRinkNum());
                     else
                         nameOfData.add(event.getTeam1() +
                                 " " + event.getStartHour() + ":" + event.getStartMin() +
-                                event.getDayNightCycle() + " L:" + event.getLocker1());
+                                event.getDayNightCycle() + " R:" + event.getRinkNum());
                 }
 
                 savedInfo.setItems(FXCollections.observableArrayList(nameOfData));
