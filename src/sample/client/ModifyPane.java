@@ -48,7 +48,7 @@ class ModifyPane extends GridPane {
         CheckBox automate = new CheckBox("Automate Lockers");
 
         Text[] t = {new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Hour"),
-                new Text("Minute"), new Text("Am?")};
+                new Text("Minute"), new Text("Am?"), new Text("Rink 1?")};
         TextField[] team1Fields = new TextField[20];
         TextField[] locker1Fields = new TextField[20];
         TextField[] team2Fields = new TextField[20];
@@ -136,6 +136,34 @@ class ModifyPane extends GridPane {
             }catch (ArrayIndexOutOfBoundsException out){out.getStackTrace();}
         });
 
+        automate.setOnAction(e->{
+            if(automate.isSelected()){
+                for(int i = 0; i < locker1Fields.length; i++){
+                    this.getChildren().remove(locker1Fields[i]);
+                    this.getChildren().remove(locker2Fields[i]);
+                    this.add(rink1[i],8, i+1);
+                }
+                this.getChildren().remove(t[1]);
+                this.getChildren().remove(t[3]);
+                this.add(t[7], 8, 0);
+                col3.setPrefWidth(0);
+                col5.setPrefWidth(0);
+
+            }else{
+                for(int i = 0; i < rink1.length; i++){
+                    this.getChildren().remove(rink1[i]);
+                    this.add(locker1Fields[i], 2, i + 1);
+                    this.add(locker2Fields[i], 4, i + 1);
+                }
+                this.add(t[1], 2, 0);
+                this.add(t[3], 4, 0);
+                this.getChildren().remove(t[7]);
+                col3.setPrefWidth(50);
+                col5.setPrefWidth(50);
+
+            }
+        });
+
         flow.getChildren().addAll(add,modify,remove, save, automate);
         flow.setHgap(5);
 
@@ -161,6 +189,7 @@ class ModifyPane extends GridPane {
             hourFields[i] = new TextField();
             minuteFields[i] = new TextField();
             ampm[i] = new CheckBox();
+            rink1[i] = new CheckBox();
 
             this.add(team1Fields[i], 1, i + 1);
             this.add(locker1Fields[i], 2, i + 1);
@@ -171,9 +200,6 @@ class ModifyPane extends GridPane {
             this.add(ampm[i],7,i+1);
 
         }
-
-        //Adds the text to the top, wish I stopped doing this.
-        this.add(t[6],7,0);
     }
 
     //Checks the data when the user hits the add button. Data can't match other data and the list and it has to meet

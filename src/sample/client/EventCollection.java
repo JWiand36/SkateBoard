@@ -87,7 +87,6 @@ class EventCollection {
         client.updateLists(combinedEvents);
     }
 
-
     void sortEvents(){
         ArrayList<sample.Event> rink1 = new ArrayList<>();
         ArrayList<sample.Event> rink2 = new ArrayList<>();
@@ -130,7 +129,7 @@ class EventCollection {
 
     private ArrayList<sample.Event> sortPeriod(ArrayList<sample.Event> sortingPeriod ){
 
-        ArrayList<Event> sortedList = new ArrayList();
+        ArrayList<Event> sortedList = new ArrayList<>();
         ArrayList<Event>[] hours = new ArrayList[12];
 
         for(int i = 0; i < hours.length; i++)
