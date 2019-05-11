@@ -2,6 +2,7 @@ package sample.client;
 
 import sample.Event;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class EventCollection {
@@ -87,7 +88,7 @@ class EventCollection {
         client.updateLists(combinedEvents);
     }
 
-    void sortEvents(){
+    void sortEvents(boolean assign){
         ArrayList<sample.Event> rink1 = new ArrayList<>();
         ArrayList<sample.Event> rink2 = new ArrayList<>();
 
@@ -102,11 +103,44 @@ class EventCollection {
             }
 
             events.clear();
-            events.addAll(sortEvents(rink1));
+            if(assign)
+                rink1 = assignLockers(sortEvents(rink1));
+            events.addAll(rink1);
+            if(assign)
+                rink2 = assignLockers(sortEvents(rink2));
             events.addAll(sortEvents(rink2));
             rink1.clear();
             rink2.clear();
         }
+    }
+
+    private ArrayList<Event> assignLockers(ArrayList<Event> events){
+
+        for(int i = 0; i < events.size(); i++) {
+            if (events.get(i).getRinkNum() == 1) {
+                if (i % 2 == 0) {
+                    events.get(i).setLocker1(1);
+                    if (events.get(i).getTeam2() != null)
+                        events.get(i).setLocker2(3);
+                } else {
+                    events.get(i).setLocker1(2);
+                    if (events.get(i).getTeam2() != null)
+                        events.get(i).setLocker2(4);
+                }
+            }else{
+                if (i % 2 == 0) {
+                    events.get(i).setLocker1(5);
+                    if (events.get(i).getTeam2() != null)
+                        events.get(i).setLocker2(7);
+                } else {
+                    events.get(i).setLocker1(6);
+                    if (events.get(i).getTeam2() != null)
+                        events.get(i).setLocker2(8);
+                }
+            }
+        }
+
+        return events;
     }
 
     private ArrayList<Event> sortEvents(ArrayList<Event> events){

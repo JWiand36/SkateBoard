@@ -131,7 +131,7 @@ public class Client extends Application {
 
     void resetCollection() { eventCollection.resetCollection(); }
 
-    void sortEvents(){ eventCollection.sortEvents(); }
+    void sortEvents(boolean assign){ eventCollection.sortEvents(assign); }
 
     //Displays if the user makes a mistake
     void displayError(String message){

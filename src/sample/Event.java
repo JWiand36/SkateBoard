@@ -48,8 +48,20 @@ public class Event implements Serializable{
         this.dayNightCycle = dayNightCycle;
     }
 
+    public Event(String team1, String team2, int startHour, int startMin, String dayNightCycle, int rinkNum){
+        this.team1 = team1;
+        this.team2 = team2;
+        this.locker1 = -1;
+        this.locker2 = -1;
+        this.rinkNum = rinkNum;
+        this.startHour = startHour;
+        this.startMin = startMin;
+        this.dayNightCycle = dayNightCycle;
+    }
+
     public Event (String team1, int startHour, int startMin, String dayNightCycle, int rinkNum){
         this.team1 = team1;
+        this.locker1 = -1;
         this.rinkNum = rinkNum;
         this.startHour = startHour;
         this.startMin = startMin;
@@ -80,11 +92,15 @@ public class Event implements Serializable{
         return startMin;
     }
 
+    public int getRinkNum() { return rinkNum; }
+
     public String getDayNightCycle() {
         return dayNightCycle;
     }
 
-    public int getRinkNum(){ return rinkNum; }
+    public void setLocker1(int locker1){ this.locker1 = locker1; }
+
+    public void setLocker2(int locker2){ this.locker2 = locker2; }
 
     public String toString() {
         String result = "Next Event at: ";

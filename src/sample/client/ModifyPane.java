@@ -28,7 +28,7 @@ class ModifyPane extends GridPane {
 
         list = new ListView<>();
 
-        update(modifyingDay);
+        update(modifyingDay, false);
 
         ColumnConstraints col1 = new ColumnConstraints(200);
         ColumnConstraints col2 = new ColumnConstraints(140);
@@ -60,22 +60,39 @@ class ModifyPane extends GridPane {
 
         //Checks the info and adds the data if it meets the requirements
         add.setOnAction(e->{
-            for(int i = 0; i < team1Fields.length; i++) {
-                if (checkInfoAdd(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected())) {
-                    client.addEvent(modifyingDay, modifyInfo(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], ampm[i]));
-                    update(modifyingDay);
-                }
+            if(automate.isSelected()) {
+                for (int i = 0; i < team1Fields.length; i++)
+                    if (checkInfoAdd(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected(), rink1[i].isSelected())) {
+                        client.addEvent(modifyingDay, modifyInfo(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], ampm[i], rink1[i]));
+                        update(modifyingDay, automate.isSelected());
+                    }
+            }else {
+
+                for (int i = 0; i < team1Fields.length; i++)
+                    if (checkInfoAdd(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected())) {
+                        client.addEvent(modifyingDay, modifyInfo(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], ampm[i]));
+                        update(modifyingDay, automate.isSelected());
+                    }
             }
         });
 
         //The user can select data from the list and modify it. It only uses the top row of TextFields
         modify.setOnAction(e->{
             try {
-                if (checkInfo(locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0])) {
-                    int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                    client.removeEvent(modifyingDay, selected);
-                    client.addEvent(modifyingDay, modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
-                    update(modifyingDay);
+                if(automate.isSelected()){
+                    if (checkInfo(locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0])) {
+                        int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
+                        client.removeEvent(modifyingDay, selected);
+                        client.addEvent(modifyingDay, modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
+                        update(modifyingDay, automate.isSelected());
+                    }
+                }else {
+                    if (checkInfo(locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0])) {
+                        int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
+                        client.removeEvent(modifyingDay, selected);
+                        client.addEvent(modifyingDay, modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
+                        update(modifyingDay, automate.isSelected());
+                    }
                 }
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
         });
@@ -85,7 +102,7 @@ class ModifyPane extends GridPane {
             try {
                 int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                 client.removeEvent(modifyingDay, selected);
-                update(modifyingDay);
+                update(modifyingDay, automate.isSelected());
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
         });
 
@@ -250,6 +267,40 @@ class ModifyPane extends GridPane {
             return false;
     }
 
+    private boolean checkInfoAdd(TextField team1, TextField team2, TextField hour, TextField min, ArrayList n, Boolean ampm, boolean rink1){
+
+        //Checks if if their are vales to meet requirements
+        if(hour.getText() != null && min.getText() != null &&
+                hour.getText().length() > 0 && min.getText().length() > 0&&
+                isNumber(hour.getText()) && isNumber(min.getText())){
+            int h = Integer.parseInt(hour.getText());
+            int m = Integer.parseInt(min.getText());
+
+            String am = "pm";
+            int rink = 2;
+
+            if(rink1){
+                rink = 1;
+            }
+
+            if(ampm)
+                am = "am";
+
+            //Checks to see if Team 2 and Locker Room 2 are filled, if not the program passes
+            if(team2.getText() != null && team2.getText().length() > 0){
+                if (n.contains(h+":"+m+am+" "+team1.getText()+" vs "+team2.getText()+
+                        " R"+rink))
+                    return false;
+            }
+
+            System.out.println(h >= 0 && h <= 24 && m >= 0 && m <= 60 && !n.contains(h + ":" + m + am + " " + team1.getText() + " R" + rink));
+            //Checks if the locker Rooms are in range and if the time is correct
+            return h >= 0 && h <= 24 && m >= 0 && m <= 60 && !n.contains(h + ":" + m + am + " " + team1.getText() + " R" + rink);
+        }else {
+            return false;
+        }
+    }
+
     //Same as CheckInfoAdd with minor differences, it doesn't check for Am/Pm. Used for the Modify Button
     private boolean checkInfo(TextField lock1, TextField team2, TextField lock2, TextField hour, TextField min){
 
@@ -357,14 +408,85 @@ class ModifyPane extends GridPane {
         }
     }
 
+    private Event modifyInfo(TextField team1F, TextField team2F, TextField hourF, TextField minF, CheckBox ampm, CheckBox rink1) {
+
+        String team1 = team1F.getText();
+        String am = "pm";
+        int hour = Integer.parseInt(hourF.getText());
+        int min = Integer.parseInt(minF.getText());
+        int rink = 2;
+
+        if(rink1.isSelected())
+            rink = 1;
+
+        if (ampm.isSelected())
+            am = "am";
+
+        //Checks if there is a second Team
+        if (team2F.getText() != null){
+            if (team2F.getText().length() > 0) {
+                String team2 = team2F.getText();
+
+                team1F.setText(null);
+                team2F.setText(null);
+                hourF.setText(null);
+                minF.setText(null);
+
+                ampm.selectedProperty().setValue(false);
+                rink1.selectedProperty().setValue(false);
+
+                hour %= 12;
+
+                if (hour == 0)
+                    hour = 12;
+
+                return new Event(team1, team2, hour, min, am, rink);
+            } else {
+
+                team1F.setText(null);
+                team2F.setText(null);
+                hourF.setText(null);
+                minF.setText(null);
+
+                ampm.selectedProperty().setValue(false);
+                rink1.selectedProperty().setValue(false);
+
+                hour %= 12;
+
+                if (hour == 0)
+                    hour = 12;
+
+                return new Event(team1, hour, min, am, rink);
+            }
+
+            //If there isn't a second event
+        }else {
+
+            team1F.setText(null);
+            team2F.setText(null);
+            hourF.setText(null);
+            minF.setText(null);
+
+            ampm.selectedProperty().setValue(false);
+            rink1.selectedProperty().setValue(false);
+
+            hour %= 12;
+
+            if(hour == 0)
+                hour = 12;
+
+            return new Event(team1, hour, min, am, rink);
+        }
+    }
+
     //Used to update the list, sets up the String for the ListView
-    private void update(int d){
+    private void update(int d, boolean assign){
 
         n = new ArrayList<>();
 
         String time;
 
-        client.sortEvents();
+        client.sortEvents(assign);
 
         ArrayList<Event>[] combinedEvents = client.getEvents();
 
