@@ -32,9 +32,9 @@ class ModifyPane extends GridPane {
 
         ColumnConstraints col1 = new ColumnConstraints(200);
         ColumnConstraints col2 = new ColumnConstraints(140);
-        ColumnConstraints col3 = new ColumnConstraints(50);
+        ColumnConstraints col3 = new ColumnConstraints();
         ColumnConstraints col4 = new ColumnConstraints(140);
-        ColumnConstraints col5 = new ColumnConstraints(50);
+        ColumnConstraints col5 = new ColumnConstraints();
         ColumnConstraints col6 = new ColumnConstraints(50);
         ColumnConstraints col7 = new ColumnConstraints(50);
         ColumnConstraints col8 = new ColumnConstraints(50);
@@ -45,7 +45,7 @@ class ModifyPane extends GridPane {
         Button modify = new Button("Modify");
         Button remove = new Button("Remove");
         Button save = new Button("Save");
-        CheckBox automate = new CheckBox("Automate Lockers");
+        CheckBox manual = new CheckBox("Manually Set Lockers");
 
         Text[] t = {new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Hour"),
                 new Text("Minute"), new Text("Am?"), new Text("Rink 1?")};
@@ -60,18 +60,18 @@ class ModifyPane extends GridPane {
 
         //Checks the info and adds the data if it meets the requirements
         add.setOnAction(e->{
-            if(automate.isSelected()) {
+            if(!manual.isSelected()) {
                 for (int i = 0; i < team1Fields.length; i++)
                     if (checkInfoAdd(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected(), rink1[i].isSelected())) {
                         client.addEvent(modifyingDay, modifyInfo(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], ampm[i], rink1[i]));
-                        update(modifyingDay, automate.isSelected());
+                        update(modifyingDay, !manual.isSelected());
                     }
             }else {
 
                 for (int i = 0; i < team1Fields.length; i++)
                     if (checkInfoAdd(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected())) {
                         client.addEvent(modifyingDay, modifyInfo(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], ampm[i]));
-                        update(modifyingDay, automate.isSelected());
+                        update(modifyingDay, !manual.isSelected());
                     }
             }
         });
@@ -79,19 +79,19 @@ class ModifyPane extends GridPane {
         //The user can select data from the list and modify it. It only uses the top row of TextFields
         modify.setOnAction(e->{
             try {
-                if(automate.isSelected()){
+                if(!manual.isSelected()){
                     if (checkInfo(hourFields[0], minuteFields[0])) {
                         int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                         client.removeEvent(modifyingDay, selected);
                         client.addEvent(modifyingDay, modifyInfo(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], ampm[0], rink1[0]));
-                        update(modifyingDay, automate.isSelected());
+                        update(modifyingDay, !manual.isSelected());
                     }
                 }else {
                     if (checkInfo(locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0])) {
                         int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                         client.removeEvent(modifyingDay, selected);
                         client.addEvent(modifyingDay, modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
-                        update(modifyingDay, automate.isSelected());
+                        update(modifyingDay, !manual.isSelected());
                     }
                 }
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
@@ -102,7 +102,7 @@ class ModifyPane extends GridPane {
             try {
                 int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                 client.removeEvent(modifyingDay, selected);
-                update(modifyingDay, automate.isSelected());
+                update(modifyingDay, !manual.isSelected());
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
         });
 
@@ -137,7 +137,7 @@ class ModifyPane extends GridPane {
 
                 ArrayList<Event> savedData = client.getSavedData();
 
-                if(automate.isSelected()){
+                if(!manual.isSelected()){
 
                     if (checkInfoAdd(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], savedData, ampm[0].isSelected(), rink1[0].isSelected())) {
                         savedData.add(modifyInfo(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], ampm[0], rink1[0]));
@@ -180,8 +180,8 @@ class ModifyPane extends GridPane {
             }catch (ArrayIndexOutOfBoundsException out){out.getStackTrace();}
         });
 
-        automate.setOnAction(e->{
-            if(automate.isSelected()){
+        manual.setOnAction(e->{
+            if(!manual.isSelected()){
                 for(int i = 0; i < locker1Fields.length; i++){
                     this.getChildren().remove(locker1Fields[i]);
                     this.getChildren().remove(locker2Fields[i]);
@@ -208,7 +208,7 @@ class ModifyPane extends GridPane {
             }
         });
 
-        flow.getChildren().addAll(add,modify,remove, save, automate);
+        flow.getChildren().addAll(add,modify,remove, save, manual);
         flow.setHgap(5);
 
         this.setPadding(new Insets(5));
@@ -222,8 +222,9 @@ class ModifyPane extends GridPane {
 
         this.add(flow, 1, team1Fields.length+2);
 
-        for(int i = 1; i < t.length; i++)
-            this.add(t[i - 1], i, 0);
+        for(int i = 1; i < t.length + 1; i++)
+            if(i != 2 && i != 4)
+                this.add(t[i - 1], i, 0);
 
         for(int i = 0; i < team1Fields.length; i++){
             team1Fields[i] = new TextField();
@@ -236,12 +237,11 @@ class ModifyPane extends GridPane {
             rink1[i] = new CheckBox();
 
             this.add(team1Fields[i], 1, i + 1);
-            this.add(locker1Fields[i], 2, i + 1);
             this.add(team2Fields[i], 3, i + 1);
-            this.add(locker2Fields[i], 4, i + 1);
             this.add(hourFields[i], 5, i + 1);
             this.add(minuteFields[i], 6, i + 1);
             this.add(ampm[i],7,i+1);
+            this.add(rink1[i],8, i+1);
 
         }
     }

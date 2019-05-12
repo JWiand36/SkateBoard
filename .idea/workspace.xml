@@ -8,13 +8,8 @@
   <component name="ChangeListManager">
     <list default="true" id="76cbff06-44a6-4238-bbb6-5ef260136793" name="Default" comment="Refactoring the Server File out of the">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Data.dat" afterPath="$PROJECT_DIR$/Data.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events.dat" afterPath="$PROJECT_DIR$/Events.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/EventCollection.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/EventCollection.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/MainPane.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/MainPane.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/ModifyPane.class" afterPath="$PROJECT_DIR$/out/production/SkateBoard/sample/client/ModifyPane.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/client/EventCollection.java" afterPath="$PROJECT_DIR$/src/sample/client/EventCollection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/client/MainPane.java" afterPath="$PROJECT_DIR$/src/sample/client/MainPane.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/client/ModifyPane.java" afterPath="$PROJECT_DIR$/src/sample/client/ModifyPane.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -30,7 +25,7 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
+            <state relative-caret-position="1343">
               <caret line="133" column="70" lean-forward="false" selection-start-line="133" selection-start-column="70" selection-end-line="133" selection-end-column="70" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -47,10 +42,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainPane.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainPane.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/client/MainPane.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
+            <state relative-caret-position="-80">
               <caret line="114" column="44" lean-forward="false" selection-start-line="114" selection-start-column="44" selection-end-line="114" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -91,20 +86,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModifyPane.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ModifyPane.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/client/ModifyPane.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3298">
-              <caret line="162" column="73" lean-forward="false" selection-start-line="162" selection-start-column="73" selection-end-line="162" selection-end-column="73" />
+            <state relative-caret-position="199">
+              <caret line="35" column="55" lean-forward="true" selection-start-line="35" selection-start-column="55" selection-end-line="35" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3593#4844#0" expanded="false" />
-                <element signature="e#4939#5290#0" expanded="false" />
-                <element signature="e#5414#6470#0" expanded="false" />
+                <element signature="e#2421#3454#0" expanded="false" />
+                <element signature="e#3588#4836#0" expanded="false" />
+                <element signature="e#4931#5281#0" expanded="false" />
+                <element signature="e#5405#6461#0" expanded="false" />
+                <element signature="e#6574#9308#0" expanded="false" />
                 <element signature="method#checkInfoAdd#0;class#ModifyPane#0" expanded="false" />
                 <element signature="method#checkInfoAdd#1;class#ModifyPane#0" expanded="false" />
                 <element signature="method#checkInfo#0;class#ModifyPane#0" expanded="false" />
+                <element signature="method#checkInfo#1;class#ModifyPane#0" expanded="false" />
                 <element signature="method#modifyInfo#0;class#ModifyPane#0" expanded="false" />
+                <element signature="method#modifyInfo#1;class#ModifyPane#0" expanded="false" />
+                <element signature="method#update#0;class#ModifyPane#0" expanded="false" />
                 <element signature="method#isNumber#0;class#ModifyPane#0" expanded="false" />
               </folding>
             </state>
@@ -114,8 +114,8 @@
       <file leaf-file-name="EventCollection.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/client/EventCollection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="115" column="33" lean-forward="true" selection-start-line="115" selection-start-column="33" selection-end-line="115" selection-end-column="33" />
+            <state relative-caret-position="1003">
+              <caret line="115" column="33" lean-forward="false" selection-start-line="115" selection-start-column="33" selection-end-line="115" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#EventCollection#0;class#EventCollection#0" expanded="false" />
@@ -133,7 +133,7 @@
       <file leaf-file-name="Event.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/Event.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="1496">
               <caret line="102" column="65" lean-forward="false" selection-start-line="102" selection-start-column="65" selection-end-line="102" selection-end-column="65" />
               <folding>
                 <element signature="method#toString#0;class#Event#0" expanded="false" />
@@ -228,8 +228,8 @@
         <option value="$PROJECT_DIR$/src/sample/Event.java" />
         <option value="$PROJECT_DIR$/src/sample/client/Client.java" />
         <option value="$PROJECT_DIR$/src/sample/client/EventCollection.java" />
-        <option value="$PROJECT_DIR$/src/sample/client/ModifyPane.java" />
         <option value="$PROJECT_DIR$/src/sample/client/MainPane.java" />
+        <option value="$PROJECT_DIR$/src/sample/client/ModifyPane.java" />
       </list>
     </option>
   </component>
@@ -257,6 +257,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -293,8 +295,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
@@ -556,14 +556,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1989">
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
-            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -592,14 +584,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
-            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -729,9 +713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="23" column="31" lean-forward="false" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -760,14 +741,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="81" column="54" lean-forward="false" selection-start-line="81" selection-start-column="54" selection-end-line="81" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#stop#0;class#Main#0" expanded="false" />
-            <element signature="method#setScreenListeners#0;class#Main#0" expanded="false" />
-            <element signature="method#changeEvent#0;class#Main#0" expanded="false" />
-            <element signature="method#changeDay#0;class#Main#0" expanded="false" />
-            <element signature="method#displayNewDay#0;class#Main#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -775,9 +748,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="969">
           <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -785,9 +755,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="10" column="26" lean-forward="false" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -823,13 +790,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="16" column="32" lean-forward="false" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#351#352#0" expanded="false" />
-            <element signature="e#387#388#0" expanded="false" />
-            <element signature="e#3852#3853#0" expanded="false" />
-            <element signature="e#3877#3878#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -837,19 +797,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
           <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="109" selection-end-column="5" />
-          <folding>
-            <element signature="method#EventCollection#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#setEvents#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#clearLastDay#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#sortEvents#0;class#EventCollection#0" expanded="false" />
-            <element signature="method#sortPeriod#0;class#EventCollection#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Event.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="1496">
           <caret line="102" column="65" lean-forward="false" selection-start-line="102" selection-start-column="65" selection-end-line="102" selection-end-column="65" />
           <folding>
             <element signature="method#toString#0;class#Event#0" expanded="false" />
@@ -859,8 +812,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/client/EventCollection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="115" column="33" lean-forward="true" selection-start-line="115" selection-start-column="33" selection-end-line="115" selection-end-column="33" />
+        <state relative-caret-position="1003">
+          <caret line="115" column="33" lean-forward="false" selection-start-line="115" selection-start-column="33" selection-end-line="115" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#EventCollection#0;class#EventCollection#0" expanded="false" />
@@ -874,27 +827,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/client/ModifyPane.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3298">
-          <caret line="162" column="73" lean-forward="false" selection-start-line="162" selection-start-column="73" selection-end-line="162" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3593#4844#0" expanded="false" />
-            <element signature="e#4939#5290#0" expanded="false" />
-            <element signature="e#5414#6470#0" expanded="false" />
-            <element signature="method#checkInfoAdd#0;class#ModifyPane#0" expanded="false" />
-            <element signature="method#checkInfoAdd#1;class#ModifyPane#0" expanded="false" />
-            <element signature="method#checkInfo#0;class#ModifyPane#0" expanded="false" />
-            <element signature="method#modifyInfo#0;class#ModifyPane#0" expanded="false" />
-            <element signature="method#isNumber#0;class#ModifyPane#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/client/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
+        <state relative-caret-position="1343">
           <caret line="133" column="70" lean-forward="false" selection-start-line="133" selection-start-column="70" selection-end-line="133" selection-end-column="70" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -912,10 +847,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/client/MainPane.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
+        <state relative-caret-position="-80">
           <caret line="114" column="44" lean-forward="false" selection-start-line="114" selection-start-column="44" selection-end-line="114" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/client/ModifyPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="35" column="55" lean-forward="true" selection-start-line="35" selection-start-column="55" selection-end-line="35" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2421#3454#0" expanded="false" />
+            <element signature="e#3588#4836#0" expanded="false" />
+            <element signature="e#4931#5281#0" expanded="false" />
+            <element signature="e#5405#6461#0" expanded="false" />
+            <element signature="e#6574#9308#0" expanded="false" />
+            <element signature="method#checkInfoAdd#0;class#ModifyPane#0" expanded="false" />
+            <element signature="method#checkInfoAdd#1;class#ModifyPane#0" expanded="false" />
+            <element signature="method#checkInfo#0;class#ModifyPane#0" expanded="false" />
+            <element signature="method#checkInfo#1;class#ModifyPane#0" expanded="false" />
+            <element signature="method#modifyInfo#0;class#ModifyPane#0" expanded="false" />
+            <element signature="method#modifyInfo#1;class#ModifyPane#0" expanded="false" />
+            <element signature="method#update#0;class#ModifyPane#0" expanded="false" />
+            <element signature="method#isNumber#0;class#ModifyPane#0" expanded="false" />
           </folding>
         </state>
       </provider>
