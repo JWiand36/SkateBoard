@@ -61,7 +61,6 @@ public class Client extends Application {
         }catch (Exception e){e.printStackTrace();}
     }
 
-
     //Network Service Actions
     void setIPAddress(String ip){ networkService.setIPAddress(ip); }
 
@@ -103,7 +102,6 @@ public class Client extends Application {
         ipPane.showSecondStage();
     }
 
-
     //File Data Actions
     ArrayList<Event> getSavedData(){ return fileData.getSavedData(); }
 
@@ -111,12 +109,10 @@ public class Client extends Application {
 
     Event getSavedEvent(int index) { return fileData.getEvent(index); }
 
-
     //Main Pane Actions
     ListView<String> getSavedInfo(){ return mainPane.getSavedInfo(); }
 
     void updateLists(ArrayList<Event>[] events){ mainPane.updateLists(events); }
-
 
     //Event Collection Actions
     void addEvent(int day, Event event){ eventCollection.addEvent(day, event); }
@@ -135,7 +131,7 @@ public class Client extends Application {
 
     void resetCollection() { eventCollection.resetCollection(); }
 
-
+    void sortEvents(boolean assign){ eventCollection.sortEvents(assign); }
 
     //Displays if the user makes a mistake
     void displayError(String message){
@@ -158,7 +154,6 @@ public class Client extends Application {
     }
 
     void showPrimary(){ primaryStage.show(); }
-
 
     @Override
     public void stop(){
