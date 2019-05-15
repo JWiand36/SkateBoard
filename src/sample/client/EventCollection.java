@@ -2,7 +2,6 @@ package sample.client;
 
 import sample.Event;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class EventCollection {
@@ -88,7 +87,7 @@ class EventCollection {
         client.updateLists(combinedEvents);
     }
 
-    void sortEvents(boolean assign){
+    void sortEvents(boolean assign, Event firstRink1, Event firstRink2){
         ArrayList<sample.Event> rink1 = new ArrayList<>();
         ArrayList<sample.Event> rink2 = new ArrayList<>();
 
@@ -104,103 +103,111 @@ class EventCollection {
 
             events.clear();
             if(assign)
-                rink1 = assignLockers(sortEvents(rink1));
+                rink1 = assignLockers(EventSorter.sortEvents(rink1), firstRink1);
             else
-                rink1 = sortEvents(rink1);
+                rink1 = EventSorter.sortEvents(rink1);
             events.addAll(rink1);
 
             if(assign)
-                rink2 = assignLockers(sortEvents(rink2));
+                rink2 = assignLockers(EventSorter.sortEvents(rink2), firstRink2);
             else
-                rink2 = sortEvents(rink2);
+                rink2 = EventSorter.sortEvents(rink2);
             events.addAll(rink2);
             rink1.clear();
             rink2.clear();
         }
     }
 
-    private ArrayList<Event> assignLockers(ArrayList<Event> events){
+    private ArrayList<Event> assignLockers(ArrayList<Event> events, Event firstNewEvent){
 
-        for(int i = 0; i < events.size(); i++) {
-            if (events.get(i).getRinkNum() == 1) {
-                if (i % 2 == 0) {
-                    events.get(i).setLocker1(1);
-                    if (events.get(i).getTeam2() != null)
-                        events.get(i).setLocker2(3);
-                } else {
-                    events.get(i).setLocker1(2);
-                    if (events.get(i).getTeam2() != null)
-                        events.get(i).setLocker2(4);
-                }
-            }else{
-                if (i % 2 == 0) {
-                    events.get(i).setLocker1(5);
-                    if (events.get(i).getTeam2() != null)
-                        events.get(i).setLocker2(7);
-                } else {
-                    events.get(i).setLocker1(6);
-                    if (events.get(i).getTeam2() != null)
-                        events.get(i).setLocker2(8);
-                }
-            }
-        }
+        boolean assign = false;
 
-        return events;
-    }
-
-    private ArrayList<Event> sortEvents(ArrayList<Event> events){
-        ArrayList<sample.Event> am = new ArrayList<>();
-        ArrayList<sample.Event> pm = new ArrayList<>();
-
-        for(Event event: events){
-            if(event.getDayNightCycle().equals("am"))
-                am.add(event);
-            else
-                pm.add(event);
-        }
-
-        events.clear();
-        events.addAll(sortPeriod(am));
-        events.addAll(sortPeriod(pm));
-
-        return events;
-    }
-
-    private ArrayList<sample.Event> sortPeriod(ArrayList<sample.Event> sortingPeriod ){
-
-        ArrayList<Event> sortedList = new ArrayList<>();
-        ArrayList<Event>[] hours = new ArrayList[12];
-
-        for(int i = 0; i < hours.length; i++)
-            hours[i] = new ArrayList<>();
-
-
-        //Puts the data in the arrays based on the hour. hour 1 goes in array[1]
-        for(Event event: sortingPeriod)
-            hours[event.getStartHour() % 12].add(event);
-
-
-        //Goes through the list of Arrays and puts it in the result. If there are multiple hours, sorts by the Min.
-        for(ArrayList<Event> hourList: hours){
-            int index = 0;
-            while(hourList.size() > 1){
-                for(int c = 1; c < hourList.size(); c++) {
-                    if(hourList.get(index).getStartMin() > hourList.get(c).getStartMin()){
-                        index = hourList.indexOf(hourList.get(c));
+        if(firstNewEvent != null){
+            for(int i = 0; i < events.size(); i++){
+                if(assign){
+                    setLockerFromAbove(events.get(i), events.get(i-1), events.get(i).equals(firstNewEvent));
+                }else if(events.get(i).equals(firstNewEvent)) {
+                    assign = true;
+                    if (i == 0) {
+                        if (firstNewEvent.getLocker1() == -1)
+                            setLockerGroup(events.get(i), 1);
+                    } else if (firstNewEvent.getLocker1() == -1) {
+                        setLockerFromAbove(events.get(i), events.get(i - 1), false);
+                    } else {
+                        setLockerFromAbove(events.get(i), events.get(i - 1), events.get(i).equals(firstNewEvent));
                     }
                 }
-                sortedList.add(hourList.get(index));
-                hourList.remove(index);
-                index = 0;
             }
+       }
+//      else
+//            for(int i = 0; i < events.size(); i++) {
+//                if (i % 2 == 0) {
+//                    //(Rink number - 1) * 4 should produce 0 for Rink1 and 1 for Rink2. Then add the locker slot 1-4
+//                    //With rink 1 is should be 1-4 and with rink 2 it will be 5-8
+//                    setLockerGroup(events.get(i), 1);
+//                } else {
+//                    setLockerGroup(events.get(i), 2);
+//                }
+//            }
 
-            if(hourList.size() == 0)
-                continue;
+        return events;
+    }
 
-            sortedList.add(hourList.get(0));
-            hourList.clear();
+    /*
+    This is used to set the locker groups 1/3, 2/4, 5/7 and 6/8. The locker number should be the first locker and you
+    don't need use 5 or 6 for the later groups, only 1 or 2 is needed. For 5/7 and 6/8 the rink number of the event
+    will produce the 5/6 groups.
+    */
+    private void setLockerGroup(Event event, int lockerNum){
+        event.setLocker1(lockerNum + 4 * (event.getRinkNum() - 1));
+        if (event.getTeam2() != null)
+            event.setLocker2((lockerNum + 2) + 4 * (event.getRinkNum() - 1));
+    }
+
+    private void setLockerFromAbove(Event editingEvent, Event upperEvent, boolean firstEvent){
+
+        boolean upperSideBySide = upperEvent.getLocker1() == 1 && upperEvent.getLocker2() == 2 || upperEvent.getLocker2()%upperEvent.getLocker1() == 1;
+
+        if(!firstEvent) {
+            if (upperSideBySide && upperEvent.getTeam2() != null) {
+                System.out.println("Side by side");
+                if (upperSideBySide) {
+                    editingEvent.setLocker1(getSideBySideLocker(upperEvent.getLocker1()));
+                    if (editingEvent.getTeam2() != null) {
+                        if (upperEvent.getLocker2() != 0)
+                            editingEvent.setLocker2(getSideBySideLocker(upperEvent.getLocker2()));
+                        else
+                            editingEvent.setLocker2(getSideBySideLocker(editingEvent.getLocker1()));
+                    }
+                }
+            } else {
+                System.out.println("Run");
+                if (upperEvent.getLocker1() % 4 == 3 || upperEvent.getLocker1() % 4 == 1) {
+                    setLockerGroup(editingEvent, 2);
+                } else {
+                    setLockerGroup(editingEvent, 1);
+                }
+            }
         }
-        sortingPeriod.clear();
-        return sortedList;
+    }
+
+    private int getSideBySideLocker(int upperLocker){
+        if(upperLocker == 1){
+            return 3;
+        }else if(upperLocker == 2){
+            return 4;
+        }else if(upperLocker == 3){
+            return 1;
+        }else if(upperLocker == 4){
+            return 2;
+        }else if(upperLocker == 5){
+            return 7;
+        }else if(upperLocker == 6){
+            return 8;
+        }else if(upperLocker == 7){
+            return 5;
+        }else{
+            return 6;
+        }
     }
 }
