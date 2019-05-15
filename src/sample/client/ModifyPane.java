@@ -28,7 +28,7 @@ class ModifyPane extends GridPane {
 
         list = new ListView<>();
 
-        update(modifyingDay, false);
+        update(modifyingDay, false, null, null);
 
         ColumnConstraints col1 = new ColumnConstraints(200);
         ColumnConstraints col2 = new ColumnConstraints(140);
@@ -46,6 +46,7 @@ class ModifyPane extends GridPane {
         Button remove = new Button("Remove");
         Button save = new Button("Save");
         CheckBox manual = new CheckBox("Manually Set Lockers");
+        CheckBox automate = new CheckBox("Automate");
 
         Text[] t = {new Text("Team 1"), new Text("Locker"), new Text("Team 2"), new Text("Locker"), new Text("Hour"),
                 new Text("Minute"), new Text("Am?"), new Text("Rink 1?")};
@@ -60,40 +61,73 @@ class ModifyPane extends GridPane {
 
         //Checks the info and adds the data if it meets the requirements
         add.setOnAction(e->{
-            if(!manual.isSelected()) {
-                for (int i = 0; i < team1Fields.length; i++)
-                    if (checkInfoAdd(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected(), rink1[i].isSelected())) {
-                        client.addEvent(modifyingDay, modifyInfo(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], ampm[i], rink1[i]));
-                        update(modifyingDay, !manual.isSelected());
-                    }
-            }else {
+            try {
 
-                for (int i = 0; i < team1Fields.length; i++)
-                    if (checkInfoAdd(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected())) {
-                        client.addEvent(modifyingDay, modifyInfo(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], ampm[i]));
-                        update(modifyingDay, !manual.isSelected());
+                ArrayList<Event> beingAdded = new ArrayList<>();
+                Event firstRink1Event = null;
+                Event firstRink2Event = null;
+
+                //updating automatically
+                if (!manual.isSelected()) {
+
+
+                    for (int i = 0; i < team1Fields.length; i++) {
+                        if (checkInfoAdd(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected(), rink1[i].isSelected())) {
+                            beingAdded.add(modifyInfo(team1Fields[i], team2Fields[i], hourFields[i], minuteFields[i], ampm[i], rink1[i]));
+                            beingAdded = EventSorter.sortEvents(beingAdded);
+                        }
                     }
-            }
+
+                //updating manually
+                } else {
+
+                    for (int i = 0; i < team1Fields.length; i++)
+                        if (checkInfoAdd(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], n, ampm[i].isSelected())) {
+                            beingAdded.add(modifyInfo(team1Fields[i], locker1Fields[i], team2Fields[i], locker2Fields[i], hourFields[i], minuteFields[i], ampm[i]));
+                            beingAdded = EventSorter.sortEvents(beingAdded);
+                        }
+                }
+
+                for (Event event : beingAdded) {
+                    if (firstRink1Event == null && event.getRinkNum() == 1)
+                        firstRink1Event = event;
+
+                    if (firstRink2Event == null && event.getRinkNum() == 2)
+                        firstRink2Event = event;
+
+                    client.addEvent(modifyingDay, event);
+                }
+                update(modifyingDay, automate.isSelected(), firstRink1Event, firstRink2Event);
+            }catch (IndexOutOfBoundsException io){io.printStackTrace();}
         });
 
         //The user can select data from the list and modify it. It only uses the top row of TextFields
         modify.setOnAction(e->{
             try {
+                Event beingAdded = null;
+                int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
+
                 if(!manual.isSelected()){
                     if (checkInfo(hourFields[0], minuteFields[0])) {
-                        int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                        client.removeEvent(modifyingDay, selected);
-                        client.addEvent(modifyingDay, modifyInfo(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], ampm[0], rink1[0]));
-                        update(modifyingDay, !manual.isSelected());
+                        beingAdded = modifyInfo(team1Fields[0], team2Fields[0], hourFields[0], minuteFields[0], ampm[0], rink1[0]);
                     }
                 }else {
                     if (checkInfo(locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0])) {
-                        int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
-                        client.removeEvent(modifyingDay, selected);
-                        client.addEvent(modifyingDay, modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]));
-                        update(modifyingDay, !manual.isSelected());
+                        beingAdded = modifyInfo(team1Fields[0], locker1Fields[0], team2Fields[0], locker2Fields[0], hourFields[0], minuteFields[0], ampm[0]);
                     }
                 }
+
+                if(beingAdded != null) {
+                    client.removeEvent(modifyingDay, selected);
+                    client.addEvent(modifyingDay, beingAdded);
+
+                    if(beingAdded.getRinkNum() == 1)
+                        update(modifyingDay, automate.isSelected(), beingAdded, null);
+                    else
+                        update(modifyingDay, automate.isSelected(), null, beingAdded);
+                }
+
+
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
         });
 
@@ -102,7 +136,7 @@ class ModifyPane extends GridPane {
             try {
                 int selected = n.indexOf(list.getSelectionModel().getSelectedItem());
                 client.removeEvent(modifyingDay, selected);
-                update(modifyingDay, !manual.isSelected());
+                update(modifyingDay, !manual.isSelected(), null, null);
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list.");}
         });
 
@@ -190,8 +224,10 @@ class ModifyPane extends GridPane {
                 this.getChildren().remove(t[1]);
                 this.getChildren().remove(t[3]);
                 this.add(t[7], 8, 0);
+                automate.selectedProperty().setValue(true);
                 col3.setPrefWidth(0);
                 col5.setPrefWidth(0);
+                flow.getChildren().remove(automate);
 
             }else{
                 for(int i = 0; i < rink1.length; i++){
@@ -204,12 +240,15 @@ class ModifyPane extends GridPane {
                 this.getChildren().remove(t[7]);
                 col3.setPrefWidth(50);
                 col5.setPrefWidth(50);
+                flow.getChildren().add(automate);
 
             }
         });
 
         flow.getChildren().addAll(add,modify,remove, save, manual);
         flow.setHgap(5);
+
+        automate.selectedProperty().setValue(true);
 
         this.setPadding(new Insets(5));
         this.setHgap(5);
@@ -526,13 +565,13 @@ class ModifyPane extends GridPane {
     }
 
     //Used to update the list, sets up the String for the ListView
-    private void update(int d, boolean assign){
+    private void update(int d, boolean assign, Event firstRink1, Event firstRink2){
 
         n = new ArrayList<>();
 
         String time;
 
-        client.sortEvents(assign);
+        client.sortEvents(assign, firstRink1, firstRink2);
 
         ArrayList<Event>[] combinedEvents = client.getEvents();
 

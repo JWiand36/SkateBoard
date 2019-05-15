@@ -114,7 +114,7 @@ class MainPane extends GridPane {
                     if(event.getTeam2() != null)
                         event.setLocker2(0);
                 }
-                client.sortEvents(false);
+                client.sortEvents(false, null, null);
                 client.updateLists(client.getEvents());
             }catch (ArrayIndexOutOfBoundsException out){client.displayError("Select an Event from the list or choose a day.");}
         });
