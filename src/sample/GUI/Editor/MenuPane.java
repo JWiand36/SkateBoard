@@ -23,6 +23,7 @@ public class MenuPane extends MenuBar {
         MenuItem remove = new MenuItem("Remove Alert");
         MenuItem close = new MenuItem("Close Board");
         MenuItem show = new MenuItem("Show Board");
+        MenuItem boardSettings = new MenuItem("Board Settings");
         MenuItem addInfo = new MenuItem("Add Event");
         MenuItem editInfo = new MenuItem("Edit Event");
         MenuItem removeInfo = new MenuItem("Remove Event");
@@ -33,7 +34,7 @@ public class MenuPane extends MenuBar {
         this.getMenus().addAll(file, message, board, help);
         file.getItems().addAll(old, newfile);
         message.getItems().addAll(promotion, alert, remove);
-        board.getItems().addAll(show, close);
+        board.getItems().addAll(show, close, boardSettings);
         help.getItems().addAll(addInfo, editInfo, removeInfo, messageInfo, boardInfo);
 
         //Closes the stage of the display board
@@ -41,6 +42,8 @@ public class MenuPane extends MenuBar {
 
         //Shows the stage of the display board
         show.setOnAction(e->controller.showBoard());
+
+        boardSettings.setOnAction(e->editor.setBottom(new BoardSettingsPane(controller)));
 
         old.setOnAction(e->controller.removeExpiredEvents());
 
@@ -66,6 +69,8 @@ public class MenuPane extends MenuBar {
 
         //Removes the alert message being displayed
         remove.setOnAction(e-> controller.removeAlertMessage());
+
+
 
         addInfo.setOnAction((e->{
             Alert infoMessage = new Alert(Alert.AlertType.INFORMATION);

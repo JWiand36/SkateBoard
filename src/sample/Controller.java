@@ -112,4 +112,10 @@ public class Controller {
             return editor.getDayOfWeek();
         return LocalDate.now().getDayOfWeek();
     }
+
+    public void increaseTextSize(boolean increase){
+        LocalDateTime currentTime = LocalDateTime.now();
+        board.increaseTextSize(increase, collection.getRinkCurrentDay(currentTime.getDayOfWeek().getValue(), 1),
+            collection.getRinkCurrentDay(currentTime.getDayOfWeek().getValue(), 2));
+    }
 }

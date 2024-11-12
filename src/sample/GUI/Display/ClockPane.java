@@ -36,4 +36,6 @@ public class ClockPane extends FlowPane{
     public void setClock(String time){
         clockText.setText(time);
     }
+
+    public void setFontSize(int fontSize){ clockText.setFont(new Font(fontSize)); }
 }

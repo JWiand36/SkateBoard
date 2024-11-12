@@ -22,7 +22,7 @@ import java.util.Calendar;
 public class DisplayBoard {
 
 
-    private final int fontSize = 35; //35 for production.
+    private int fontSize = 35; //35 for production.
 
     private double xOffset;
     private double yOffset;
@@ -131,5 +131,20 @@ public class DisplayBoard {
     private void displayNewDay(LocalDateTime currentTime, ArrayList<Event> rink1Events, ArrayList<Event> rink2Events){
         rink1.displayNewDay(currentTime, rink1Events);
         rink2.displayNewDay(currentTime, rink2Events);
+    }
+
+    void increaseTextSize(boolean increase, ArrayList<Event> rink1Events, ArrayList<Event> rink2Events) {
+
+        if(increase){
+            this.fontSize++;
+        }else{
+            this.fontSize--;
+        }
+
+        rink1.setFontSize(this.fontSize, rink1Events);
+        rink2.setFontSize(this.fontSize, rink2Events);
+        clockPane.setFontSize(this.fontSize);
+        alertMessagePane.setFontSize(this.fontSize);
+        promotionalMessagePane.setFontSize(this.fontSize);
     }
 }

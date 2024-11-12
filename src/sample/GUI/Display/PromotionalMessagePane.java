@@ -53,4 +53,6 @@ public class PromotionalMessagePane extends Pane {
     public String getText(){
         return message.getText();
     }
+
+    public void setFontSize(int fontSize){ message.setFont(new Font(fontSize)); }
 }

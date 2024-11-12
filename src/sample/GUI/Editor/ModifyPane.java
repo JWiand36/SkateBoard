@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Locale;
 
 public class ModifyPane extends VBox {
 
@@ -115,11 +116,14 @@ public class ModifyPane extends VBox {
 
         if(validateValues(modifyingEvent)) {
             try {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("[HH:mm][H:mm][HH,mm][H,mm][HH.mm][H.mm][HHmm][Hmm]");
-                LocalTime selectedTime = LocalTime.parse(startTimeTxtFld.getText(), dtf);
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("[hh:mma][h:mma][hh,mma][h,mma][hh.mma][h.mma][hhmma][hmma]", Locale.US);
 
-                if (!amCheckBox.isSelected())
-                    selectedTime = selectedTime.plusHours(12);
+                LocalTime selectedTime;
+                if (amCheckBox.isSelected())
+                    selectedTime = LocalTime.parse(startTimeTxtFld.getText() + "AM", dtf);
+                else
+                    selectedTime = LocalTime.parse(startTimeTxtFld.getText() + "PM", dtf);
+
 
                 modifyingEvent.setStartTime(LocalDateTime.of(selectedDate, selectedTime));
                 controller.saveEvent(modifyingEvent);

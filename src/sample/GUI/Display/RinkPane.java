@@ -189,4 +189,12 @@ public class RinkPane extends GridPane {
         });
 
     }
+
+    public void setFontSize(int fontSize, ArrayList<Event> events){
+        this.getChildren().clear();
+        this.getColumnConstraints().clear();
+        this.fontSize = fontSize;
+        setUpDisplay(fontSize);
+        setRinkInfo(events);
+    }
 }

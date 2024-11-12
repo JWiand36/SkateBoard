@@ -27,4 +27,6 @@ public class AlertMessagePane extends FlowPane{
     public void setAlertMessage(String text){
         specialMessage.setText(text);
     }
+
+    public void setFontSize(int fontSize){ specialMessage.setFont(new Font(fontSize)); }
 }

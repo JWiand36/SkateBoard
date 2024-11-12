@@ -86,7 +86,7 @@ class EventSorter {
             if(events.size() > 1){
 
                 for(Event selectedEvent : events)
-                    if(selectedEvent.getStartTime().isBefore(events.get(index).getStartTime()))
+                    if(selectedEvent.getStartTime().toLocalTime().isBefore(events.get(index).getStartTime().toLocalTime()))
                         index = events.indexOf(selectedEvent);
             }
 
@@ -95,30 +95,5 @@ class EventSorter {
         }
 
         return sortedEvents;
-    }
-
-    private ArrayList<Event>[] seperateByDayOfWeek(ArrayList<Event> events){
-
-        ArrayList<Event>[] dayOfWeekEvents = new ArrayList[7];
-
-        dayOfWeekEvents[0] = gatherDay(events, Calendar.SUNDAY);
-        dayOfWeekEvents[1] = gatherDay(events, Calendar.MONDAY);
-        dayOfWeekEvents[2] = gatherDay(events, Calendar.TUESDAY);
-        dayOfWeekEvents[3] = gatherDay(events, Calendar.WEDNESDAY);
-        dayOfWeekEvents[4] = gatherDay(events, Calendar.THURSDAY);
-        dayOfWeekEvents[5] = gatherDay(events, Calendar.FRIDAY);
-        dayOfWeekEvents[6] = gatherDay(events, Calendar.SATURDAY);
-
-        return dayOfWeekEvents;
-    }
-
-    private ArrayList<Event> gatherDay(ArrayList<Event> events, int calendarDay) {
-        ArrayList<Event> returnEvents = new ArrayList<>();
-
-        for (Event event : events)
-            if (event.getStartTime().getDayOfWeek().getValue() - 1 == calendarDay)
-                returnEvents.add(event);
-
-        return returnEvents;
     }
 }
